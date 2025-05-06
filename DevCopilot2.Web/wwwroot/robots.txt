@@ -1,0 +1,4 @@
+User-agent: *
+DisAllow: /admin/
+DisAllow: /User/
+Sitemap:https://DevCopilot2.com/sitemap.xml

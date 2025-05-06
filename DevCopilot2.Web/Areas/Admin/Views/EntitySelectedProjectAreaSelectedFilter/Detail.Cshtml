@@ -1,0 +1,104 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.DTOs.Entities
+@model EntitySelectedProjectAreaSelectedFilterListDto
+@{
+	ViewData["Title"] = $"{SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")} {SharedLocalizer.GetString("Detail")}";
+    List<SelectListItem> properties = ViewData["Properties"] as List<SelectListItem>;
+
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Home"
+                                  asp-action="Index" 
+                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
+<li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="EntitySelectedProjectAreaSelectedFilter"
+                                  asp-action="Index" 
+
+                                asp-route-entitySelectedProjectAreaIdId="@Model.EntitySelectedProjectAreaId" title="@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilters")">@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilters")</a></li>
+
+        <li class="breadcrumb-item active">@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter") @SharedLocalizer.GetString("Detail")</li>
+    </ol>   
+</nav>
+<form class="mb-9" method="post" >
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter") @SharedLocalizer.GetString("Detail")</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                <a class="btn btn-primary px-5 w-100 text-nowrap" asp-area="Admin"
+                                  asp-controller="EntitySelectedProjectAreaSelectedFilter"
+                                  asp-action="Index" 
+                                asp-route-entitySelectedProjectAreaIdId="@Model.EntitySelectedProjectAreaId">@SharedLocalizer.GetString("Close")</a>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+
+                <div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Hidden-input"  asp-for="@Model.Id"  placeholder="" />
+        <label asp-for="@Model.Id"></label>
+    </div>
+    <span asp-validation-for="@Model.Id"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select"  asp-for="@Model.PropertyName"  asp-items="properties" >
+
+        </select>
+        <label asp-for="@Model.PropertyName"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertyName"></span>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled  class="form-check-input Title-input" asp-for="@Model.EntitySelectedProjectAreaHasWeb" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.EntitySelectedProjectAreaHasWeb"></label>
+    </div>
+</div>
+
+                    <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control" value="@Model.CreateDate.ToShamsi()" asp-for="@Model.CreateDate" type="text" placeholder="" />
+                <label asp-for="@Model.CreateDate"></label>
+            </div>
+            <span asp-validation-for="@Model.CreateDate"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control" value="@Model.LatestEditDate.ToShamsi()" asp-for="@Model.LatestEditDate" type="text" placeholder="" />
+                <label asp-for="@Model.LatestEditDate"></label>
+            </div>
+            <span asp-validation-for="@Model.LatestEditDate"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control" asp-for="@Model.EditCounts" type="number" placeholder="" />
+                <label asp-for="@Model.EditCounts"></label>
+            </div>
+            <span asp-validation-for="@Model.EditCounts"></span>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts
+{
+
+	<script>
+		$(document).ready(function (e) {
+			$('.EntitySelectedProjectAreaSelectedFiltersManagement').addClass('active');
+            $('.EntitySelectedProjectAreaSelectedFiltersManagement').addClass('show');
+		});
+	</script>
+}

@@ -1,0 +1,27 @@
+﻿@model BasePaging
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        @if (Model.StartPage < Model.PageId)
+        {
+            <li class="page-item">
+                <a class="page-link" href="#"
+                   onclick="FillPageId(@(Model.PageId - 1))"
+                   tabindex="-1" aria-disabled="true">قبلی</a>
+            </li>
+        }
+        @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+        {
+            <li class="page-item @(Model.PageId == i ? "active":"")">
+                <a class="page-link" href="#" onclick="FillPageId(@i)">@i</a>
+            </li>
+        }
+        @if (Model.EndPage > Model.PageId)
+        {
+            <li class="page-item">
+                <a class="page-link" href="#"
+                   onclick="FillPageId(@(Model.PageId +1))"
+                   tabindex="-1" aria-disabled="true">بعدی</a>
+            </li>
+        }
+    </ul>
+</nav>

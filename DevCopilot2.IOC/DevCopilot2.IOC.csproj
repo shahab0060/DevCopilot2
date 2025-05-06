@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DevCopilot2.Core\DevCopilot2.Core.csproj" />
+    <ProjectReference Include="..\DevCopilot2.DataLayer\DevCopilot2.DataLayer.csproj" />
+    <ProjectReference Include="..\DevCopilot2.Domain\DevCopilot2.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="8.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\surface\.nuget\packages\selenium.webdriver\4.25.0\buildTransitive\..\manager\linux\selenium-manager" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\surface\.nuget\packages\selenium.webdriver\4.25.0\buildTransitive\..\manager\macos\selenium-manager" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\surface\.nuget\packages\selenium.webdriver\4.25.0\buildTransitive\..\manager\windows\selenium-manager.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="selenium-manager\linux\" />
+    <Folder Include="selenium-manager\macos\" />
+    <Folder Include="selenium-manager\windows\" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,37 @@
+﻿@model BasePaging
+<ul class="pagination ltr align-items-center justify-content-center">
+    @if (Model.StartPage < Model.PageId)
+    {
+        <li class="page-item">
+            <a class="page-arrow" href="#" onclick="FillPageId(@(Model.PageId - 1))
+           aria-label="Previous">
+                <span aria-hidden="true">
+                    <svg class="svg-icon page-icon">
+                        <use xlink:href="#angle-left-1"> </use>
+                    </svg>
+                </span><span class="sr-only">قبلی</span>
+            </a>
+        </li>
+    }
+    @for (int i = Model.StartPage; i <= Model.EndPage; i++)
+    {
+        <li class="page-item @(Model.PageId == i ? "active":"")">
+            <a class="page-link" onclick="FillPageId(@i)" href="#">@i</a>
+        </li>
+    }
+    @if (Model.EndPage > Model.PageId)
+    {
+        <li class="page-item">
+            <a class="page-arrow" href="#" aria-label="Next"
+               onclick="FillPageId(@(Model.PageId + 1))">
+                <span aria-hidden="true">
+                    <svg class="svg-icon page-icon">
+                        <use xlink:href="#angle-right-1"> </use>
+                    </svg>
+                </span>
+                <span class="sr-only">بعدی</span>
+            </a>
+        </li>
+    }
+
+</ul>

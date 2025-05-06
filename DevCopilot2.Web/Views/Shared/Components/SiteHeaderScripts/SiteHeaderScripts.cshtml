@@ -1,0 +1,14 @@
+@using DevCopilot2.Domain.DTOs.SiteSettings
+@model SiteSettingListDto
+@* @if (!string.IsNullOrEmpty(Model.GTagId))
+{
+    <script async src="https://www.googletagmanager.com/gtag/js?id=@Model.GTagId"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', '@Model.GTagId');
+    </script>
+}
+ *@

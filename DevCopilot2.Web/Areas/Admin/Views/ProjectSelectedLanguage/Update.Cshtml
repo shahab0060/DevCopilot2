@@ -1,0 +1,73 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.DTOs.Projects
+@model UpdateProjectSelectedLanguageDto
+@{
+	ViewData["Title"] = $@"{SharedLocalizer.GetString("Update")} {SharedEntitiesLocalizer.GetString("ProjectSelectedLanguage")}";
+
+    List<SelectListItem> languages = ViewData["Languages"] as List<SelectListItem>;
+
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Home"
+                                  asp-action="Index" 
+                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
+<li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="ProjectSelectedLanguage"
+                                  asp-action="Index" 
+
+                                asp-route-projectIdId="@Model.ProjectId" title="@SharedEntitiesLocalizer.GetString("ProjectSelectedLanguages")">@SharedEntitiesLocalizer.GetString("ProjectSelectedLanguages")</a></li>
+
+        <li class="breadcrumb-item active">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("ProjectSelectedLanguage")</li>
+    </ol>   
+</nav>
+<form class="mb-9" method="post" 
+                            asp-area="Admin" asp-controller="ProjectSelectedLanguage" asp-action="Update"
+                            enctype="multipart/form-data">
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("ProjectSelectedLanguage")</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                                <button class="btn btn-primary px-5 w-100 text-nowrap">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("ProjectSelectedLanguage")</button>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+
+                <input type="hidden" asp-for="@Model.Id" class=""
+                       />
+<input type="hidden" asp-for="@Model.ProjectId" class=""
+                       />
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select"  asp-for="@Model.LanguageId"  asp-items="languages" >
+
+        </select>
+        <label asp-for="@Model.LanguageId"></label>
+    </div>
+    <span asp-validation-for="@Model.LanguageId"></span>
+</div>
+
+    </div>
+</form>
+
+@section Scripts
+{
+	<script src="/Shared/JqueryValidation.min.js"></script>
+	<script>
+		$(document).ready(function (e) {
+			$('.ProjectSelectedLanguagesManagement').addClass('active');
+            $('.ProjectSelectedLanguagesManagement').addClass('show');
+		});
+	</script>
+}

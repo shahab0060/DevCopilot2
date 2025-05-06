@@ -1,0 +1,127 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.Enums.Relations
+@using DevCopilot2.Domain.DTOs.Entities
+@model CreateEntityRelationDto
+@{
+	ViewData["Title"] = $@"{SharedLocalizer.GetString("Create New")} {SharedEntitiesLocalizer.GetString("EntityRelation")}";
+
+    List<SelectListItem> entities = ViewData["Entities"] as List<SelectListItem>;    
+
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Home"
+                                  asp-action="Index" 
+                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
+<li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="EntityRelation"
+                                  asp-action="Index" 
+
+                                asp-route-primaryPropertyIdId="@Model.PrimaryPropertyId" title="@SharedEntitiesLocalizer.GetString("EntityRelations")">@SharedEntitiesLocalizer.GetString("EntityRelations")</a></li>
+
+        <li class="breadcrumb-item active">@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("EntityRelation")</li>
+    </ol>   
+</nav>
+<form class="mb-9" method="post" 
+                            asp-area="Admin" asp-controller="EntityRelation" asp-action="Create"
+                            enctype="multipart/form-data">
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("EntityRelation")</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                                <button class="btn btn-primary px-5 w-100 text-nowrap">@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("EntityRelation")</button>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+
+                <input type="hidden" asp-for="@Model.PrimaryPropertyId" class=""
+                       />
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select"  asp-for="@Model.SecondaryEntityId"  asp-items="entities" >
+
+        </select>
+        <label asp-for="@Model.SecondaryEntityId"></label>
+    </div>
+    <span asp-validation-for="@Model.SecondaryEntityId"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select"  asp-for="@Model.MiddleEntityId"  asp-items="entities" >
+
+        </select>
+        <label asp-for="@Model.MiddleEntityId"></label>
+    </div>
+    <span asp-validation-for="@Model.MiddleEntityId"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select"  asp-for="@Model.RelationType" name="RelationType" >
+
+                            @foreach (RelationTypeEnum relationTypeEnum in (RelationTypeEnum[])Enum.GetValues(typeof(RelationTypeEnum)))
+                            {
+                                <option value="@relationTypeEnum">@relationTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.RelationType"></label>
+    </div>
+    <span asp-validation-for="@Model.RelationType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select"  asp-for="@Model.InputType" name="InputType" >
+
+                            @foreach (InputTypeEnum inputTypeEnum in (InputTypeEnum[])Enum.GetValues(typeof(InputTypeEnum)))
+                            {
+                                <option value="@inputTypeEnum">@inputTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.InputType"></label>
+    </div>
+    <span asp-validation-for="@Model.InputType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select"  asp-for="@Model.FillingType" name="FillingType" >
+
+                            @foreach (FillingTypeEnum fillingTypeEnum in (FillingTypeEnum[])Enum.GetValues(typeof(FillingTypeEnum)))
+                            {
+                                <option value="@fillingTypeEnum">@fillingTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.FillingType"></label>
+    </div>
+    <span asp-validation-for="@Model.FillingType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Title-input"  asp-for="@Model.FillingCode"  placeholder="" />
+        <label asp-for="@Model.FillingCode"></label>
+    </div>
+    <span asp-validation-for="@Model.FillingCode"></span>
+</div>
+
+    </div>
+</form>
+
+@section Scripts
+{
+	<script src="/Shared/JqueryValidation.min.js"></script>
+	<script>
+		$(document).ready(function (e) {
+			$('.EntityRelationsManagement').addClass('active');
+            $('.EntityRelationsManagement').addClass('show');
+		});
+	</script>
+}

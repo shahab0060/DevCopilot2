@@ -1,0 +1,30 @@
+@using DevCopilot2.Core.MediasInformation.SiteSettings
+@using DevCopilot2.Domain.DTOs.SiteSettings
+@model SiteSettingListDto
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>@ViewData["Title"] | @Model.SiteName</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="all,follow">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="HandheldFriendly" content="true" />
+
+<!-- Apple Mobile Web App Status Bar Style -->
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/x-icon"
+      href="@(SiteSettingMediaInformation.OriginalFavIconName.GetAddress+Model.FavIconName)">
+@* <link rel="icon" type="image/x-icon"
+      href="@(SiteSettingMediaInformation.XSmallFavIcon.GetAddress+Model.FavIconName)">
+<link rel="apple-touch-icon"
+      sizes="@($"{SiteSettingMediaInformation.Medium2FavIcon.Width}x{SiteSettingMediaInformation.Medium2FavIcon.Height}")"
+      href="@SiteSettingMediaInformation.Medium2FavIcon.GetAddress+Model.FavIconName">
+<link rel="icon" type="image/png" 
+      sizes="@($"{SiteSettingMediaInformation.Medium3FavIcon.Width}x{SiteSettingMediaInformation.Medium3FavIcon.Height}")"
+      href="@SiteSettingMediaInformation.Medium3FavIcon.GetAddress+Model.FavIconName">
+<link rel="icon" type="image/png"
+      sizes="@($"{SiteSettingMediaInformation.LargeFavIcon.Width}x{SiteSettingMediaInformation.LargeFavIcon.Height}")"
+      href="@SiteSettingMediaInformation.LargeFavIcon.GetAddress+Model.FavIconName">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="@SiteSettingMediaInformation.Medium1FavIcon+Model.FavIconName"> *@

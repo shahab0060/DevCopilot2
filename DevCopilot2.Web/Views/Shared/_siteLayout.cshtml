@@ -1,0 +1,24 @@
+@using DevCopilot2.Domain.DTOs.Users
+<!DOCTYPE html>
+<html lang="fa-ir">
+<head>
+    @await Component.InvokeAsync("SiteHeaderScripts")
+    @await Component.InvokeAsync("SiteMetaTagsAndTitle")
+    @await RenderSectionAsync("MetaTags", false)
+    <partial name="_siteStyles" />
+    @RenderSection("Styles", false)
+    @await RenderSectionAsync("HeaderScripts", false)
+
+</head>
+<body>
+    <div id="content">
+        @*         @await Component.InvokeAsync("SiteNavbar")
+ *@        @RenderBody()
+        @*         @await Component.InvokeAsync("SiteFooter")
+ *@    </div>
+
+    <partial name="_siteScripts" />
+    <partial name="_SiteMessage" />
+    @RenderSection("Scripts", false)
+</body>
+</html>

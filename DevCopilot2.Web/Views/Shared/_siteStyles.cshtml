@@ -1,0 +1,28 @@
+﻿@if(ViewData["CustomMainStyleAddress"]==null)
+{
+    <link rel="stylesheet" asp-append-version="true" href="/site/css/style.default.no-media.min.css">
+}
+else
+{
+    <link rel="stylesheet" asp-append-version="true" href="@ViewData["CustomMainStyleAddress"]">
+    <div class="defer-stylesheet" data-src="@ViewData["CustomMainStyleAddress"]"></div>
+}
+<link rel="stylesheet" href="/site/fonts/stylesheet.css">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-min-width-576-px.css" media="(min-width: 576px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-min-width-768-px.css" media="(min-width: 768px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-min-width-992-px.css" media="(min-width: 992px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-min-width-1200-px.css" media="(min-width: 1200px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-min-width-1400-px.css" media="(min-width: 1400px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-max-width-575-98-px.css" media="(max-width: 575.98px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-max-width-767-98-px.css" media="(max-width: 767.98px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-max-width-991-98-px.css" media="(max-width: 991.98px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-max-width-1199-98-px.css" media="(max-width: 1199.98px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-max-width-1399-98-px.css" media="(max-width: 1399.98px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-prefers-reduced-motion-no-preference.css" media="(prefers-reduced-motion: no-preference)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-prefers-reduced-motion-reduce.css" media="(prefers-reduced-motion: reduce)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-print.css" media="print">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-screen-and-max-width-1024-px.css" media="screen and (max-width: 1024px)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-screen-and-ms-high-contrast-active-screen-and-ms-high-contrast-none.css" media="screen and (ms-high-contrast: active), screen and (ms-high-contrast: none)">
+<link rel="stylesheet" asp-append-version="true" href="/site/packs/medias/style.default.min-webkit-min-device-pixel-ratio-1-1-webkit-min-device-pixel-ratio-1-09375-min-resolution-105-dpi-min-resolution-1-1-dppx.css" media="(-webkit-min-device-pixel-ratio: 1.1), (-webkit-min-device-pixel-ratio: 1.09375), (min-resolution: 105dpi), (min-resolution: 1.1dppx)">
+<link rel="stylesheet" asp-append-version="true" href="/site/use.fontawesome.com/releases/v5.10.0/css/all.min.css">
+<link rel="stylesheet" asp-append-version="true" href="/site/customCss/SiteCustom.min.css"/>

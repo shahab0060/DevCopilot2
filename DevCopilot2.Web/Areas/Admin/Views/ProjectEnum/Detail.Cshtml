@@ -1,0 +1,196 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.DTOs.Projects
+@model ProjectEnumListDto
+@{
+	ViewData["Title"] = $"{SharedEntitiesLocalizer.GetString("ProjectEnum")} {SharedLocalizer.GetString("Detail")}";
+    List<SelectListItem> projects = ViewData["Projects"] as List<SelectListItem>;
+List<SelectListItem> languages = ViewData["Languages"] as List<SelectListItem>;
+    CreateProjectEnumPropertyDto createProjectEnumProperty = new CreateProjectEnumPropertyDto();
+CreateProjectEnumPropertySelectedLanguageDto createProjectEnumPropertySelectedLanguage = new CreateProjectEnumPropertySelectedLanguageDto();
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Home"
+                                  asp-action="Index" 
+                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
+<li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="ProjectEnum"
+                                  asp-action="Index" 
+                                   title="@SharedEntitiesLocalizer.GetString("ProjectEnums")">@SharedEntitiesLocalizer.GetString("ProjectEnums")</a></li>
+
+        <li class="breadcrumb-item active">@SharedEntitiesLocalizer.GetString("ProjectEnum") @SharedLocalizer.GetString("Detail")</li>
+    </ol>   
+</nav>
+<form class="mb-9" method="post" >
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@SharedEntitiesLocalizer.GetString("ProjectEnum") @SharedLocalizer.GetString("Detail")</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                <a class="btn btn-primary px-5 w-100 text-nowrap" asp-area="Admin"
+                                  asp-controller="ProjectEnum"
+                                  asp-action="Index">@SharedLocalizer.GetString("Close")</a>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+
+                <div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Hidden-input"  asp-for="@Model.Id"  placeholder="" />
+        <label asp-for="@Model.Id"></label>
+    </div>
+    <span asp-validation-for="@Model.Id"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select"  asp-for="@Model.ProjectTitle"  asp-items="projects" >
+
+        </select>
+        <label asp-for="@Model.ProjectTitle"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectTitle"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.AuthorPhoneNumber"  placeholder="" />
+        <label asp-for="@Model.AuthorPhoneNumber"></label>
+    </div>
+    <span asp-validation-for="@Model.AuthorPhoneNumber"></span>
+</div>
+
+                                 <div class="sub-form-container" data-name="@("ProjectEnumPropertiesList")">
+                                 <h3>@SharedEntitiesLocalizer.GetString("ProjectEnumProperties")</h3>
+                                     @if (Model.ProjectEnumPropertiesList is not null)
+                                     {
+                                         for (int projectEnumProperty = 0; projectEnumProperty < Model.ProjectEnumPropertiesList.Count; projectEnumProperty++)
+                                         {
+
+                                                string projectEnumPropertyDataName = "ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]";
+
+                                         <div class="single-sub-form row g-5" data-name="@("ProjectEnumPropertiesList")">
+                                                 <div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Hidden-input" 
+               data-name="ProjectEnumPropertiesList"
+               data-prefix="ProjectEnumPropertiesList"
+               data-suffix="Id"
+                 asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].Id"  placeholder="" />
+        <label asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].Id"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].Id"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Hidden-input" 
+               data-name="ProjectEnumPropertiesList"
+               data-prefix="ProjectEnumPropertiesList"
+               data-suffix="ProjectEnumEnglishName"
+               data-value="1"  asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumEnglishName"  placeholder="" />
+        <label asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumEnglishName"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumEnglishName"></span>
+</div>
+
+                                 <div class="sub-form-container" data-name="@("ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]"+"." +"ProjectEnumPropertySelectedLanguagesList")">
+                                 <h3>@SharedEntitiesLocalizer.GetString("ProjectEnumPropertySelectedLanguages")</h3>
+                                     @if (Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList is not null)
+                                     {
+                                         for (int projectEnumPropertySelectedLanguage = 0; projectEnumPropertySelectedLanguage < Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList.Count; projectEnumPropertySelectedLanguage++)
+                                         {
+
+                                                string projectEnumPropertySelectedLanguageDataName = "ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]"+"." +"ProjectEnumPropertySelectedLanguagesList" + "[" + projectEnumPropertySelectedLanguage + "]";
+
+                                         <div class="single-sub-form row g-5" data-name="@("ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]"+"." +"ProjectEnumPropertySelectedLanguagesList")">
+                                                 <div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Hidden-input" 
+               data-name="ProjectEnumPropertySelectedLanguagesList"
+               data-prefix="ProjectEnumPropertySelectedLanguagesList"
+               data-suffix="Id"
+                 asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Id"  placeholder="" />
+        <label asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Id"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Id"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select" 
+               data-name="ProjectEnumPropertySelectedLanguagesList"
+               data-prefix="ProjectEnumPropertySelectedLanguagesList"
+               data-suffix="LanguageName"
+                 asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].LanguageName"  asp-items="languages" >
+
+        </select>
+        <label asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].LanguageName"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].LanguageName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Hidden-input" 
+               data-name="ProjectEnumPropertySelectedLanguagesList"
+               data-prefix="ProjectEnumPropertySelectedLanguagesList"
+               data-suffix="ProjectEnumPropertyName"
+               data-value="1"  asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].ProjectEnumPropertyName"  placeholder="" />
+        <label asp-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].ProjectEnumPropertyName"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].ProjectEnumPropertyName"></span>
+</div>
+
+                                         </div>
+
+                                         }
+                                     }  
+                                 </div>
+
+                                         </div>
+
+                                         }
+                                     }  
+                                 </div>
+
+                    <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control" value="@Model.CreateDate.ToShamsi()" asp-for="@Model.CreateDate" type="text" placeholder="" />
+                <label asp-for="@Model.CreateDate"></label>
+            </div>
+            <span asp-validation-for="@Model.CreateDate"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control" value="@Model.LatestEditDate.ToShamsi()" asp-for="@Model.LatestEditDate" type="text" placeholder="" />
+                <label asp-for="@Model.LatestEditDate"></label>
+            </div>
+            <span asp-validation-for="@Model.LatestEditDate"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control" asp-for="@Model.EditCounts" type="number" placeholder="" />
+                <label asp-for="@Model.EditCounts"></label>
+            </div>
+            <span asp-validation-for="@Model.EditCounts"></span>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts
+{
+
+	<script>
+		$(document).ready(function (e) {
+			$('.ProjectEnumsManagement').addClass('active');
+            $('.ProjectEnumsManagement').addClass('show');
+		});
+	</script>
+}

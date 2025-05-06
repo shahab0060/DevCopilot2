@@ -1,0 +1,226 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.DTOs.Templates
+@model UpdateTemplateDto
+@{
+	ViewData["Title"] = $@"{SharedLocalizer.GetString("Update")} {SharedEntitiesLocalizer.GetString("Template")}";
+
+    List<SelectListItem> projects = ViewData["Projects"] as List<SelectListItem>;
+
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Home"
+                                  asp-action="Index" 
+                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
+<li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Template"
+                                  asp-action="Index" 
+                                   title="@SharedEntitiesLocalizer.GetString("Templates")">@SharedEntitiesLocalizer.GetString("Templates")</a></li>
+
+        <li class="breadcrumb-item active">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("Template")</li>
+    </ol>   
+</nav>
+<form class="mb-9" method="post" 
+                            asp-area="Admin" asp-controller="Template" asp-action="Update"
+                            enctype="multipart/form-data">
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("Template")</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                                <button class="btn btn-primary px-5 w-100 text-nowrap">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("Template")</button>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+
+                <input type="hidden" asp-for="@Model.Id" class=""
+                       />
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Title-input"  asp-for="@Model.Title"  placeholder="" />
+        <label asp-for="@Model.Title"></label>
+    </div>
+    <span asp-validation-for="@Model.Title"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select"  asp-for="@Model.ProjectId"  asp-items="projects" >
+
+        </select>
+        <label asp-for="@Model.ProjectId"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectId"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ListViewHtml"  placeholder="" />
+        <label asp-for="@Model.ListViewHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.ListViewHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ListFirstThCode"  placeholder="" />
+        <label asp-for="@Model.ListFirstThCode"></label>
+    </div>
+    <span asp-validation-for="@Model.ListFirstThCode"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ListOtherThCodes"  placeholder="" />
+        <label asp-for="@Model.ListOtherThCodes"></label>
+    </div>
+    <span asp-validation-for="@Model.ListOtherThCodes"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ListBoolTdHtml"  placeholder="" />
+        <label asp-for="@Model.ListBoolTdHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.ListBoolTdHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ListTextTdHtml"  placeholder="" />
+        <label asp-for="@Model.ListTextTdHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.ListTextTdHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ListImageTdHtml"  placeholder="" />
+        <label asp-for="@Model.ListImageTdHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.ListImageTdHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ListPriceTdHtml"  placeholder="" />
+        <label asp-for="@Model.ListPriceTdHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.ListPriceTdHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ListDefaultTdCode"  placeholder="" />
+        <label asp-for="@Model.ListDefaultTdCode"></label>
+    </div>
+    <span asp-validation-for="@Model.ListDefaultTdCode"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ListViewCardHtml"  placeholder="" />
+        <label asp-for="@Model.ListViewCardHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.ListViewCardHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.CreatePageHtml"  placeholder="" />
+        <label asp-for="@Model.CreatePageHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.CreatePageHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.CheckBoxInputCode"  placeholder="" />
+        <label asp-for="@Model.CheckBoxInputCode"></label>
+    </div>
+    <span asp-validation-for="@Model.CheckBoxInputCode"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.FileInputCode"  placeholder="" />
+        <label asp-for="@Model.FileInputCode"></label>
+    </div>
+    <span asp-validation-for="@Model.FileInputCode"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.TextInputHtml"  placeholder="" />
+        <label asp-for="@Model.TextInputHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.TextInputHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.TextEditorInputHtml"  placeholder="" />
+        <label asp-for="@Model.TextEditorInputHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.TextEditorInputHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.IntegerInputHtml"  placeholder="" />
+        <label asp-for="@Model.IntegerInputHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.IntegerInputHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.SelectInputHtml"  placeholder="" />
+        <label asp-for="@Model.SelectInputHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.SelectInputHtml"></span>
+</div>
+<input type="hidden" asp-for="@Model.AuthorId" class=""
+                       />
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.SingleImageHtml"  placeholder="" />
+        <label asp-for="@Model.SingleImageHtml"></label>
+    </div>
+    <span asp-validation-for="@Model.SingleImageHtml"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.ColorPickerInputCode"  placeholder="" />
+        <label asp-for="@Model.ColorPickerInputCode"></label>
+    </div>
+    <span asp-validation-for="@Model.ColorPickerInputCode"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.BreadCrumbCode"  placeholder="" />
+        <label asp-for="@Model.BreadCrumbCode"></label>
+    </div>
+    <span asp-validation-for="@Model.BreadCrumbCode"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.AnchorTagCode"  placeholder="" />
+        <label asp-for="@Model.AnchorTagCode"></label>
+    </div>
+    <span asp-validation-for="@Model.AnchorTagCode"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.SubmitBtnCode"  placeholder="" />
+        <label asp-for="@Model.SubmitBtnCode"></label>
+    </div>
+    <span asp-validation-for="@Model.SubmitBtnCode"></span>
+</div>
+
+    </div>
+</form>
+
+@section Scripts
+{
+	<script src="/Shared/JqueryValidation.min.js"></script>
+	<script>
+		$(document).ready(function (e) {
+			$('.TemplatesManagement').addClass('active');
+            $('.TemplatesManagement').addClass('show');
+		});
+	</script>
+}

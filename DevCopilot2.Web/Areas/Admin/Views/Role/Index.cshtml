@@ -1,0 +1,189 @@
+
+@using System;
+
+@using DevCopilot2.Domain.DTOs.Roles;
+
+
+@model FilterRolesDto
+@{
+    ViewData["Title"] = "مدیریت نقش ها";
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+ <li class="breadcrumb-item">
+     <a asp-area="Admin"
+        asp-controller="Home"
+        asp-action="Index"
+        title="ادمین">ادمین</a>
+ </li>
+
+        <li class="breadcrumb-item active">نقش ها</li>
+    </ol>   
+</nav>
+<div class="mb-9">
+  <div class="row g-3 mb-4">
+    <div class="col-auto">
+      <h2 class="mb-0">نقش ها</h2>
+    </div>
+  </div>
+  <ul class="nav nav-links mb-3 mb-lg-2 mx-n3">
+    <li class="nav-item">
+      <p class="nav-link disable-nav-link" aria-current="page" href="#"><span>همه </span><span
+          class="text-body-tertiary fw-semibold">(@Model.AllEntitiesCount.ToString("#,0"))</span></p>
+    </li>
+    <li>
+      <a class="btn btn-primary" id="addBtn" 
+                            asp-area="Admin" asp-controller="Role" asp-action="Create"
+                            >
+        <span class="fas fa-plus me-2"></span>افزودن نقش جدید
+      </a>
+    </li>
+  </ul>
+  <div id="products">
+    <form class="mb-4 filter-form FilterForm" method="get" 
+                            asp-area="Admin" asp-controller="Role" asp-action="Index">
+      <div class="d-flex flex-wrap gap-3">
+        <div class="search-box">
+          <div class="position-relative">
+
+                <input type="hidden" asp-for="@Model.PageId" name="PageId" id="PageId" />
+            <input class="form-control search-input search" type="search" 
+            placeholder="جستجو" aria-label="Search" asp-for="@Model.Search" name="Search" />
+            <span class="fas fa-search search-box-icon"></span>
+          </div>
+        </div>
+        <div class="scrollbar overflow-hidden-y">
+          <div class="btn-group position-static" role="group">
+
+<div class="ml-input">
+    <input class="form-control2 search-input search persian-date-picker" 
+           type="text" asp-for="@Model.FromDate"  placeholder="از تاریخ" aria-label="Search" name="FromDate" 
+           id="FromDate" dir="ltr">
+</div>
+
+<div class="ml-input">
+    <input class="form-control2 search-input search persian-date-picker" 
+           type="text" asp-for="@Model.ToDate" placeholder="تا تاریخ" aria-label="Search" name="ToDate" 
+           id="ToDate" dir="ltr">
+</div>
+
+                        <div class="ml-input">
+                            <select class="btn btn-sm btn-phoenix-secondary px-7 flex-shrink-0" asp-for="@Model.BaseSortEntityType" name="BaseSortEntityType"
+        >
+
+                            @foreach (BaseSortEntityType baseSortEntityType in (BaseSortEntityType[])Enum.GetValues(typeof(BaseSortEntityType)))
+                            {
+                                <option value="@baseSortEntityType">@baseSortEntityType.GetEnumName()</option>
+                            }
+                            </select>
+                        </div>
+
+                        <div class="ml-input">
+                            <select class="btn btn-sm btn-phoenix-secondary px-7 flex-shrink-0" asp-for="@Model.SortType" name="SortType"
+        >
+
+                            @foreach (SortType sortType in (SortType[])Enum.GetValues(typeof(SortType)))
+                            {
+                                <option value="@sortType">@sortType.GetEnumName()</option>
+                            }
+                            </select>
+                        </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="ms-xxl-auto">
+        <button class="btn btn-sm btn-phoenix-secondary px-7 flex-shrink-0" type="submit" style="margin-top: 5px;">
+          جستجو
+        </button>
+
+        <a class="btn btn-link text-body me-4 px-0 export-btn" 
+                            asp-area="Admin" asp-controller="Role" asp-action="ExportExcel">
+          <span class="fa-solid fa-file-export fs-9 me-2"></span>Excel
+        </a>
+      </div>
+    </form>
+  </div>
+  <div
+    class="mx-n4 px-4 mx-lg-n6 px-lg-6 bg-body-emphasis border-top border-bottom border-translucent position-relative top-1">
+  </div>
+</div>
+
+                   @if (Model.Roles.Any())
+                   {
+                     <div class="table-responsive scrollbar mx-n1 px-1">
+      <table class="table fs-9 mb-0">
+        <thead>
+
+                    <tr>
+                    <th class="" scope="col">عنوان</th>
+<th class="" scope="col">تاریخ ساخت</th>
+<th class="" scope="col">تاریخ آخرین ویرایش</th>
+<th class="" scope="col">تعداد ویرایش</th>
+
+<th class="sort text-end align-middle pe-0 ps-4" scope="col">عملیات</th>
+                    </tr>
+        </thead>
+        <tbody class="list" id="table-body">
+          <tr class="position-static">
+
+                            @foreach (
+            RoleListDto role in Model.Roles)
+                            {
+
+                                <tr class="position-static">
+
+                                <td class="product align-middle ps-4">
+    <span class="fw-semibold line-clamp-3 mb-0">@role.Title</span>
+</td>
+<td class="product align-middle ps-4">
+    <span class="fw-semibold line-clamp-3 mb-0">@role.CreateDate.ToShamsi()</span>
+</td>
+<td class="product align-middle ps-4">
+    <span class="fw-semibold line-clamp-3 mb-0">@role.LatestEditDate.ToShamsi()</span>
+</td>
+<td class="product align-middle ps-4">
+    <span class="fw-semibold line-clamp-3 mb-0">@role.EditCounts.ToString()</span>
+</td>
+
+<td class="align-middle white-space-nowrap text-end pe-0 ps-4 btn-reveal-trigger">
+    <div class="btn-reveal-trigger position-static">
+        <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+        <div class="dropdown-menu dropdown-menu-end py-2">
+            <a asp-area="Admin" asp-controller="Role" asp-action="Update"
+                                           asp-route-id="@role.Id" class="dropdown-item update-btn">ویرایش</a>
+                                         <a asp-area="Admin" asp-controller="Role" asp-action="Detail"
+                                           asp-route-id="@role.Id" class="dropdown-item detail-btn">جزئیات</a>
+            <div class="dropdown-divider"></div>
+            <a asp-area="Admin" asp-controller="Role" asp-action="Delete"
+                                           asp-route-id="@role.Id" class="dropdown-item text-danger">حذف</a>
+
+        </div>
+    </div>
+</td>
+
+                                </tr>
+                            }
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+                   }
+
+                   else
+                   {
+                    <div class="alert alert-info">هیچ آیتمی یافت نشد!</div>
+                   }
+@section Scripts
+{
+    <script src="/Shared/JqueryValidation.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+            $('.RolesManagement').addClass('active');
+            $('.RolesManagement').addClass('show');
+        });
+    </script>
+}

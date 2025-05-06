@@ -1,0 +1,106 @@
+@using DevCopilot2.Core.MediasInformation.SiteSettings
+@using DevCopilot2.Core.MediasInformation.Users
+@using DevCopilot2.Domain.DTOs.SiteSettings;
+@using DevCopilot2.Domain.DTOs.Users;
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@model UserListDto
+@{
+    SiteSettingListDto siteSettings = ViewData["SiteSettigs"] as SiteSettingListDto;
+
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureItems = LocOptions.Value.SupportedUICultures!
+    .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
+    .ToList();
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
+    int idIndex = 1;
+}
+
+@await Component.InvokeAsync("AdminVerticalMenu")
+<nav class="navbar navbar-top fixed-top navbar-expand-lg" data-move-target="#navbarVerticalNav">
+    <div class="navbar-logo">
+        <button class="btn navbar-toggler navbar-toggler-humburger-icon hover-bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+        <a class="navbar-brand me-1 me-sm-3" asp-area="" asp-controller="Home"
+           asp-action="Index" title="سایت">
+            <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                    <img src="@(SiteSettingMediaInformation.OriginalLogoImageName.GetAddress+siteSettings.LogoImageName.ConvertImageNameToWebP())"
+                         alt="@siteSettings.SiteName" width="27" />
+                    <h5 class="logo-text ms-2 d-none d-sm-block">@siteSettings.SiteName</h5>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="languages">
+        @foreach (var culture in cultureItems)
+        {
+            <a asp-area="" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="@culture.Value"
+               asp-route-returnUrl="@returnUrl"
+               class="btn @(requestCulture?.RequestCulture.Culture.Name==culture.Value?"btn-primary":"") culture-item">
+                @culture.Value.ToCultureDisplayName()
+            </a>
+        }
+    </div>
+    @await Component.InvokeAsync("AdminHorizentalMenu")
+    <ul class="navbar-nav navbar-nav-icons flex-row">
+        <li class="nav-item">
+            <div class="theme-control-toggle fa-icon-wait px-2">
+                <input class="form-check-input ms-0 theme-control-toggle-input" type="checkbox"
+                       data-theme-control="phoenixTheme" value="dark" id="themeControlToggle" />
+                <label class="mb-0 theme-control-toggle-label theme-control-toggle-light"
+                       for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left"
+                       data-bs-title="@SharedLocalizer.GetString("Change Theme")" style="height:32px;width:32px;">
+                    <span class="icon" data-feather="moon"></span>
+                </label>
+                <label class="mb-0 theme-control-toggle-label theme-control-toggle-dark"
+                       for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left"
+                       data-bs-title="@SharedLocalizer.GetString("Change Theme")" style="height:32px;width:32px;">
+                    <span class="icon" data-feather="sun"></span>
+                </label>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+                <div class="avatar avatar-l ">
+                    <img class="rounded-circle "
+                         src="@((!string.IsNullOrEmpty(Model.ImageName)?
+                         UserMediaInformation.OriginalImage.GetAddress+Model.ImageName.ConvertImageNameToWebP():
+                         PathExtension.UserNoPhoto))"
+                         alt="@Model.FirstName"
+                         title="@Model.FirstName" />
+                </div>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border" aria-labelledby="navbarDropdownUser">
+                <div class="card position-relative border-0">
+                    <div class="card-body p-0">
+                        <div class="text-center pt-4 pb-3">
+                            <div class="avatar avatar-xl ">
+                                <img class="rounded-circle "
+                                     src="@(UserMediaInformation.OriginalImage.GetAddress+Model.ImageName.ConvertImageNameToWebP())"
+                                     alt="@Model.FirstName"
+                                     title="@Model.FirstName" />
+                            </div>
+                            <h6 class="mt-2 text-body-emphasis">@Model.FirstName</h6>
+                        </div>
+                    </div>
+                    <div class="overflow-auto scrollbar" style="height: 6rem;">
+                        <ul class="nav d-flex flex-column mb-2 pb-1">
+                            
+                        </ul>
+                    </div>
+                    <div class="card-footer p-0 border-top border-translucent">
+
+                        <div class="px-3">
+                            <a class="btn btn-phoenix-secondary d-flex flex-center w-100"
+                               asp-area=""
+                               asp-controller="Account"
+                               asp-action="Logout"> <span class="me-2" data-feather="log-out"> </span>"@SharedLocalizer.GetString("Logout")"</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</nav>

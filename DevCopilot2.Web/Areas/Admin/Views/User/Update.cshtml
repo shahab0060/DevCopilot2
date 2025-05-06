@@ -1,0 +1,116 @@
+@using System;
+
+@using DevCopilot2.Domain.DTOs.Users;
+@using DevCopilot2.Core.MediasInformation.Users;
+
+@model UpdateUserDto
+@{
+    ViewData["Title"] = "ویرایش کاربر";
+
+    List<SelectListItem> roles = ViewData["Roles"] as List<SelectListItem>;
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Home"
+               asp-action="Index"
+               title="ادمین">ادمین</a>
+        </li>
+
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="User"
+               asp-action="Index" title="کاربر ها">کاربر ها</a>
+        </li>
+        <li class="breadcrumb-item active">ویرایش کاربر</li>
+    </ol>
+</nav>
+<form class="mb-9" method="post"
+      asp-area="Admin" asp-controller="User" asp-action="Update"
+      enctype="multipart/form-data">
+    <input type="hidden" asp-for="@Model.Id" />
+    <input type="hidden" asp-for="@Model.ImageName" />
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">ویرایش کاربر</h2>
+        </div>
+    </div>
+    <div class="row g-5">
+
+        <div class="border-bottom border-translucent mb-6">
+            <div class="form-check">
+                <input class="form-check-input Others-input" asp-for="@Model.IsSuperAdmin" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.IsSuperAdmin"></label>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input class="form-control Title-input" asp-for="@Model.FirstName" placeholder="" />
+                <label asp-for="@Model.FirstName"></label>
+            </div>
+            <span asp-validation-for="@Model.FirstName"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input class="form-control Title-input" asp-for="@Model.LastName" placeholder="" />
+                <label asp-for="@Model.LastName"></label>
+            </div>
+            <span asp-validation-for="@Model.LastName"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input class="form-control PhoneNumber-input" asp-for="@Model.PhoneNumber" type="number" placeholder="" />
+                <label asp-for="@Model.PhoneNumber"></label>
+            </div>
+            <span asp-validation-for="@Model.PhoneNumber"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input class="form-control Password-input" asp-for="@Model.Password" placeholder="" />
+                <label asp-for="@Model.Password"></label>
+            </div>
+            <span asp-validation-for="@Model.Password"></span>
+        </div>
+
+        <div class="col-12 gy-6">
+            <label class="form-label" asp-for="@Model.Image"></label>
+            <input class="form-control Image-input" asp-for="@Model.Image"
+                   accept="@FileAcceptableFormats.Image"
+                   data-value="@($"-preview")" type="file" />
+            <span asp-validation-for="@Model.Image"></span>
+        </div>
+        <div class="col-12 col-sm-12 mb-sm-2">
+            <div class="avatar avatar-5xl"><img class="rounded-circle  @($"-preview")" src="@(UserMediaInformation.OriginalImage.GetAddress+Model.ImageName.ConvertImageNameToWebP())" alt="عکس" title="عکس"></div>
+        </div>
+
+        <div class="col-sm-12 col-md-6 gy-6">
+            <div class="form-floating form-floating-advance-select">
+                <label asp-for="@Model.RoleIds"></label>
+                <select class="form-select" data-choices="data-choices"
+                        data-options=''
+                        asp-for="@Model.RoleIds"
+                        asp-items="roles" multiple>
+                </select>
+            </div>
+            <span asp-validation-for="@Model.RoleIds"></span>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4 offset-lg-4">
+            <div class="d-flex">
+                <button class="btn btn-primary px-5 w-100 text-nowrap">ویرایش کاربر</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <script src="/Shared/JqueryValidation.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+            $('.UsersManagement').addClass('active');
+            $('.UsersManagement').addClass('show');
+        });
+    </script>
+}

@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'vremenagrotesk';
+    src: url('vazir/numbers/Vazir-FD-WOL.woff2') format('woff2'), url('vazir/numbers/Vazir-FD-WOL.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'vremenagrotesk';
+    src: url('vazir/numbers/Vazir-FD-WOL.woff2') format('woff2'), url('vazir/numbers/Vazir-FD-WOL.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'vremenagrotesk';
+    src: url('vazir/numbers/Vazir-Bold-FD-WOL.woff2') format('woff2'), url('vazir/numbers/Vazir-Bold-FD-WOL.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}

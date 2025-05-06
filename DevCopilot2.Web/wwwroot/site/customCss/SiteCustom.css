@@ -1,0 +1,57 @@
+﻿
+.field-validation-error {
+    color: red !important;
+}
+
+a.disabled {
+    pointer-events: none !important;
+    cursor: default !important;
+    color: grey !important;
+}
+.pswp__img{
+    object-fit:contain!important;
+}
+a[disabled] {
+    color: #6c757d; /* Bootstrap's text-muted color */
+    cursor: default;
+    pointer-events: none; /* Prevents any interaction */
+    text-decoration: none; /* Removes underline */
+}
+
+    a[disabled]:hover {
+        text-decoration: none; /* Ensures underline is removed on hover */
+    }
+
+.d-real-none {
+    display: none !important;
+}
+
+.navbar-cart-product-remove {
+    cursor: pointer;
+}
+
+.default-cursor {
+    cursor: default;
+}
+.single-credential-img{
+    width:100px;
+    height:100px;
+}
+.single-category-navbar-image {
+    width: 100px;
+    height: 100px;
+}
+.rtl{
+    direction:rtl;
+}
+.ltr{
+    direction:ltr!important;
+}
+ul{
+    padding-inline-start:0;
+}
+.btn-outline-dark:focus , .btn-outline-dark:active{
+    color:white;
+    background-color:black!important;
+    border-color:grey;
+}

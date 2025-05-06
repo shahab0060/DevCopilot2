@@ -1,0 +1,107 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.DTOs.SiteSettings
+@using DevCopilot2.Core.MediasInformation.SiteSettings
+@model UpdateSiteSettingDto
+@{
+	ViewData["Title"] = $@"{SharedLocalizer.GetString("Update")} {SharedEntitiesLocalizer.GetString("SiteSetting")}";
+
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Home"
+                                  asp-action="Index" 
+                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
+<li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="SiteSetting"
+                                  asp-action="Index" 
+                                   title="@SharedEntitiesLocalizer.GetString("SiteSettings")">@SharedEntitiesLocalizer.GetString("SiteSettings")</a></li>
+
+        <li class="breadcrumb-item active">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("SiteSetting")</li>
+    </ol>   
+</nav>
+<form class="mb-9" method="post" 
+                            asp-area="Admin" asp-controller="SiteSetting" asp-action="Update"
+                            enctype="multipart/form-data">
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("SiteSetting")</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                                <button class="btn btn-primary px-5 w-100 text-nowrap">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("SiteSetting")</button>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+
+                <input type="hidden" asp-for="@Model.Id" class=""
+                       />
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.SMSApiKey"  placeholder="" />
+        <label asp-for="@Model.SMSApiKey"></label>
+    </div>
+    <span asp-validation-for="@Model.SMSApiKey"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Others-input"  asp-for="@Model.SMSTemplateName"  placeholder="" />
+        <label asp-for="@Model.SMSTemplateName"></label>
+    </div>
+    <span asp-validation-for="@Model.SMSTemplateName"></span>
+</div>
+<input type="hidden" asp-for="@Model.FavIconName" class=""
+                       />
+
+                        <div class="col-12 gy-6">
+  <label class="form-label" asp-for="@Model.FavIconNameFile"></label>
+  <input class="form-control Image-input" asp-for="@Model.FavIconNameFile" 
+                            accept="@FileAcceptableFormats.Image" 
+                            data-value="@("Model" + ".FavIconNameFile")" type="file" />
+  <span asp-validation-for="@Model.FavIconNameFile"></span>
+</div>
+                        <div class="col-12 col-sm-12 mb-sm-2">
+                          <div class="avatar avatar-5xl"><img data-name="@("Model" + ".FavIconNameFile")" class="rounded-circle " src="@(SiteSettingMediaInformation.OriginalFavIconName.GetAddress+Model.FavIconName)" alt="FavIconNameFile" title="FavIconNameFile"></div>
+                        </div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control Title-input"  asp-for="@Model.SiteName"  placeholder="" />
+        <label asp-for="@Model.SiteName"></label>
+    </div>
+    <span asp-validation-for="@Model.SiteName"></span>
+</div>
+<input type="hidden" asp-for="@Model.LogoImageName" class=""
+                       />
+
+                        <div class="col-12 gy-6">
+  <label class="form-label" asp-for="@Model.LogoImageNameFile"></label>
+  <input class="form-control Image-input" asp-for="@Model.LogoImageNameFile" 
+                            accept="@FileAcceptableFormats.Image" 
+                            data-value="@("Model" + ".LogoImageNameFile")" type="file" />
+  <span asp-validation-for="@Model.LogoImageNameFile"></span>
+</div>
+                        <div class="col-12 col-sm-12 mb-sm-2">
+                          <div class="avatar avatar-5xl"><img data-name="@("Model" + ".LogoImageNameFile")" class="rounded-circle " src="@(SiteSettingMediaInformation.OriginalLogoImageName.GetAddress+Model.LogoImageName)" alt="LogoImageNameFile" title="LogoImageNameFile"></div>
+                        </div>
+
+    </div>
+</form>
+
+@section Scripts
+{
+	<script src="/Shared/JqueryValidation.min.js"></script>
+	<script>
+		$(document).ready(function (e) {
+			$('.SiteSettingsManagement').addClass('active');
+            $('.SiteSettingsManagement').addClass('show');
+		});
+	</script>
+}

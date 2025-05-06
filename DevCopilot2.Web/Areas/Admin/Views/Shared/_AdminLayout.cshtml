@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+
+<!DOCTYPE html>
+<html lang="fa-IR" dir="ltr" data-navigation-type="combo" data-navbar-horizontal-shape="default">
+<head>
+    @await Component.InvokeAsync("AdminMetaTagsAndTitle")
+    <partial name="_AdminHeadStylesAndScripts" />
+    @RenderSection("Styles", false)
+</head>
+<body>
+
+    <main class="main" id="top">
+        @await Component.InvokeAsync("AdminNavbar")
+
+        <div class="content">
+            @RenderBody()
+            @await Component.InvokeAsync("AdminFooter")
+        </div>
+        @await Component.InvokeAsync("AdminModals")
+    </main>
+</body>
+<partial name="_AdminScripts" />
+<partial name="_AdminMessage" />
+@RenderSection("Scripts", false)
+</html>

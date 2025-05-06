@@ -1,0 +1,230 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.DTOs.Entities
+@model UpdateEntitySelectedProjectAreaDto
+@{
+	ViewData["Title"] = $@"{SharedLocalizer.GetString("Update")} {SharedEntitiesLocalizer.GetString("EntitySelectedProjectArea")}";
+
+    List<SelectListItem> projectAreas = ViewData["ProjectAreas"] as List<SelectListItem>;
+List<SelectListItem> properties = ViewData["Properties"] as List<SelectListItem>;
+    UpdateEntitySelectedProjectAreaSelectedFilterDto updateEntitySelectedProjectAreaSelectedFilter = new UpdateEntitySelectedProjectAreaSelectedFilterDto();
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Home"
+                                  asp-action="Index" 
+                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
+<li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="EntitySelectedProjectArea"
+                                  asp-action="Index" 
+
+                                asp-route-entityIdId="@Model.EntityId" title="@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreas")">@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreas")</a></li>
+
+        <li class="breadcrumb-item active">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("EntitySelectedProjectArea")</li>
+    </ol>   
+</nav>
+<form class="mb-9" method="post" 
+                            asp-area="Admin" asp-controller="EntitySelectedProjectArea" asp-action="Update"
+                            enctype="multipart/form-data">
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("EntitySelectedProjectArea")</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                                <button class="btn btn-primary px-5 w-100 text-nowrap">@SharedLocalizer.GetString("Update") @SharedEntitiesLocalizer.GetString("EntitySelectedProjectArea")</button>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+
+                <input type="hidden" asp-for="@Model.Id" class=""
+                       />
+<input type="hidden" asp-for="@Model.EntityId" class=""
+                       />
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select"  asp-for="@Model.ProjectAreaId"  asp-items="projectAreas" >
+
+        </select>
+        <label asp-for="@Model.ProjectAreaId"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectAreaId"></span>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input  class="form-check-input Others-input" asp-for="@Model.HasIndex" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasIndex"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input  class="form-check-input Others-input" asp-for="@Model.HasCreate" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasCreate"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input  class="form-check-input Others-input" asp-for="@Model.HasUpdate" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasUpdate"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input  class="form-check-input Others-input" asp-for="@Model.HasDelete" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasDelete"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input  class="form-check-input Others-input" asp-for="@Model.HasApi" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasApi"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input  class="form-check-input Title-input" asp-for="@Model.HasWeb" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasWeb"></label>
+    </div>
+</div>
+
+                                 <div class="sub-form-container" data-name="@("EntitySelectedProjectAreaSelectedFiltersList")">
+                                 <h3>@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilters")</h3>
+                                     @if (Model.EntitySelectedProjectAreaSelectedFiltersList is not null)
+                                     {
+                                         for (int entitySelectedProjectAreaSelectedFilter = 0; entitySelectedProjectAreaSelectedFilter < Model.EntitySelectedProjectAreaSelectedFiltersList.Count; entitySelectedProjectAreaSelectedFilter++)
+                                         {
+
+                                                string entitySelectedProjectAreaSelectedFilterDataName = "EntitySelectedProjectAreaSelectedFiltersList" + "[" + entitySelectedProjectAreaSelectedFilter + "]";
+
+                                         <div class="single-sub-form row g-5" data-name="@("EntitySelectedProjectAreaSelectedFiltersList")">
+                                                 <input type="hidden" asp-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Id" class="sub-form-input"
+
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="Id"
+               />
+<input type="hidden" asp-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].EntitySelectedProjectAreaId" class="sub-form-input"
+
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="EntitySelectedProjectAreaId"
+               data-value="1"/>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select" 
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="PropertyId"
+                 asp-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].PropertyId"  asp-items="properties" >
+
+        </select>
+        <label asp-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].PropertyId"></label>
+    </div>
+    <span asp-validation-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].PropertyId"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control sub-form-input Title-input" 
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="Value"
+                 asp-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Value"  placeholder="" />
+        <label asp-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Value"></label>
+    </div>
+    <span asp-validation-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Value"></span>
+</div>
+
+                                            <div class="buttons-container" data-name="@entitySelectedProjectAreaSelectedFilterDataName">
+
+                                                 <div class="d-flex justify-content-end mt-3">
+                                                     <p class="btn btn-danger next-btn mb-0 remove-sub-item-btn"
+                                                        data-name="@("EntitySelectedProjectAreaSelectedFiltersList")"
+                                                        onclick="RemoveSubItem(this)">@SharedLocalizer.GetString("Delete") @SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")</p>
+                                                 </div>
+                                             </div>
+                                         </div>
+
+                                         }
+                                     }  
+                                 </div>
+
+                                 <div class="d-flex justify-content-end mt-3">
+                                     <p class="btn btn-success next-btn mb-0 add-sub-item-btn"
+                                        onclick="AddSubItem('EntitySelectedProjectAreaSelectedFiltersList')"
+                                        data-name="EntitySelectedProjectAreaSelectedFiltersList">@SharedLocalizer.GetString("Add") @SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")</p>
+                                 </div>
+
+                                 <div class="sub-form-template d-none add-default-sub-form" 
+                                          data-name="EntitySelectedProjectAreaSelectedFiltersList"
+                                          data-form-name="EntitySelectedProjectAreaSelectedFiltersList"
+                                          data-title="@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilters")"
+                                          data-replace-from="updateEntitySelectedProjectAreaSelectedFilter"
+                                          data-replace-to="EntitySelectedProjectAreaSelectedFiltersList[0]"
+                                          >
+                                         <input type="hidden" asp-for="@updateEntitySelectedProjectAreaSelectedFilter.Id" class="sub-form-input"
+
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="Id"
+               value="0"/>
+<input type="hidden" asp-for="@updateEntitySelectedProjectAreaSelectedFilter.EntitySelectedProjectAreaId" class="sub-form-input"
+
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="EntitySelectedProjectAreaId"
+               value="0"/>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select class="form-select" 
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="PropertyId"
+                 asp-for="@updateEntitySelectedProjectAreaSelectedFilter.PropertyId"  asp-items="properties" >
+
+        </select>
+        <label asp-for="@updateEntitySelectedProjectAreaSelectedFilter.PropertyId"></label>
+    </div>
+    <span asp-validation-for="@updateEntitySelectedProjectAreaSelectedFilter.PropertyId"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input class="form-control sub-form-input Title-input" 
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="Value"
+                 asp-for="@updateEntitySelectedProjectAreaSelectedFilter.Value"  placeholder="" />
+        <label asp-for="@updateEntitySelectedProjectAreaSelectedFilter.Value"></label>
+    </div>
+    <span asp-validation-for="@updateEntitySelectedProjectAreaSelectedFilter.Value"></span>
+</div>
+                                      <div class="buttons-container is-template" data-name="EntitySelectedProjectAreaSelectedFiltersList[0]">
+
+                                         <div class="d-flex justify-content-end mt-3">
+                                             <p class="btn btn-danger next-btn mb-0 remove-sub-item-btn"
+                                                data-name="EntitySelectedProjectAreaSelectedFiltersList"
+                                                onclick="RemoveSubItem(this)">@SharedLocalizer.GetString("Delete") @SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")</p>
+                                         </div>                              
+                                      </div>
+                                  </div>
+
+    </div>
+</form>
+
+@section Scripts
+{
+	<script src="/Shared/JqueryValidation.min.js"></script>
+	<script>
+		$(document).ready(function (e) {
+			$('.EntitySelectedProjectAreasManagement').addClass('active');
+            $('.EntitySelectedProjectAreasManagement').addClass('show');
+		});
+	</script>
+}

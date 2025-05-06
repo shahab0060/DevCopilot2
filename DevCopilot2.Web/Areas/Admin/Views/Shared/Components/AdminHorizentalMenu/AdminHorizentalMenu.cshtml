@@ -1,0 +1,26 @@
+@using DevCopilot2.Domain.DTOs.SiteSettings;
+@using DevCopilot2.Web.Areas.Admin.Components;
+@using DevCopilot2.Domain.DTOs.Common;
+@model List<MenuItemDto>
+@{
+    UpdateSiteSettingDto siteSettings = ViewData["SiteSettigs"] as UpdateSiteSettingDto;
+    bool isSuperAdmin = (bool)ViewData["IsSuperAdmin"];
+    int idIndex = 1;
+}
+<div class="collapse navbar-collapse navbar-top-collapse order-1 order-lg-0 justify-content-center" id="navbarTopCollapse">
+    <ul class="navbar-nav navbar-nav-top" data-dropdown-on-hover="data-dropdown-on-hover">
+        @foreach (var menuItem in Model.Where(a => a.InnerItems != null && a.InnerItems.Any()))
+        {
+            if (isSuperAdmin)
+                menuItem.UserHasPermission = true;
+            if (menuItem.UserHasPermission || (menuItem.InnerItems.Any(a => a.UserHasPermission)))
+            {
+                menuItem.Index = idIndex;
+                <li class="nav-item">
+                    @await Component.InvokeAsync("AdminHorizentalMenuItem", menuItem)
+                </li>
+                idIndex++;
+            }
+        }
+    </ul>
+</div>

@@ -1,0 +1,97 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="selenium-manager2\**" />
+    <Content Remove="selenium-manager2\**" />
+    <EmbeddedResource Remove="selenium-manager2\**" />
+    <None Remove="selenium-manager2\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Areas\Admin\Views\Home\Icons.cshtml" />
+    <None Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Role\Create.cshtml" />
+    <None Include="Areas\Admin\Views\Role\Detail.cshtml" />
+    <None Include="Areas\Admin\Views\Role\Index.cshtml" />
+    <None Include="Areas\Admin\Views\Role\Update.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Components\AdminFooter\AdminFooter.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Components\AdminHorizentalMenuItem\AdminHorizentalMenuItem.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Components\AdminHorizentalMenu\AdminHorizentalMenu.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Components\AdminMetaTagsAndTitle\AdminMetaTagsAndTitle.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Components\AdminModals\AdminModals.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Components\AdminNavbar\AdminNavbar.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Components\AdminSettingsPanel\AdminSettingsPanel.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Components\AdminVerticalMenuItem\AdminVerticalMenuItem.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\Components\AdminVerticalMenu\AdminVerticalMenu.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_AdminHeadStylesAndScripts.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_AdminLayout.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_AdminMessage.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_AdminMetaTags.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_AdminPagingPartial.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_AdminScripts.cshtml" />
+    <None Include="Areas\Admin\Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="Areas\Admin\Views\User\Create.cshtml" />
+    <None Include="Areas\Admin\Views\User\Detail.cshtml" />
+    <None Include="Areas\Admin\Views\User\Index.cshtml" />
+    <None Include="Areas\Admin\Views\User\Update.cshtml" />
+    <None Include="Areas\Admin\Views\_ViewImports.cshtml" />
+    <None Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <None Include="Views\Account\PhoneNumberAndPasswordSignIn.cshtml" />
+    <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Home\NotFound.cshtml" />
+    <None Include="Views\Shared\Components\SiteHeaderScripts\SiteHeaderScripts.cshtml" />
+    <None Include="Views\Shared\Components\SiteMetaTagsAndTitle\SiteMetaTagsAndTitle.cshtml" />
+    <None Include="Views\Shared\Components\SiteFooter\SiteFooter.cshtml" />
+    <None Include="Views\Shared\Components\SiteNavbar\SiteNavbar.cshtml" />
+    <None Include="Views\Shared\_SiteMessage.cshtml" />
+    <None Include="Views\Shared\_siteScriptsPartial.cshtml" />
+    <None Include="Views\Shared\_siteLayout.cshtml" />
+    <None Include="Views\Shared\_sitePaginationPartial.cshtml" />
+    <None Include="Views\Shared\_siteScripts.cshtml" />
+    <None Include="Views\Shared\_siteSingleProductPartial.cshtml" />
+    <None Include="Views\Shared\_siteStyles.cshtml" />
+    <None Include="Views\_ViewImports.cshtml" />
+    <None Include="Views\_ViewStart.cshtml" />
+     </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
+    <!--<PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.5" />-->
+    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.3.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <!--<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.1"></PackageReference>-->
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DevCopilot2.Core\DevCopilot2.Core.csproj" />
+    <ProjectReference Include="..\DevCopilot2.DataLayer\DevCopilot2.DataLayer.csproj" />
+    <ProjectReference Include="..\DevCopilot2.Domain\DevCopilot2.Domain.csproj" />
+    <ProjectReference Include="..\DevCopilot2.IOC\DevCopilot2.IOC.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="selenium-manager\linux\" />
+    <Folder Include="selenium-manager\macos\" />
+    <Folder Include="selenium-manager\windows\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\surface\.nuget\packages\selenium.webdriver\4.25.0\buildTransitive\..\manager\linux\selenium-manager" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\surface\.nuget\packages\selenium.webdriver\4.25.0\buildTransitive\..\manager\macos\selenium-manager" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="C:\Users\surface\.nuget\packages\selenium.webdriver\4.25.0\buildTransitive\..\manager\windows\selenium-manager.exe" />
+  </ItemGroup>
+</Project>

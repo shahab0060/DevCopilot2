@@ -1,0 +1,80 @@
+﻿<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+        crossorigin="anonymous"
+        asp-fallback-src="/shared/jquery.min.js"></script>
+@if (ViewData["CustomDeferStyleAddress"] is not null)
+{
+    <div class="defer-stylesheet" data-src="@ViewData["CustomDeferStyleAddress"]"></div>
+}
+else
+{
+    <div class="defer-stylesheet" data-src="/site/packs/allDeferCssPack.min.css"></div>
+}
+@if (ViewBag.AddSwiper is true)
+{
+    <link rel="stylesheet" href="/site/vendor/swiper/swiper-bundle.min.css" />
+    <script src="/site/vendor/swiper/swiper-pack.min.js" asp-append-version="true"></script>
+}
+@if (ViewBag.AddAosLibrary is true)
+{
+    <link rel="stylesheet" href="/site/vendor/aos/aos.min.css" asp-append-version="true" />
+    <script src="/site/vendor/aos/aos-pack.min.js" asp-append-version="true"></script>
+}
+<script src="/site/vendor/object-fit-images/ofi-pack.min.js" asp-append-version="true" async></script>
+
+@if (ViewBag.AddZoomLibrary is true)
+{
+    <script defer asp-append-version="true" src="/site/packs/ZoomPack.min.js"></script>
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <!--
+          Background of PhotoSwipe.
+          It's a separate element as animating opacity is faster than rgba().
+          -->
+        <div class="pswp__bg"></div>
+        <!-- Slides wrapper with overflow:hidden.-->
+        <div class="pswp__scroll-wrap">
+            <!--
+              Container that holds slides.
+              PhotoSwipe keeps only 3 of them in the DOM to save memory.
+              Don't modify these 3 pswp__item elements, data is added later on.
+              -->
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed.-->
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <!-- Controls are self-explanatory. Order can be changed.-->
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                    <button class="pswp__button pswp__button--share" title="Share"></button>
+                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                    <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR-->
+                    <!-- element will get class pswp__preloader--active when preloader is running-->
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div>
+                </div>
+                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center text-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="/site/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+<script src="/site/vendor/bootstrap-select/js/bootstrap-select.min.js" defer></script>
+<script src="/site/packs/allJsDeferPack.min.js" asp-append-version="true" defer></script>

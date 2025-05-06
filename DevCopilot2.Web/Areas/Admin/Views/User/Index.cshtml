@@ -1,0 +1,199 @@
+@using System;
+
+@using DevCopilot2.Domain.DTOs.Users;
+@using DevCopilot2.Core.MediasInformation.Users;
+
+@model FilterUsersDto
+@{
+    ViewData["Title"] = "مدیریت کاربر ها";
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Home"
+               asp-action="Index"
+               title="ادمین">ادمین</a>
+        </li>
+
+        <li class="breadcrumb-item active">کاربر ها</li>
+    </ol>
+</nav>
+<div class="mb-9">
+    <div class="row g-3 mb-4">
+        <div class="col-auto">
+            <h2 class="mb-0">کاربر ها</h2>
+        </div>
+    </div>
+    <ul class="nav nav-links mb-3 mb-lg-2 mx-n3">
+        <li class="nav-item">
+            <p class="nav-link disable-nav-link" aria-current="page" href="#">
+                <span>همه </span><span class="text-body-tertiary fw-semibold">(@Model.AllEntitiesCount.ToString("#,0"))</span>
+            </p>
+        </li>
+        <li>
+            <a class="btn btn-primary" id="addBtn"
+               asp-area="Admin" asp-controller="User" asp-action="Create">
+                <span class="fas fa-plus me-2"></span>افزودن کاربر جدید
+            </a>
+        </li>
+    </ul>
+    <div id="products">
+        <form class="mb-4 filter-form FilterForm" method="get"
+              asp-area="Admin" asp-controller="User" asp-action="Index">
+            <div class="d-flex flex-wrap gap-3">
+                <div class="search-box">
+                    <div class="position-relative">
+
+                        <input type="hidden" asp-for="@Model.PageId" name="PageId" id="PageId" />
+                        <input class="form-control search-input search" type="search"
+                               placeholder="جستجو" aria-label="Search" asp-for="@Model.Search" name="Search" />
+                        <span class="fas fa-search search-box-icon"></span>
+                    </div>
+                </div>
+                <div class="scrollbar overflow-hidden-y">
+                    <div class="btn-group position-static" role="group">
+
+                        <div class="ml-input">
+                            <input class="form-control2 search-input search persian-date-picker"
+                                   type="text" asp-for="@Model.FromDate" placeholder="از تاریخ" aria-label="Search" name="FromDate"
+                                   id="FromDate" dir="ltr">
+                        </div>
+
+                        <div class="ml-input">
+                            <input class="form-control2 search-input search persian-date-picker"
+                                   type="text" asp-for="@Model.ToDate" placeholder="تا تاریخ" aria-label="Search" name="ToDate"
+                                   id="ToDate" dir="ltr">
+                        </div>
+
+                        <div class="ml-input">
+                            <select class="btn btn-sm btn-phoenix-secondary px-7 flex-shrink-0" asp-for="@Model.BaseSortEntityType" name="BaseSortEntityType">
+
+                                @foreach (BaseSortEntityType baseSortEntityType in (BaseSortEntityType[])Enum.GetValues(typeof(BaseSortEntityType)))
+                                {
+                                    <option value="@baseSortEntityType">@baseSortEntityType.GetEnumName()</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="ml-input">
+                            <select class="btn btn-sm btn-phoenix-secondary px-7 flex-shrink-0" asp-for="@Model.SortType" name="SortType">
+
+                                @foreach (SortType sortType in (SortType[])Enum.GetValues(typeof(SortType)))
+                                {
+                                    <option value="@sortType">@sortType.GetEnumName()</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="ms-xxl-auto">
+                <button class="btn btn-sm btn-phoenix-secondary px-7 flex-shrink-0" type="submit" style="margin-top: 5px;">
+                    جستجو
+                </button>
+
+                <a class="btn btn-link text-body me-4 px-0 export-btn"
+                   asp-area="Admin" asp-controller="User" asp-action="ExportExcel">
+                    <span class="fa-solid fa-file-export fs-9 me-2"></span>Excel
+                </a>
+            </div>
+        </form>
+    </div>
+    <div class="mx-n4 px-4 mx-lg-n6 px-lg-6 bg-body-emphasis border-top border-bottom border-translucent position-relative top-1">
+    </div>
+</div>
+
+@if (Model.Users.Any())
+{
+    <div class="table-responsive scrollbar mx-n1 px-1">
+        <table class="table fs-9 mb-0">
+            <thead>
+
+                <tr>
+                    <th class="" scope="col">نام</th>
+                    <th class="" scope="col">نام خانوادگی</th>
+                    <th class="" scope="col">شماره تلفن</th>
+                    <th class="" scope="col">تاریخ ساخت</th>
+                    <th class="" scope="col">تاریخ آخرین ویرایش</th>
+                    <th class="" scope="col">تعداد ویرایش</th>
+
+                    <th class="sort text-end align-middle pe-0 ps-4" scope="col">عملیات</th>
+                </tr>
+            </thead>
+            <tbody class="list" id="table-body">
+                <tr class="position-static">
+
+                    @foreach (
+                   UserListDto user in Model.Users)
+                    {
+                        bool isAdmin = user.IsSuperAdmin || user.RoleIds.Any();
+                    <tr class="position-static">
+
+                        <td class="product align-middle ps-4">
+                            <span class="fw-semibold line-clamp-3 mb-0">@user.FirstName</span>
+                        </td>
+                        <td class="product align-middle ps-4">
+                            <span class="fw-semibold line-clamp-3 mb-0">@user.LastName</span>
+                        </td>
+                        <td class="product align-middle ps-4">
+                            <span class="fw-semibold line-clamp-3 mb-0">@user.PhoneNumber</span>
+                        </td>
+                        <td class="product align-middle ps-4">
+                            <span class="fw-semibold line-clamp-3 mb-0">@user.CreateDate.ToShamsi()</span>
+                        </td>
+                        <td class="product align-middle ps-4">
+                            <span class="fw-semibold line-clamp-3 mb-0">@user.LatestEditDate.ToShamsi()</span>
+                        </td>
+                        <td class="product align-middle ps-4">
+                            <span class="fw-semibold line-clamp-3 mb-0">@user.EditCounts.ToString()</span>
+                        </td>
+
+                        <td class="align-middle white-space-nowrap text-end pe-0 ps-4 btn-reveal-trigger">
+                            <div class="btn-reveal-trigger position-static">
+                                <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs-10" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs-10"></span></button>
+                                <div class="dropdown-menu dropdown-menu-end py-2">
+                                        @if (isAdmin)
+                                        {
+                                        <a asp-area="Admin" asp-controller="User" asp-action="Update"
+                                           asp-route-id="@user.Id" class="dropdown-item update-btn">ویرایش</a>
+                                        }
+                                    <a asp-area="Admin" asp-controller="User" asp-action="Detail"
+                                       asp-route-id="@user.Id" class="dropdown-item detail-btn">جزئیات</a>
+                                        @if (isAdmin)
+                                        {
+                                        <div class="dropdown-divider"></div>
+                                        <a asp-area="Admin" asp-controller="User" asp-action="Delete"
+                                           asp-route-id="@user.Id" class="dropdown-item text-danger">حذف</a>
+                                        }
+
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                    }
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <partial name="_AdminPagingPartial" model="@Model.GetCurrentPaging()" />
+}
+
+else
+{
+    <div class="alert alert-info">هیچ آیتمی یافت نشد!</div>
+}
+@section Scripts
+{
+    <script src="/Shared/JqueryValidation.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+            $('.UsersManagement').addClass('active');
+            $('.UsersManagement').addClass('show');
+        });
+    </script>
+}

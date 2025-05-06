@@ -1,0 +1,38 @@
+@using DevCopilot2.Domain.DTOs.SiteSettings;
+@using DevCopilot2.Web.Areas.Admin.Components;
+@using DevCopilot2.Domain.DTOs.Common;
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@model List<MenuItemDto>
+@{
+    SiteSettingListDto siteSettings = ViewData["SiteSettigs"] as SiteSettingListDto;
+    bool isSuperAdmin = (bool)ViewData["IsSuperAdmin"];
+    int idIndex = 1;
+}
+<nav class="navbar navbar-vertical navbar-expand-lg">
+    <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+        <!-- scrollbar removed-->
+        <div class="navbar-vertical-content">
+            <ul class="navbar-nav flex-column" id="navbarVerticalNav">
+                @foreach (var menuItem in Model)
+                {
+                    if (isSuperAdmin)
+                        menuItem.UserHasPermission = true;
+                    if (menuItem.UserHasPermission || (menuItem.InnerItems != null &&
+                    menuItem.InnerItems.Any(a => a.UserHasPermission)))
+                    {
+                        menuItem.Index = idIndex;
+                        @await Component.InvokeAsync("AdminVerticalMenuItem", menuItem)
+                        idIndex++;
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="navbar-vertical-footer">
+        <button class="btn navbar-vertical-toggle border-0 fw-semibold w-100 white-space-nowrap d-flex align-items-center">
+            <span class="uil uil-left-arrow-to-left fs-8"></span>
+            <span class="uil uil-arrow-from-right fs-8"></span>
+            <span class="navbar-vertical-footer-text ms-2">@SharedLocalizer.GetString("Collapse")</span>
+        </button>
+    </div>
+</nav>

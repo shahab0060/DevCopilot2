@@ -1,0 +1,201 @@
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.Enums.Project
+@using DevCopilot2.Domain.DTOs.Projects
+@model ProjectListDto
+@{
+	ViewData["Title"] = $"{SharedEntitiesLocalizer.GetString("Project")} {SharedLocalizer.GetString("Detail")}";
+    List<SelectListItem> templates = ViewData["Templates"] as List<SelectListItem>;
+List<SelectListItem> languages = ViewData["Languages"] as List<SelectListItem>;
+    CreateProjectAreaDto createProjectArea = new CreateProjectAreaDto();
+CreateProjectSelectedLanguageDto createProjectSelectedLanguage = new CreateProjectSelectedLanguageDto();
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Home"
+                                  asp-action="Index" 
+                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
+<li class="breadcrumb-item"><a asp-area="Admin"
+                                  asp-controller="Project"
+                                  asp-action="Index" 
+                                   title="@SharedEntitiesLocalizer.GetString("Projects")">@SharedEntitiesLocalizer.GetString("Projects")</a></li>
+
+        <li class="breadcrumb-item active">@SharedEntitiesLocalizer.GetString("Project") @SharedLocalizer.GetString("Detail")</li>
+    </ol>   
+</nav>
+<form class="mb-9" method="post" >
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@SharedEntitiesLocalizer.GetString("Project") @SharedLocalizer.GetString("Detail")</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                <a class="btn btn-primary px-5 w-100 text-nowrap" asp-area="Admin"
+                                  asp-controller="Project"
+                                  asp-action="Index">@SharedLocalizer.GetString("Close")</a>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+
+                <div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Hidden-input"  asp-for="@Model.Id"  placeholder="" />
+        <label asp-for="@Model.Id"></label>
+    </div>
+    <span asp-validation-for="@Model.Id"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.AuthorPhoneNumber"  placeholder="" />
+        <label asp-for="@Model.AuthorPhoneNumber"></label>
+    </div>
+    <span asp-validation-for="@Model.AuthorPhoneNumber"></span>
+</div>
+
+                                 <div class="sub-form-container" data-name="@("ProjectAreasList")">
+                                 <h3>@SharedEntitiesLocalizer.GetString("ProjectAreas")</h3>
+                                     @if (Model.ProjectAreasList is not null)
+                                     {
+                                         for (int projectArea = 0; projectArea < Model.ProjectAreasList.Count; projectArea++)
+                                         {
+
+                                                string projectAreaDataName = "ProjectAreasList" + "[" + projectArea + "]";
+
+                                         <div class="single-sub-form row g-5" data-name="@("ProjectAreasList")">
+                                                 <div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Hidden-input" 
+               data-name="ProjectAreasList"
+               data-prefix="ProjectAreasList"
+               data-suffix="Id"
+                 asp-for="@Model.ProjectAreasList[projectArea].Id"  placeholder="" />
+        <label asp-for="@Model.ProjectAreasList[projectArea].Id"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectAreasList[projectArea].Id"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Hidden-input" 
+               data-name="ProjectAreasList"
+               data-prefix="ProjectAreasList"
+               data-suffix="ProjectTitle"
+               data-value="1"  asp-for="@Model.ProjectAreasList[projectArea].ProjectTitle"  placeholder="" />
+        <label asp-for="@Model.ProjectAreasList[projectArea].ProjectTitle"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectAreasList[projectArea].ProjectTitle"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select" 
+               data-name="ProjectAreasList"
+               data-prefix="ProjectAreasList"
+               data-suffix="TemplateTitle"
+                 asp-for="@Model.ProjectAreasList[projectArea].TemplateTitle"  asp-items="templates" >
+
+        </select>
+        <label asp-for="@Model.ProjectAreasList[projectArea].TemplateTitle"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectAreasList[projectArea].TemplateTitle"></span>
+</div>
+
+                                         </div>
+
+                                         }
+                                     }  
+                                 </div>
+
+                                 <div class="sub-form-container" data-name="@("ProjectSelectedLanguagesList")">
+                                 <h3>@SharedEntitiesLocalizer.GetString("ProjectSelectedLanguages")</h3>
+                                     @if (Model.ProjectSelectedLanguagesList is not null)
+                                     {
+                                         for (int projectSelectedLanguage = 0; projectSelectedLanguage < Model.ProjectSelectedLanguagesList.Count; projectSelectedLanguage++)
+                                         {
+
+                                                string projectSelectedLanguageDataName = "ProjectSelectedLanguagesList" + "[" + projectSelectedLanguage + "]";
+
+                                         <div class="single-sub-form row g-5" data-name="@("ProjectSelectedLanguagesList")">
+                                                 <div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Hidden-input" 
+               data-name="ProjectSelectedLanguagesList"
+               data-prefix="ProjectSelectedLanguagesList"
+               data-suffix="Id"
+                 asp-for="@Model.ProjectSelectedLanguagesList[projectSelectedLanguage].Id"  placeholder="" />
+        <label asp-for="@Model.ProjectSelectedLanguagesList[projectSelectedLanguage].Id"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectSelectedLanguagesList[projectSelectedLanguage].Id"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Hidden-input" 
+               data-name="ProjectSelectedLanguagesList"
+               data-prefix="ProjectSelectedLanguagesList"
+               data-suffix="ProjectTitle"
+               data-value="1"  asp-for="@Model.ProjectSelectedLanguagesList[projectSelectedLanguage].ProjectTitle"  placeholder="" />
+        <label asp-for="@Model.ProjectSelectedLanguagesList[projectSelectedLanguage].ProjectTitle"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectSelectedLanguagesList[projectSelectedLanguage].ProjectTitle"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select" 
+               data-name="ProjectSelectedLanguagesList"
+               data-prefix="ProjectSelectedLanguagesList"
+               data-suffix="LanguageName"
+                 asp-for="@Model.ProjectSelectedLanguagesList[projectSelectedLanguage].LanguageName"  asp-items="languages" >
+
+        </select>
+        <label asp-for="@Model.ProjectSelectedLanguagesList[projectSelectedLanguage].LanguageName"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectSelectedLanguagesList[projectSelectedLanguage].LanguageName"></span>
+</div>
+
+                                         </div>
+
+                                         }
+                                     }  
+                                 </div>
+
+                    <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control" value="@Model.CreateDate.ToShamsi()" asp-for="@Model.CreateDate" type="text" placeholder="" />
+                <label asp-for="@Model.CreateDate"></label>
+            </div>
+            <span asp-validation-for="@Model.CreateDate"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control" value="@Model.LatestEditDate.ToShamsi()" asp-for="@Model.LatestEditDate" type="text" placeholder="" />
+                <label asp-for="@Model.LatestEditDate"></label>
+            </div>
+            <span asp-validation-for="@Model.LatestEditDate"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control" asp-for="@Model.EditCounts" type="number" placeholder="" />
+                <label asp-for="@Model.EditCounts"></label>
+            </div>
+            <span asp-validation-for="@Model.EditCounts"></span>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts
+{
+
+	<script>
+		$(document).ready(function (e) {
+			$('.ProjectsManagement').addClass('active');
+            $('.ProjectsManagement').addClass('show');
+		});
+	</script>
+}
