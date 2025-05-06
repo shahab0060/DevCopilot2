@@ -6,7 +6,7 @@ namespace DevCopilot2.Domain.Enums.Project
 {
     public enum ArchitectureType
     {
-        [Display(ResourceType = typeof(ArchitectureTypeResources), Name = nameof(ArchitectureTypeResources.Architecture))]
-        Architecture = 1,
+        [Display(ResourceType = typeof(ArchitectureTypeResources), Name = nameof(ArchitectureTypeResources.Clean))]
+        Clean = 1,
     }
 }

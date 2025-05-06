@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DevCopilot2.Domain.Resources.Enums.Relations {
+namespace DevCopilot2.Domain.Resources.Enums.Relations
+{
     using System;
 
     /// <summary>
@@ -21,23 +22,28 @@ namespace DevCopilot2.Domain.Resources.Enums.Relations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class InputTypeEnumResources {
+    public class InputTypeEnumResources
+    {
 
         private static global::System.Resources.ResourceManager resourceMan;
 
         private static global::System.Globalization.CultureInfo resourceCulture;
 
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal InputTypeEnumResources() {
+        internal InputTypeEnumResources()
+        {
         }
 
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DevCopilot2.Domain.Resources.Enums.Relations.InputTypeEnumResources", typeof(InputTypeEnumResources).Assembly);
                     resourceMan = temp;
                 }
@@ -50,21 +56,70 @@ namespace DevCopilot2.Domain.Resources.Enums.Relations {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to InputType
+        ///   Looks up a localized string similar to Select
         /// </summary>
-        public static string InputType {
-            get {
-                return ResourceManager.GetString("InputType", resourceCulture);
+        public static string Select
+        {
+            get
+            {
+                return ResourceManager.GetString("Select", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to SecondaryEntitySelect
+        /// </summary>
+        public static string SecondaryEntitySelect
+        {
+            get
+            {
+                return ResourceManager.GetString("SecondaryEntitySelect", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Hidden
+        /// </summary>
+        public static string Hidden
+        {
+            get
+            {
+                return ResourceManager.GetString("Hidden", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to NoInput
+        /// </summary>
+        public static string NoInput
+        {
+            get
+            {
+                return ResourceManager.GetString("NoInput", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to FieldsInRelationEntityPage
+        /// </summary>
+        public static string FieldsInRelationEntityPage
+        {
+            get
+            {
+                return ResourceManager.GetString("FieldsInRelationEntityPage", resourceCulture);
             }
         }
     }

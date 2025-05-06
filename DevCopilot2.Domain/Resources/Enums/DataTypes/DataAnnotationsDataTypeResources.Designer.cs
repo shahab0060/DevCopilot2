@@ -60,11 +60,187 @@ namespace DevCopilot2.Domain.Resources.Enums.DataTypes {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to DataAnnotationDataType
+        ///   Looks up a localized string similar to Title
         /// </summary>
-        public static string DataAnnotationDataType {
+        public static string Title {
             get {
-                return ResourceManager.GetString("DataAnnotationDataType", resourceCulture);
+                return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Text
+        /// </summary>
+        public static string Text
+        {
+            get
+            {
+                return ResourceManager.GetString("Text", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Url
+        /// </summary>
+        public static string Url
+        {
+            get
+            {
+                return ResourceManager.GetString("Url", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Email
+        /// </summary>
+        public static string Email
+        {
+            get
+            {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+
+
+        /// <summary>
+        ///   Looks up a localized string similar to Password
+        /// </summary>
+        public static string Password
+        {
+            get
+            {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to PhoneNumber
+        /// </summary>
+        public static string PhoneNumber
+        {
+            get
+            {
+                return ResourceManager.GetString("PhoneNumber", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to NationalCode
+        /// </summary>
+        public static string NationalCode
+        {
+            get
+            {
+                return ResourceManager.GetString("NationalCode", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to PersianDate
+        /// </summary>
+        public static string PersianDate
+        {
+            get
+            {
+                return ResourceManager.GetString("PersianDate", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Price
+        /// </summary>
+        public static string Price
+        {
+            get
+            {
+                return ResourceManager.GetString("Price", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Color
+        /// </summary>
+        public static string Color
+        {
+            get
+            {
+                return ResourceManager.GetString("Color", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Image
+        /// </summary>
+        public static string Image
+        {
+            get
+            {
+                return ResourceManager.GetString("Image", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Video
+        /// </summary>
+        public static string Video
+        {
+            get
+            {
+                return ResourceManager.GetString("Video", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to File
+        /// </summary>
+        public static string File
+        {
+            get
+            {
+                return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Others
+        /// </summary>
+        public static string Others
+        {
+            get
+            {
+                return ResourceManager.GetString("Others", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to List
+        /// </summary>
+        public static string List
+        {
+            get
+            {
+                return ResourceManager.GetString("List", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to DtoList
+        /// </summary>
+        public static string DtoList
+        {
+            get
+            {
+                return ResourceManager.GetString("DtoList", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Hidden
+        /// </summary>
+        public static string Hidden
+        {
+            get
+            {
+                return ResourceManager.GetString("Hidden", resourceCulture);
             }
         }
     }

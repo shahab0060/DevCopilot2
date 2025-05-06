@@ -60,11 +60,11 @@ namespace DevCopilot2.Domain.Resources.Enums.Project {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Architecture
+        ///   Looks up a localized string similar to Clean
         /// </summary>
-        public static string Architecture {
+        public static string Clean {
             get {
-                return ResourceManager.GetString("Architecture", resourceCulture);
+                return ResourceManager.GetString("Clean", resourceCulture);
             }
         }
     }

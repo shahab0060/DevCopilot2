@@ -6,7 +6,11 @@ namespace DevCopilot2.Domain.Enums.DataTypes
 {
     public enum IdTypeEnum
     {
-        [Display(ResourceType = typeof(IdTypeEnumResources), Name = nameof(IdTypeEnumResources.IdType))]
-        IdType = 1,
+        [Display(ResourceType = typeof(IdTypeEnumResources), Name = nameof(IdTypeEnumResources.Long))]
+        Long,
+        [Display(ResourceType = typeof(IdTypeEnumResources), Name = nameof(IdTypeEnumResources.Int))]
+        Int,
+        [Display(ResourceType = typeof(IdTypeEnumResources), Name = nameof(IdTypeEnumResources.Byte))]
+        Byte
     }
 }

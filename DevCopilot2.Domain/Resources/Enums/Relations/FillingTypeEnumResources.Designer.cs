@@ -60,11 +60,34 @@ namespace DevCopilot2.Domain.Resources.Enums.Relations {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to FillingType
+        ///   Looks up a localized string similar to Input
         /// </summary>
-        public static string FillingType {
+        public static string Input
+        {
             get {
-                return ResourceManager.GetString("FillingType", resourceCulture);
+                return ResourceManager.GetString("Input", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Routing
+        /// </summary>
+        public static string Routing
+        {
+            get
+            {
+                return ResourceManager.GetString("Routing", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Custom
+        /// </summary>
+        public static string Custom
+        {
+            get
+            {
+                return ResourceManager.GetString("Custom", resourceCulture);
             }
         }
     }

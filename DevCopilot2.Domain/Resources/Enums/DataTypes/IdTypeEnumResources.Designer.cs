@@ -60,11 +60,33 @@ namespace DevCopilot2.Domain.Resources.Enums.DataTypes {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to IdType
+        ///   Looks up a localized string similar to Long
         /// </summary>
-        public static string IdType {
+        public static string Long {
             get {
-                return ResourceManager.GetString("IdType", resourceCulture);
+                return ResourceManager.GetString("Long", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Int
+        /// </summary>
+        public static string Int
+        {
+            get
+            {
+                return ResourceManager.GetString("Int", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Byte
+        /// </summary>
+        public static string Byte
+        {
+            get
+            {
+                return ResourceManager.GetString("Byte", resourceCulture);
             }
         }
     }

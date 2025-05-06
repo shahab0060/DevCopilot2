@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DevCopilot2.Domain.Resources.Enums.DataTypes {
+namespace DevCopilot2.Domain.Resources.Enums.DataTypes
+{
     using System;
 
     /// <summary>
@@ -21,23 +22,28 @@ namespace DevCopilot2.Domain.Resources.Enums.DataTypes {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class DataTypeEnumResources {
+    public class DataTypeEnumResources
+    {
 
         private static global::System.Resources.ResourceManager resourceMan;
 
         private static global::System.Globalization.CultureInfo resourceCulture;
 
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DataTypeEnumResources() {
+        internal DataTypeEnumResources()
+        {
         }
 
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
+        public static global::System.Resources.ResourceManager ResourceManager
+        {
+            get
+            {
+                if (object.ReferenceEquals(resourceMan, null))
+                {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DevCopilot2.Domain.Resources.Enums.DataTypes.DataTypeEnumResources", typeof(DataTypeEnumResources).Assembly);
                     resourceMan = temp;
                 }
@@ -50,21 +56,125 @@ namespace DevCopilot2.Domain.Resources.Enums.DataTypes {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
-            get {
+        public static global::System.Globalization.CultureInfo Culture
+        {
+            get
+            {
                 return resourceCulture;
             }
-            set {
+            set
+            {
                 resourceCulture = value;
             }
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to DataType
+        ///   Looks up a localized string similar to String
         /// </summary>
-        public static string DataType {
-            get {
-                return ResourceManager.GetString("DataType", resourceCulture);
+        public static string String
+        {
+            get
+            {
+                return ResourceManager.GetString("String", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Int
+        /// </summary>
+        public static string Int
+        {
+            get
+            {
+                return ResourceManager.GetString("Int", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Long
+        /// </summary>
+        public static string Long
+        {
+            get
+            {
+                return ResourceManager.GetString("Long", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Bool
+        /// </summary>
+        public static string Bool
+        {
+            get
+            {
+                return ResourceManager.GetString("Bool", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Guid
+        /// </summary>
+        public static string Guid
+        {
+            get
+            {
+                return ResourceManager.GetString("Guid", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enum
+        /// </summary>
+        public static string Enum
+        {
+            get
+            {
+                return ResourceManager.GetString("Enum", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to DateTime
+        /// </summary>
+        public static string DateTime
+        {
+            get
+            {
+                return ResourceManager.GetString("DateTime", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Decimal
+        /// </summary>
+        public static string Decimal
+        {
+            get
+            {
+                return ResourceManager.GetString("Decimal", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Double
+        /// </summary>
+        public static string Double
+        {
+            get
+            {
+                return ResourceManager.GetString("Double", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Byte
+        /// </summary>
+        public static string Byte
+        {
+            get
+            {
+                return ResourceManager.GetString("Byte", resourceCulture);
             }
         }
     }

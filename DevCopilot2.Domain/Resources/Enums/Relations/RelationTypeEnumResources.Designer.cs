@@ -8,9 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DevCopilot2.Domain.Resources.Enums.Relations {
-    using System;
-
+namespace DevCopilot2.Domain.Resources.Enums.Relations
+{
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -60,11 +59,22 @@ namespace DevCopilot2.Domain.Resources.Enums.Relations {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to RelationType
+        ///   Looks up a localized string similar to OneToMany
         /// </summary>
-        public static string RelationType {
+        public static string OneToMany {
             get {
-                return ResourceManager.GetString("RelationType", resourceCulture);
+                return ResourceManager.GetString("OneToMany", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to OneToOne
+        /// </summary>
+        public static string OneToOne
+        {
+            get
+            {
+                return ResourceManager.GetString("OneToOne", resourceCulture);
             }
         }
     }
