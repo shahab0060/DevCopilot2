@@ -1,4 +1,3 @@
-using System;
 using DevCopilot2.Domain.DTOs.Common;
 using DevCopilot2.Domain.DTOs.Permissions;
 
@@ -14,6 +13,18 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.AdminMenuItemsData
 
                 new MenuItemDto()
                 {
+                    Title = "Project",
+                    IconName = "project",
+                    VerticalIconName = "project",
+                    ControllerName = "Project",
+                    ActionName = "Index",
+                    PluralTitle = "Projects",
+                    FolderName = "ProjectsManagement",
+                    UserHasPermission = userPermissions.Any(a=>a.KeyName=="ProjectsManagement"),
+                },
+
+                new MenuItemDto()
+                {
                     Title = "Entity",
                     IconName = "entity",
                     VerticalIconName = "entity",
@@ -25,32 +36,6 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.AdminMenuItemsData
 
                 },
 
-                new MenuItemDto()
-                {
-                    Title = "Project",
-                    IconName = "project",
-                    VerticalIconName = "project",
-                    ControllerName = "Project",
-                    ActionName = "Index",
-                    PluralTitle = "Projects",
-                    FolderName = "ProjectsManagement",
-                    UserHasPermission = userPermissions.Any(a=>a.KeyName=="ProjectsManagement"),
-
-                    InnerItems = new List<MenuItemDto>()
-                    {
-
-                new MenuItemDto()
-                {
-                    Title = "Project",
-                    IconName = "project",
-                    VerticalIconName = "project",
-                    ControllerName = "Project",
-                    ActionName = "Index",
-                    PluralTitle = "Projects",
-                    FolderName = "ProjectsManagement",
-                    UserHasPermission = userPermissions.Any(a=>a.KeyName=="ProjectsManagement"),
-
-                },
 
                 new MenuItemDto()
                 {
@@ -63,21 +48,6 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.AdminMenuItemsData
                     FolderName = "ProjectEnumsManagement",
                     UserHasPermission = userPermissions.Any(a=>a.KeyName=="ProjectEnumsManagement"),
 
-                },
-
-                new MenuItemDto()
-                {
-                    Title = "ProjectArea",
-                    IconName = "projectArea",
-                    VerticalIconName = "projectarea",
-                    ControllerName = "ProjectArea",
-                    ActionName = "Index",
-                    PluralTitle = "ProjectAreas",
-                    FolderName = "ProjectAreasManagement",
-                    UserHasPermission = userPermissions.Any(a=>a.KeyName=="ProjectAreasManagement"),
-
-                },
-                    },
                 },
 
                 new MenuItemDto()
@@ -112,11 +82,11 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.AdminMenuItemsData
                     IconName = "siteSetting",
                     VerticalIconName = "sitesetting",
                     ControllerName = "SiteSetting",
-                    ActionName = "Index",
+                    ActionName = "Update",
                     PluralTitle = "SiteSettings",
                     FolderName = "SiteSettingsManagement",
                     UserHasPermission = userPermissions.Any(a=>a.KeyName=="SiteSettingsManagement"),
-
+                    RouteData = new Dictionary<string, string>{{"id","1"}}
                 },
 
                 new MenuItemDto()
@@ -125,11 +95,11 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.AdminMenuItemsData
                     IconName = "generalSetting",
                     VerticalIconName = "generalsetting",
                     ControllerName = "GeneralSetting",
-                    ActionName = "Index",
+                    ActionName = "Update",
                     PluralTitle = "GeneralSettings",
                     FolderName = "GeneralSettingsManagement",
                     UserHasPermission = userPermissions.Any(a=>a.KeyName=="GeneralSettingsManagement"),
-
+                    RouteData = new Dictionary<string, string>{{"id","1"}}
                 },
             };
 

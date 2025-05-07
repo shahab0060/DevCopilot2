@@ -23,7 +23,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.GeneralSettings
                            IStringLocalizer<SharedResources> sharedLocalizer,
                            IStringLocalizer<EntitiesSharedResources> sharedEntitiesLocalizer,
                            IStringLocalizer<GeneralSettingController> localizer,
-                           ISiteService siteService 
+                           ISiteService siteService
                                       )
         {
             this._sharedLocalizer = sharedLocalizer;
@@ -36,91 +36,57 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.GeneralSettings
 
         #region update
 
-		[HttpGet]
-		public async Task<IActionResult> Update(int id)
-		{
-			UpdateGeneralSettingDto? generalSettingInformation = await _siteService.GetGeneralSettingInformation(id);
-			if (generalSettingInformation is null) return NotFound();
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            UpdateGeneralSettingDto? generalSettingInformation = await _siteService.GetGeneralSettingInformation(id);
+            if (generalSettingInformation is null) return NotFound();
 
             return View(generalSettingInformation);
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Update(UpdateGeneralSettingDto update)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateGeneralSettingDto update)
+        {
 
-			if (!ModelState.IsValid)
-			{
+            if (!ModelState.IsValid)
+            {
 
                 return View(update);
             }
-			BaseChangeEntityResult result = await _siteService.UpdateGeneralSetting(update);
+            BaseChangeEntityResult result = await _siteService.UpdateGeneralSetting(update);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("GeneralSetting")} {_sharedLocalizer.GetString("Updated Successfully.")}";
-					return RedirectToAction("Index", "GeneralSetting", new { Area = "Admin", });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("GeneralSetting")} {_sharedLocalizer.GetString("Updated Successfully.")}";
+                        return RedirectToAction("Update", "GeneralSetting", new { Area = "Admin", id = update.Id });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-			return View(update);
-		}
+            return View(update);
+        }
 
-		#endregion
-
-        #region delete
-
-		[HttpGet]
-		public async Task<IActionResult> Delete(int id)
-		{
-            GeneralSettingListDto? generalSettingInformation = await _siteService.GetSingleGeneralSettingInformation(id);
-            if (generalSettingInformation is null) return NotFound();
-			BaseChangeEntityResult result = await _siteService.DeleteGeneralSetting(id);
-			switch (result)
-			{
-				case BaseChangeEntityResult.Success:
-					{
-						TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("GeneralSetting")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-					return RedirectToAction("Index", "GeneralSetting", new { Area = "Admin", });
-					}
-			}
-			return NotFound();
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> DeleteRange(List<int> ids)
-		{
-			if (!ids.Distinct().Any())
-			{
-				TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
-				return RedirectToAction("Index", "GeneralSetting", new { Area = "Admin" });
-			}
-			await _siteService.DeleteGeneralSetting(ids);
-			TempData[SuccessMessage] =$"{_sharedEntitiesLocalizer.GetString("GeneralSettings")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-			return RedirectToAction("Index", "GeneralSetting", new { Area = "Admin" });
-		}
-
-		#endregion
+        #endregion
 
     }
 }

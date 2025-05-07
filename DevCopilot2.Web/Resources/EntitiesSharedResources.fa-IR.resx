@@ -119,11 +119,11 @@
   </resheader>
 
   <data name="SiteSetting" xml:space="preserve">
-    <value>SiteSetting</value>
+    <value>تنظیمات سایت</value>
   </data>
 
   <data name="SiteSettings" xml:space="preserve">
-    <value>SiteSettings</value>
+    <value>تنظیمات سایت</value>
   </data>
 
   <data name="PropertySelectedLanguage" xml:space="preserve">

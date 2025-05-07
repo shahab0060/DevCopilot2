@@ -16,7 +16,7 @@ using DevCopilot2.Core.Exporters;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.SiteSettings
 {
-	[PermissionChecker("SiteSettingManagement")]
+    [PermissionChecker("SiteSettingManagement")]
     public class SiteSettingController : BaseAdminController<SiteSettingListDto>
     {
 
@@ -30,7 +30,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.SiteSettings
                            IStringLocalizer<SharedResources> sharedLocalizer,
                            IStringLocalizer<EntitiesSharedResources> sharedEntitiesLocalizer,
                            IStringLocalizer<SiteSettingController> localizer,
-                           ISiteService siteService 
+                           ISiteService siteService
                                       )
         {
             this._sharedLocalizer = sharedLocalizer;
@@ -43,57 +43,57 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.SiteSettings
 
         #region update
 
-		[HttpGet]
-		public async Task<IActionResult> Update(long id)
-		{
-			UpdateSiteSettingDto? siteSettingInformation = await _siteService.GetSiteSettingInformation(id);
-			if (siteSettingInformation is null) return NotFound();
+        [HttpGet]
+        public async Task<IActionResult> Update(long id)
+        {
+            UpdateSiteSettingDto? siteSettingInformation = await _siteService.GetSiteSettingInformation(id);
+            if (siteSettingInformation is null) return NotFound();
 
             return View(siteSettingInformation);
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Update(UpdateSiteSettingDto update)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateSiteSettingDto update)
+        {
 
-			if (!ModelState.IsValid)
-			{
+            if (!ModelState.IsValid)
+            {
 
                 return View(update);
             }
-			BaseChangeEntityResult result = await _siteService.UpdateSiteSetting(update);
+            BaseChangeEntityResult result = await _siteService.UpdateSiteSetting(update);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("SiteSetting")} {_sharedLocalizer.GetString("Updated Successfully.")}";
-					return RedirectToAction("Index", "SiteSetting", new { Area = "Admin", });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("SiteSetting")} {_sharedLocalizer.GetString("Updated Successfully.")}";
+                        return RedirectToAction("Update", "SiteSetting", new { Area = "Admin", id = update.Id });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-			return View(update);
-		}
+            return View(update);
+        }
 
-		#endregion
+        #endregion
 
     }
 }

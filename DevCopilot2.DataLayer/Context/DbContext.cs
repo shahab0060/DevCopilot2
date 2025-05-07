@@ -26,48 +26,48 @@ namespace DevCopilot2.DataLayer.Context
 
         #region templates
 
-        public virtual DbSet<Template> Templates { get; set; }        
+        public virtual DbSet<Template> Templates { get; set; }
 
         #endregion
 
         #region general settings
 
-        public virtual DbSet<GeneralSetting> GeneralSettings { get; set; }        
+        public virtual DbSet<GeneralSetting> GeneralSettings { get; set; }
 
         #endregion
 
         #region languages
 
-        public virtual DbSet<Language> Languages { get; set; }        
+        public virtual DbSet<Language> Languages { get; set; }
 
         #endregion
 
         #region projects
-public virtual DbSet<ProjectEnumPropertySelectedLanguage> ProjectEnumPropertySelectedLanguages { get; set; }
-public virtual DbSet<Project> Projects { get; set; }
-public virtual DbSet<ProjectEnum> ProjectEnums { get; set; }
-public virtual DbSet<ProjectEnumProperty> ProjectEnumProperties { get; set; }
-public virtual DbSet<ProjectArea> ProjectAreas { get; set; }
+        public virtual DbSet<ProjectEnumPropertySelectedLanguage> ProjectEnumPropertySelectedLanguages { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<ProjectEnum> ProjectEnums { get; set; }
+        public virtual DbSet<ProjectEnumProperty> ProjectEnumProperties { get; set; }
+        public virtual DbSet<ProjectArea> ProjectAreas { get; set; }
 
-        public virtual DbSet<ProjectSelectedLanguage> ProjectSelectedLanguages { get; set; }        
+        public virtual DbSet<ProjectSelectedLanguage> ProjectSelectedLanguages { get; set; }
 
         #endregion
 
         #region entities
-public virtual DbSet<Entity> Entities { get; set; }
-public virtual DbSet<EntityRelation> EntityRelations { get; set; }
-public virtual DbSet<EntitySelectedProjectArea> EntitySelectedProjectAreas { get; set; }
-public virtual DbSet<EntitySelectedProjectAreaSelectedFilter> EntitySelectedProjectAreaSelectedFilters { get; set; }
+        public virtual DbSet<Entity> Entities { get; set; }
+        public virtual DbSet<EntityRelation> EntityRelations { get; set; }
+        public virtual DbSet<EntitySelectedProjectArea> EntitySelectedProjectAreas { get; set; }
+        public virtual DbSet<EntitySelectedProjectAreaSelectedFilter> EntitySelectedProjectAreaSelectedFilters { get; set; }
 
-        public virtual DbSet<EntitySelectedLanguage> EntitySelectedLanguages { get; set; }        
+        public virtual DbSet<EntitySelectedLanguage> EntitySelectedLanguages { get; set; }
 
         #endregion
 
         #region properties
-public virtual DbSet<Property> Properties { get; set; }
-public virtual DbSet<PropertyImageResizeInformation> PropertyImageResizeInformation { get; set; }
+        public virtual DbSet<Property> Properties { get; set; }
+        public virtual DbSet<PropertyImageResizeInformation> PropertyImageResizeInformation { get; set; }
 
-        public virtual DbSet<PropertySelectedLanguage> PropertySelectedLanguages { get; set; }        
+        public virtual DbSet<PropertySelectedLanguage> PropertySelectedLanguages { get; set; }
 
         #endregion
 
@@ -132,9 +132,24 @@ public virtual DbSet<PropertyImageResizeInformation> PropertyImageResizeInformat
                     LogoImageName = "logo.png",
                     SMSApiKey = "apiKey",
                     SMSTemplateName = "defaultVerification",
-                    CreateDate = new DateTime(2025,01,01),
-                    LatestEditDate = new DateTime(2025,01,01),
+                    CreateDate = new DateTime(2025, 01, 01),
+                    LatestEditDate = new DateTime(2025, 01, 01),
                     FavIconName = "favicon.ico"
+                });
+
+            #endregion
+
+            #region general settings
+
+            modelBuilder
+                .Entity<GeneralSetting>()
+                .HasData(new GeneralSetting()
+                {
+                    Id = 1,
+                    CreateDate = new DateTime(2025, 01, 01),
+                    LatestEditDate = new DateTime(2025, 01, 01),
+                    DefaultSolutionName = "BaseCleanArchitectureTemplate",
+                    DefaultSolutionLocation = @"C:\Users\surface\Projects\BaseCleanArchitectureTemplate\BaseCleanArchitectureTemplate.zip",
                 });
 
             #endregion
