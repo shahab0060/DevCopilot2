@@ -9,7 +9,10 @@
 @{
 	ViewData["Title"] = $"{SharedEntitiesLocalizer.GetString("EntityRelation")} {SharedLocalizer.GetString("Detail")}";
     List<SelectListItem> entities = ViewData["Entities"] as List<SelectListItem>;
-
+    List<SelectListItem> middleEntities = [
+        ListMappers.GetDefault(),
+        .. entities
+    ];
 }
 
 <nav class="mb-3" aria-label="breadcrumb">
@@ -70,12 +73,58 @@
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">
-        <select disabled class="form-select"  asp-for="@Model.MiddleEntityPluralName"  asp-items="entities" >
+        <select disabled class="form-select"  asp-for="@Model.MiddleEntityPluralName"  asp-items="middleEntities" >
 
         </select>
         <label asp-for="@Model.MiddleEntityPluralName"></label>
     </div>
     <span asp-validation-for="@Model.MiddleEntityPluralName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select"  asp-for="@Model.RelationType" name="RelationType" >
+
+                            @foreach (RelationTypeEnum relationTypeEnum in (RelationTypeEnum[])Enum.GetValues(typeof(RelationTypeEnum)))
+                            {
+                                <option value="@relationTypeEnum">@relationTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.RelationType"></label>
+    </div>
+    <span asp-validation-for="@Model.RelationType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select"  asp-for="@Model.InputType" name="InputType" >
+
+                            @foreach (InputTypeEnum inputTypeEnum in (InputTypeEnum[])Enum.GetValues(typeof(InputTypeEnum)))
+                            {
+                                <option value="@inputTypeEnum">@inputTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.InputType"></label>
+    </div>
+    <span asp-validation-for="@Model.InputType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select"  asp-for="@Model.FillingType" name="FillingType" >
+
+                            @foreach (FillingTypeEnum fillingTypeEnum in (FillingTypeEnum[])Enum.GetValues(typeof(FillingTypeEnum)))
+                            {
+                                <option value="@fillingTypeEnum">@fillingTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.FillingType"></label>
+    </div>
+    <span asp-validation-for="@Model.FillingType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.FillingCode"  placeholder="" />
+        <label asp-for="@Model.FillingCode"></label>
+    </div>
+    <span asp-validation-for="@Model.FillingCode"></span>
 </div>
 
                     <div class="col-sm-12 col-md-6">

@@ -54,10 +54,51 @@ CreateProjectSelectedLanguageDto createProjectSelectedLanguage = new CreateProje
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.EnglishName"  placeholder="" />
+        <label asp-for="@Model.EnglishName"></label>
+    </div>
+    <span asp-validation-for="@Model.EnglishName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.Title"  placeholder="" />
+        <label asp-for="@Model.Title"></label>
+    </div>
+    <span asp-validation-for="@Model.Title"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Others-input"  asp-for="@Model.Location"  placeholder="" />
+        <label asp-for="@Model.Location"></label>
+    </div>
+    <span asp-validation-for="@Model.Location"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select"  asp-for="@Model.Architecture" name="Architecture" >
+
+                            @foreach (ArchitectureType architectureType in (ArchitectureType[])Enum.GetValues(typeof(ArchitectureType)))
+                            {
+                                <option value="@architectureType">@architectureType.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.Architecture"></label>
+    </div>
+    <span asp-validation-for="@Model.Architecture"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
         <input disabled class="form-control Title-input"  asp-for="@Model.AuthorPhoneNumber"  placeholder="" />
         <label asp-for="@Model.AuthorPhoneNumber"></label>
     </div>
     <span asp-validation-for="@Model.AuthorPhoneNumber"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Others-input"  asp-for="@Model.ReactProjectLocation"  placeholder="" />
+        <label asp-for="@Model.ReactProjectLocation"></label>
+    </div>
+    <span asp-validation-for="@Model.ReactProjectLocation"></span>
 </div>
 
                                  <div class="sub-form-container" data-name="@("ProjectAreasList")">
@@ -91,6 +132,28 @@ CreateProjectSelectedLanguageDto createProjectSelectedLanguage = new CreateProje
         <label asp-for="@Model.ProjectAreasList[projectArea].ProjectTitle"></label>
     </div>
     <span asp-validation-for="@Model.ProjectAreasList[projectArea].ProjectTitle"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Others-input" 
+               data-name="ProjectAreasList"
+               data-prefix="ProjectAreasList"
+               data-suffix="EnglishName"
+                 asp-for="@Model.ProjectAreasList[projectArea].EnglishName"  placeholder="" />
+        <label asp-for="@Model.ProjectAreasList[projectArea].EnglishName"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectAreasList[projectArea].EnglishName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Title-input" 
+               data-name="ProjectAreasList"
+               data-prefix="ProjectAreasList"
+               data-suffix="Title"
+                 asp-for="@Model.ProjectAreasList[projectArea].Title"  placeholder="" />
+        <label asp-for="@Model.ProjectAreasList[projectArea].Title"></label>
+    </div>
+    <span asp-validation-for="@Model.ProjectAreasList[projectArea].Title"></span>
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">

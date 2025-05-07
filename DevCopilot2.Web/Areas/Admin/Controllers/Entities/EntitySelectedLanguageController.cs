@@ -77,7 +77,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
         [HttpGet]
         public async Task<IActionResult> Create(int entityId)
         {
-            await GetViewDatas(entityId);
+            await GetViewDatas(entityId, true);
             CreateEntitySelectedLanguageDto create = new CreateEntitySelectedLanguageDto()
             {
                 EntityId = entityId,
@@ -91,7 +91,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 
             if (!ModelState.IsValid)
             {
-                await GetViewDatas(create.EntityId);
+                await GetViewDatas(create.EntityId, true);
                 return View(create);
             }
             BaseChangeEntityResult result = await _entityService.CreateEntitySelectedLanguage(create);
@@ -123,7 +123,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 
             #endregion
 
-            await GetViewDatas(create.EntityId);
+            await GetViewDatas(create.EntityId, true);
             return View(create);
         }
 
@@ -136,7 +136,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
         {
             UpdateEntitySelectedLanguageDto? entitySelectedLanguageInformation = await _entityService.GetEntitySelectedLanguageInformation(id);
             if (entitySelectedLanguageInformation is null) return NotFound();
-            await GetViewDatas(entitySelectedLanguageInformation.EntityId);
+            await GetViewDatas(entitySelectedLanguageInformation.EntityId, true);
             return View(entitySelectedLanguageInformation);
         }
 
@@ -146,7 +146,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 
             if (!ModelState.IsValid)
             {
-                await GetViewDatas(update.EntityId);
+                await GetViewDatas(update.EntityId, true);
                 return View(update);
             }
             BaseChangeEntityResult result = await _entityService.UpdateEntitySelectedLanguage(update);
@@ -178,7 +178,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 
             #endregion
 
-            await GetViewDatas(update.EntityId);
+            await GetViewDatas(update.EntityId, true);
             return View(update);
         }
 

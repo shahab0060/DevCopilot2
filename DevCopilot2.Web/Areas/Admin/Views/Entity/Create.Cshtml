@@ -13,6 +13,7 @@
     ViewData["Title"] = $@"{SharedLocalizer.GetString("Create New")} {SharedEntitiesLocalizer.GetString("Entity")}";
 
     List<SelectListItem> entities = ViewData["Entities"] as List<SelectListItem>;
+
     List<SelectListItem> projects = ViewData["Projects"] as List<SelectListItem>;
     List<SelectListItem> projectEnums = ViewData["ProjectEnums"] as List<SelectListItem>;
     List<LanguageListDto> languagesList = ViewData["LanguagesList"] as List<LanguageListDto>;

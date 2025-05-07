@@ -11,6 +11,7 @@
 @{
 	ViewData["Title"] = $"{SharedEntitiesLocalizer.GetString("Entity")} {SharedLocalizer.GetString("Detail")}";
     List<SelectListItem> entities = ViewData["Entities"] as List<SelectListItem>;
+
 List<SelectListItem> projects = ViewData["Projects"] as List<SelectListItem>;
 List<SelectListItem> projectEnums = ViewData["ProjectEnums"] as List<SelectListItem>;
 List<SelectListItem> languages = ViewData["Languages"] as List<SelectListItem>;
@@ -65,12 +66,53 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.SingularName"  placeholder="" />
+        <label asp-for="@Model.SingularName"></label>
+    </div>
+    <span asp-validation-for="@Model.SingularName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.PluralName"  placeholder="" />
+        <label asp-for="@Model.PluralName"></label>
+    </div>
+    <span asp-validation-for="@Model.PluralName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.FolderName"  placeholder="" />
+        <label asp-for="@Model.FolderName"></label>
+    </div>
+    <span asp-validation-for="@Model.FolderName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
         <select disabled class="form-select"  asp-for="@Model.InheritedEntityPluralName"  asp-items="entities" >
 
         </select>
         <label asp-for="@Model.InheritedEntityPluralName"></label>
     </div>
     <span asp-validation-for="@Model.InheritedEntityPluralName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select"  asp-for="@Model.IdType" name="IdType" >
+
+                            @foreach (IdTypeEnum idTypeEnum in (IdTypeEnum[])Enum.GetValues(typeof(IdTypeEnum)))
+                            {
+                                <option value="@idTypeEnum">@idTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.IdType"></label>
+    </div>
+    <span asp-validation-for="@Model.IdType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Others-input"  asp-for="@Model.ServiceName"  placeholder="" />
+        <label asp-for="@Model.ServiceName"></label>
+    </div>
+    <span asp-validation-for="@Model.ServiceName"></span>
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">
@@ -87,6 +129,18 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
         <label asp-for="@Model.ProjectTitle"></label>
     </div>
     <span asp-validation-for="@Model.ProjectTitle"></span>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled  class="form-check-input Others-input" asp-for="@Model.IsExcluded" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.IsExcluded"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled  class="form-check-input Title-input" asp-for="@Model.AddToMenu" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.AddToMenu"></label>
+    </div>
 </div>
 
                                  <div class="sub-form-container" data-name="@("PropertiesList")">
@@ -112,6 +166,78 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">
+        <input disabled class="form-control sub-form-input Title-input" 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="Name"
+                 asp-for="@Model.PropertiesList[property].Name"  placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].Name"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].Name"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select" 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="DataType"
+                 asp-for="@Model.PropertiesList[property].DataType" name="DataType" >
+
+                            @foreach (DataTypeEnum dataTypeEnum in (DataTypeEnum[])Enum.GetValues(typeof(DataTypeEnum)))
+                            {
+                                <option value="@dataTypeEnum">@dataTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.PropertiesList[property].DataType"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].DataType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Others-input" 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="MaxLength"
+                 asp-for="@Model.PropertiesList[property].MaxLength" type="number" placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].MaxLength"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].MaxLength"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Others-input" 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="MinLength"
+                 asp-for="@Model.PropertiesList[property].MinLength" type="number" placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].MinLength"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].MinLength"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Others-input" 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="RangeFrom"
+                 asp-for="@Model.PropertiesList[property].RangeFrom" type="number" placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].RangeFrom"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].RangeFrom"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Others-input" 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="RangeTo"
+                 asp-for="@Model.PropertiesList[property].RangeTo" type="number" placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].RangeTo"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].RangeTo"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
         <select disabled class="form-select" 
                data-name="PropertiesList"
                data-prefix="PropertiesList"
@@ -125,6 +251,34 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">
+        <select disabled class="form-select" 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="DataAnnotationDataType"
+                 asp-for="@Model.PropertiesList[property].DataAnnotationDataType" name="DataAnnotationDataType" >
+
+                            @foreach (DataAnnotationsDataType dataAnnotationsDataType in (DataAnnotationsDataType[])Enum.GetValues(typeof(DataAnnotationsDataType)))
+                            {
+                                <option value="@dataAnnotationsDataType">@dataAnnotationsDataType.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.PropertiesList[property].DataAnnotationDataType"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].DataAnnotationDataType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Others-input" 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="Order"
+                 asp-for="@Model.PropertiesList[property].Order" type="number" placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].Order"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].Order"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
         <input disabled class="form-control sub-form-input Hidden-input" 
                data-name="PropertiesList"
                data-prefix="PropertiesList"
@@ -133,6 +287,97 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
         <label asp-for="@Model.PropertiesList[property].EntityPluralName"></label>
     </div>
     <span asp-validation-for="@Model.PropertiesList[property].EntityPluralName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Others-input" 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="ForceMapperCode"
+                 asp-for="@Model.PropertiesList[property].ForceMapperCode"  placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].ForceMapperCode"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].ForceMapperCode"></span>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="IsRequired"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.PropertiesList[property].IsRequired" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.PropertiesList[property].IsRequired"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="IsUnique"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.PropertiesList[property].IsUnique" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.PropertiesList[property].IsUnique"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="IsUpdatable"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.PropertiesList[property].IsUpdatable" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.PropertiesList[property].IsUpdatable"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="ShowInList"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.PropertiesList[property].ShowInList" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.PropertiesList[property].ShowInList"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="IsFilterContain"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.PropertiesList[property].IsFilterContain" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.PropertiesList[property].IsFilterContain"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="IsFilterEqual"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.PropertiesList[property].IsFilterEqual" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.PropertiesList[property].IsFilterEqual"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="UseEditor"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.PropertiesList[property].UseEditor" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.PropertiesList[property].UseEditor"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="PropertiesList"
+               data-prefix="PropertiesList"
+               data-suffix="ExcludeFromListDto"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.PropertiesList[property].ExcludeFromListDto" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.PropertiesList[property].ExcludeFromListDto"></label>
+    </div>
 </div>
 
                                  <div class="sub-form-container" data-name="@("PropertiesList" + "[" + property + "]"+"." +"EntityRelationsList")">
@@ -193,6 +438,68 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
     </div>
     <span asp-validation-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].MiddleEntityPluralName"></span>
 </div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select" 
+               data-name="EntityRelationsList"
+               data-prefix="EntityRelationsList"
+               data-suffix="RelationType"
+                 asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].RelationType" name="RelationType" >
+
+                            @foreach (RelationTypeEnum relationTypeEnum in (RelationTypeEnum[])Enum.GetValues(typeof(RelationTypeEnum)))
+                            {
+                                <option value="@relationTypeEnum">@relationTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].RelationType"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].RelationType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select" 
+               data-name="EntityRelationsList"
+               data-prefix="EntityRelationsList"
+               data-suffix="InputType"
+                 asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].InputType" name="InputType" >
+
+                            @foreach (InputTypeEnum inputTypeEnum in (InputTypeEnum[])Enum.GetValues(typeof(InputTypeEnum)))
+                            {
+                                <option value="@inputTypeEnum">@inputTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].InputType"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].InputType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <select disabled class="form-select" 
+               data-name="EntityRelationsList"
+               data-prefix="EntityRelationsList"
+               data-suffix="FillingType"
+                 asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].FillingType" name="FillingType" >
+
+                            @foreach (FillingTypeEnum fillingTypeEnum in (FillingTypeEnum[])Enum.GetValues(typeof(FillingTypeEnum)))
+                            {
+                                <option value="@fillingTypeEnum">@fillingTypeEnum.GetEnumName()</option>
+                            }
+        </select>
+        <label asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].FillingType"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].FillingType"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Title-input" 
+               data-name="EntityRelationsList"
+               data-prefix="EntityRelationsList"
+               data-suffix="FillingCode"
+                 asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].FillingCode"  placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].FillingCode"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].FillingCode"></span>
+</div>
 
                                          </div>
 
@@ -231,6 +538,39 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
         <label asp-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].PropertyName"></label>
     </div>
     <span asp-validation-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].PropertyName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Title-input" 
+               data-name="PropertyImageResizeInformationList"
+               data-prefix="PropertyImageResizeInformationList"
+               data-suffix="Name"
+                 asp-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].Name"  placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].Name"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].Name"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Others-input" 
+               data-name="PropertyImageResizeInformationList"
+               data-prefix="PropertyImageResizeInformationList"
+               data-suffix="Width"
+                 asp-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].Width" type="number" placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].Width"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].Width"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Others-input" 
+               data-name="PropertyImageResizeInformationList"
+               data-prefix="PropertyImageResizeInformationList"
+               data-suffix="Height"
+                 asp-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].Height" type="number" placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].Height"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].PropertyImageResizeInformationList[propertyImageResizeInformation].Height"></span>
 </div>
 
                                          </div>
@@ -283,6 +623,17 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
         <label asp-for="@Model.PropertiesList[property].PropertySelectedLanguagesList[propertySelectedLanguage].LanguageName"></label>
     </div>
     <span asp-validation-for="@Model.PropertiesList[property].PropertySelectedLanguagesList[propertySelectedLanguage].LanguageName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Title-input" 
+               data-name="PropertySelectedLanguagesList"
+               data-prefix="PropertySelectedLanguagesList"
+               data-suffix="Title"
+                 asp-for="@Model.PropertiesList[property].PropertySelectedLanguagesList[propertySelectedLanguage].Title"  placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].PropertySelectedLanguagesList[propertySelectedLanguage].Title"></label>
+    </div>
+    <span asp-validation-for="@Model.PropertiesList[property].PropertySelectedLanguagesList[propertySelectedLanguage].Title"></span>
 </div>
 
                                          </div>
@@ -342,6 +693,66 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
     </div>
     <span asp-validation-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].ProjectAreaTitle"></span>
 </div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="EntitySelectedProjectAreasList"
+               data-prefix="EntitySelectedProjectAreasList"
+               data-suffix="HasIndex"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasIndex" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasIndex"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="EntitySelectedProjectAreasList"
+               data-prefix="EntitySelectedProjectAreasList"
+               data-suffix="HasCreate"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasCreate" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasCreate"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="EntitySelectedProjectAreasList"
+               data-prefix="EntitySelectedProjectAreasList"
+               data-suffix="HasUpdate"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasUpdate" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasUpdate"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="EntitySelectedProjectAreasList"
+               data-prefix="EntitySelectedProjectAreasList"
+               data-suffix="HasDelete"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasDelete" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasDelete"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="EntitySelectedProjectAreasList"
+               data-prefix="EntitySelectedProjectAreasList"
+               data-suffix="HasApi"
+                 class="form-check-input sub-form-input Others-input" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasApi" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasApi"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled 
+               data-name="EntitySelectedProjectAreasList"
+               data-prefix="EntitySelectedProjectAreasList"
+               data-suffix="HasWeb"
+                 class="form-check-input sub-form-input Title-input" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasWeb" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].HasWeb"></label>
+    </div>
+</div>
 
                                  <div class="sub-form-container" data-name="@("EntitySelectedProjectAreasList" + "[" + entitySelectedProjectArea + "]"+"." +"EntitySelectedProjectAreaSelectedFiltersList")">
                                  <h3>@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilters")</h3>
@@ -376,6 +787,17 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
         <label asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].PropertyName"></label>
     </div>
     <span asp-validation-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].PropertyName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Title-input" 
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="Value"
+                 asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Value"  placeholder="" />
+        <label asp-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Value"></label>
+    </div>
+    <span asp-validation-for="@Model.EntitySelectedProjectAreasList[entitySelectedProjectArea].EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Value"></span>
 </div>
 <div class="col-sm-4">
     <div class="form-check">
@@ -444,6 +866,28 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
         <label asp-for="@Model.EntitySelectedLanguagesList[entitySelectedLanguage].LanguageName"></label>
     </div>
     <span asp-validation-for="@Model.EntitySelectedLanguagesList[entitySelectedLanguage].LanguageName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Title-input" 
+               data-name="EntitySelectedLanguagesList"
+               data-prefix="EntitySelectedLanguagesList"
+               data-suffix="SingularTitle"
+                 asp-for="@Model.EntitySelectedLanguagesList[entitySelectedLanguage].SingularTitle"  placeholder="" />
+        <label asp-for="@Model.EntitySelectedLanguagesList[entitySelectedLanguage].SingularTitle"></label>
+    </div>
+    <span asp-validation-for="@Model.EntitySelectedLanguagesList[entitySelectedLanguage].SingularTitle"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Title-input" 
+               data-name="EntitySelectedLanguagesList"
+               data-prefix="EntitySelectedLanguagesList"
+               data-suffix="PluralTitle"
+                 asp-for="@Model.EntitySelectedLanguagesList[entitySelectedLanguage].PluralTitle"  placeholder="" />
+        <label asp-for="@Model.EntitySelectedLanguagesList[entitySelectedLanguage].PluralTitle"></label>
+    </div>
+    <span asp-validation-for="@Model.EntitySelectedLanguagesList[entitySelectedLanguage].PluralTitle"></span>
 </div>
 
                                          </div>

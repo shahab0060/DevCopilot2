@@ -77,7 +77,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
         [HttpGet]
         public async Task<IActionResult> Create(int projectEnumPropertyId)
         {
-            await GetViewDatas(projectEnumPropertyId);
+            await GetViewDatas(projectEnumPropertyId, true);
             CreateProjectEnumPropertySelectedLanguageDto create = new CreateProjectEnumPropertySelectedLanguageDto()
             {
                 ProjectEnumPropertyId = projectEnumPropertyId,
@@ -91,7 +91,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
 
             if (!ModelState.IsValid)
             {
-                await GetViewDatas(create.ProjectEnumPropertyId);
+                await GetViewDatas(create.ProjectEnumPropertyId, true);
                 return View(create);
             }
             BaseChangeEntityResult result = await _projectService.CreateProjectEnumPropertySelectedLanguage(create);
@@ -123,7 +123,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
 
             #endregion
 
-            await GetViewDatas(create.ProjectEnumPropertyId);
+            await GetViewDatas(create.ProjectEnumPropertyId, true);
             return View(create);
         }
 
@@ -136,7 +136,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
         {
             UpdateProjectEnumPropertySelectedLanguageDto? projectEnumPropertySelectedLanguageInformation = await _projectService.GetProjectEnumPropertySelectedLanguageInformation(id);
             if (projectEnumPropertySelectedLanguageInformation is null) return NotFound();
-            await GetViewDatas(id);
+            await GetViewDatas(id, true);
             return View(projectEnumPropertySelectedLanguageInformation);
         }
 
@@ -146,7 +146,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
 
             if (!ModelState.IsValid)
             {
-                await GetViewDatas(update.ProjectEnumPropertyId);
+                await GetViewDatas(update.ProjectEnumPropertyId, true);
                 return View(update);
             }
             BaseChangeEntityResult result = await _projectService.UpdateProjectEnumPropertySelectedLanguage(update);
@@ -178,7 +178,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
 
             #endregion
 
-            await GetViewDatas(update.ProjectEnumPropertyId);
+            await GetViewDatas(update.ProjectEnumPropertyId, true);
             return View(update);
         }
 

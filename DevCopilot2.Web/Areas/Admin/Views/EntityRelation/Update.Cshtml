@@ -10,7 +10,10 @@
 	ViewData["Title"] = $@"{SharedLocalizer.GetString("Update")} {SharedEntitiesLocalizer.GetString("EntityRelation")}";
 
     List<SelectListItem> entities = ViewData["Entities"] as List<SelectListItem>;
-
+    List<SelectListItem> middleEntities = [
+        ListMappers.GetDefault(),
+        .. entities
+    ];
 }
 
 <nav class="mb-3" aria-label="breadcrumb">
@@ -60,7 +63,7 @@
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">
-        <select class="form-select"  asp-for="@Model.MiddleEntityId"  asp-items="entities" >
+        <select class="form-select"  asp-for="@Model.MiddleEntityId"  asp-items="middleEntities" >
 
         </select>
         <label asp-for="@Model.MiddleEntityId"></label>

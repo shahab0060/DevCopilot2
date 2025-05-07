@@ -68,6 +68,42 @@ List<SelectListItem> properties = ViewData["Properties"] as List<SelectListItem>
     </div>
     <span asp-validation-for="@Model.ProjectAreaTitle"></span>
 </div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled  class="form-check-input Others-input" asp-for="@Model.HasIndex" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasIndex"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled  class="form-check-input Others-input" asp-for="@Model.HasCreate" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasCreate"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled  class="form-check-input Others-input" asp-for="@Model.HasUpdate" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasUpdate"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled  class="form-check-input Others-input" asp-for="@Model.HasDelete" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasDelete"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled  class="form-check-input Others-input" asp-for="@Model.HasApi" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasApi"></label>
+    </div>
+</div>
+<div class="col-sm-4">
+    <div class="form-check">
+        <input disabled  class="form-check-input Title-input" asp-for="@Model.HasWeb" type="checkbox" />
+        <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.HasWeb"></label>
+    </div>
+</div>
 
                                  <div class="sub-form-container" data-name="@("EntitySelectedProjectAreaSelectedFiltersList")">
                                  <h3>@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilters")</h3>
@@ -102,6 +138,17 @@ List<SelectListItem> properties = ViewData["Properties"] as List<SelectListItem>
         <label asp-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].PropertyName"></label>
     </div>
     <span asp-validation-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].PropertyName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control sub-form-input Title-input" 
+               data-name="EntitySelectedProjectAreaSelectedFiltersList"
+               data-prefix="EntitySelectedProjectAreaSelectedFiltersList"
+               data-suffix="Value"
+                 asp-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Value"  placeholder="" />
+        <label asp-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Value"></label>
+    </div>
+    <span asp-validation-for="@Model.EntitySelectedProjectAreaSelectedFiltersList[entitySelectedProjectAreaSelectedFilter].Value"></span>
 </div>
 <div class="col-sm-4">
     <div class="form-check">

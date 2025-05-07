@@ -75,7 +75,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
         [HttpGet]
         public async Task<IActionResult> Create(int propertyId)
         {
-            await GetViewDatas(propertyId);
+            await GetViewDatas(propertyId, true);
             CreatePropertySelectedLanguageDto create = new CreatePropertySelectedLanguageDto()
             {
                 PropertyId = propertyId,
@@ -89,7 +89,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
 
             if (!ModelState.IsValid)
             {
-                await GetViewDatas(create.PropertyId);
+                await GetViewDatas(create.PropertyId, true);
                 return View(create);
             }
             BaseChangeEntityResult result = await _entityService.CreatePropertySelectedLanguage(create);
@@ -121,7 +121,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
 
             #endregion
 
-            await GetViewDatas(create.PropertyId);
+            await GetViewDatas(create.PropertyId, true);
             return View(create);
         }
 
@@ -134,7 +134,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
         {
             UpdatePropertySelectedLanguageDto? propertySelectedLanguageInformation = await _entityService.GetPropertySelectedLanguageInformation(id);
             if (propertySelectedLanguageInformation is null) return NotFound();
-            await GetViewDatas(propertySelectedLanguageInformation.PropertyId);
+            await GetViewDatas(propertySelectedLanguageInformation.PropertyId, true);
             return View(propertySelectedLanguageInformation);
         }
 
@@ -144,7 +144,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
 
             if (!ModelState.IsValid)
             {
-                await GetViewDatas(update.PropertyId);
+                await GetViewDatas(update.PropertyId, true);
                 return View(update);
             }
             BaseChangeEntityResult result = await _entityService.UpdatePropertySelectedLanguage(update);
@@ -176,7 +176,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
 
             #endregion
 
-            await GetViewDatas(update.PropertyId);
+            await GetViewDatas(update.PropertyId, true);
             return View(update);
         }
 

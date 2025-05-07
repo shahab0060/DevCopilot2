@@ -60,6 +60,20 @@
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">
+        <input disabled class="form-control Others-input"  asp-for="@Model.EnglishName"  placeholder="" />
+        <label asp-for="@Model.EnglishName"></label>
+    </div>
+    <span asp-validation-for="@Model.EnglishName"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.Title"  placeholder="" />
+        <label asp-for="@Model.Title"></label>
+    </div>
+    <span asp-validation-for="@Model.Title"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
         <select disabled class="form-select"  asp-for="@Model.TemplateTitle"  asp-items="templates" >
 
         </select>

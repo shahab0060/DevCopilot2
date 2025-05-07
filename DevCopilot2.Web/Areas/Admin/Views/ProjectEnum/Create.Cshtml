@@ -161,7 +161,6 @@
                                         </div>
 
                                         <div class="buttons-container" data-name="@projectEnumPropertySelectedLanguageDataName">
-
                                         </div>
                                     </div>
 
@@ -221,6 +220,55 @@
                 </div>
                 <span asp-validation-for="@createProjectEnumProperty.Order"></span>
             </div>
+            @for (int projectEnumPropertySelectedLanguage = 0; projectEnumPropertySelectedLanguage < languages.Count; projectEnumPropertySelectedLanguage++)
+            {
+                createProjectEnumProperty = new CreateProjectEnumPropertyDto();
+                int projectEnumProperty = 0;
+                foreach (var remainingLanguage in languages)
+                {
+                    createProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList.Add(new CreateProjectEnumPropertySelectedLanguageDto()
+                    {
+                        LanguageId = int.Parse(remainingLanguage.Value),
+                    });
+                }
+                string projectEnumPropertySelectedLanguageDataName = "ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]" + "." + "ProjectEnumPropertySelectedLanguagesList" + "[" + projectEnumPropertySelectedLanguage + "]";
+
+                <div class="single-sub-form row g-5" data-name="@("ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]" + "." + "ProjectEnumPropertySelectedLanguagesList")">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-floating">
+                            <select class="form-select"
+                                    data-name="ProjectEnumPropertySelectedLanguagesList"
+                                    data-prefix="ProjectEnumPropertySelectedLanguagesList"
+                                    data-suffix="LanguageId"
+                                    asp-for="@createProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].LanguageId" asp-items="languages">
+                            </select>
+                            <label asp-for="@createProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].LanguageId"></label>
+                        </div>
+                        <span asp-validation-for="@createProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].LanguageId"></span>
+                    </div>
+                    <input type="hidden" asp-for="@createProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].ProjectEnumPropertyId" class="sub-form-input"
+                           data-name="ProjectEnumPropertySelectedLanguagesList"
+                           data-prefix="ProjectEnumPropertySelectedLanguagesList"
+                           data-suffix="ProjectEnumPropertyId"
+                           data-value="1" />
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-floating">
+                            <input class="form-control sub-form-input Title-input"
+                                   data-name="ProjectEnumPropertySelectedLanguagesList"
+                                   data-prefix="ProjectEnumPropertySelectedLanguagesList"
+                                   data-suffix="Title"
+                                   asp-for="@createProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Title" placeholder="" />
+                            <label asp-for="@createProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Title"></label>
+                        </div>
+                        <span asp-validation-for="@createProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Title"></span>
+                    </div>
+
+                    <div class="buttons-container" data-name="@projectEnumPropertySelectedLanguageDataName">
+                    </div>
+                </div>
+
+            }
+
             <div class="buttons-container is-template" data-name="ProjectEnumPropertiesList[0]">
 
                 <div class="d-flex justify-content-end mt-3">

@@ -57,6 +57,27 @@
     </div>
     <span asp-validation-for="@Model.PropertyName"></span>
 </div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.Name"  placeholder="" />
+        <label asp-for="@Model.Name"></label>
+    </div>
+    <span asp-validation-for="@Model.Name"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Others-input"  asp-for="@Model.Width" type="number" placeholder="" />
+        <label asp-for="@Model.Width"></label>
+    </div>
+    <span asp-validation-for="@Model.Width"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Others-input"  asp-for="@Model.Height" type="number" placeholder="" />
+        <label asp-for="@Model.Height"></label>
+    </div>
+    <span asp-validation-for="@Model.Height"></span>
+</div>
 
                     <div class="col-sm-12 col-md-6">
             <div class="form-floating">

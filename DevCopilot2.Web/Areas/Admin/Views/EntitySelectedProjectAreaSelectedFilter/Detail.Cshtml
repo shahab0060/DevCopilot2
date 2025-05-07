@@ -60,6 +60,13 @@
     </div>
     <span asp-validation-for="@Model.PropertyName"></span>
 </div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.Value"  placeholder="" />
+        <label asp-for="@Model.Value"></label>
+    </div>
+    <span asp-validation-for="@Model.Value"></span>
+</div>
 <div class="col-sm-4">
     <div class="form-check">
         <input disabled  class="form-check-input Title-input" asp-for="@Model.EntitySelectedProjectAreaHasWeb" type="checkbox" />

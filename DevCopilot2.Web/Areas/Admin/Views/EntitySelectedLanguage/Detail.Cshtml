@@ -67,6 +67,20 @@
     </div>
     <span asp-validation-for="@Model.LanguageName"></span>
 </div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.SingularTitle"  placeholder="" />
+        <label asp-for="@Model.SingularTitle"></label>
+    </div>
+    <span asp-validation-for="@Model.SingularTitle"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.PluralTitle"  placeholder="" />
+        <label asp-for="@Model.PluralTitle"></label>
+    </div>
+    <span asp-validation-for="@Model.PluralTitle"></span>
+</div>
 
                     <div class="col-sm-12 col-md-6">
             <div class="form-floating">

@@ -12,18 +12,23 @@ namespace DevCopilot2.Web.PresentationMappers
                 Value = combo.Value
             };
 
+        public static SelectListItem GetDefault()
+            => GetDefaultCombo().ToSelectListItem();
+
+        public static ComboDto GetDefaultCombo()
+            => new ComboDto()
+            {
+                Title = "لطفا انتخاب کنید",
+                Value = ""
+            };
+
         public static List<SelectListItem> ToSelectListItem(this List<ComboDto> combos, bool selectAll = false, bool addDefault = false)
         {
             if (combos.Any())
             {
                 if (addDefault)
                 {
-                    ComboDto defaultCombo = new ComboDto()
-                    {
-                        Title = "لطفا انتخاب کنید",
-                        Value = ""
-                    };
-                    combos.Add(defaultCombo);
+                    combos.Add(GetDefaultCombo());
                 }
                 if (selectAll)
                 {

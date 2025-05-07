@@ -6,7 +6,7 @@
 @using DevCopilot2.Domain.DTOs.Properties
 @model PropertySelectedLanguageListDto
 @{
-	ViewData["Title"] = $"{SharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {SharedLocalizer.GetString("Detail")}";
+    ViewData["Title"] = $"{SharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {SharedLocalizer.GetString("Detail")}";
     List<SelectListItem> languages = ViewData["Languages"] as List<SelectListItem>;
 
 }
@@ -14,20 +14,23 @@
 <nav class="mb-3" aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
 
-        <li class="breadcrumb-item"><a asp-area="Admin"
-                                  asp-controller="Home"
-                                  asp-action="Index" 
-                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
-<li class="breadcrumb-item"><a asp-area="Admin"
-                                  asp-controller="PropertySelectedLanguage"
-                                  asp-action="Index" 
-
-                                asp-route-propertyId="@Model.PropertyId" title="@SharedEntitiesLocalizer.GetString("PropertySelectedLanguages")">@SharedEntitiesLocalizer.GetString("PropertySelectedLanguages")</a></li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Home"
+               asp-action="Index"
+               title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="PropertySelectedLanguage"
+               asp-action="Index"
+               asp-route-propertyId="@Model.PropertyId" title="@SharedEntitiesLocalizer.GetString("PropertySelectedLanguages")">@SharedEntitiesLocalizer.GetString("PropertySelectedLanguages")</a>
+        </li>
 
         <li class="breadcrumb-item active">@SharedEntitiesLocalizer.GetString("PropertySelectedLanguage") @SharedLocalizer.GetString("Detail")</li>
-    </ol>   
+    </ol>
 </nav>
-<form class="mb-9" method="post" >
+<form class="mb-9" method="post">
 
     <div class="row justify-content-between align-items-end g-3 mb-5">
         <div class="col-12 col-sm-auto col-xl-8">
@@ -36,39 +39,45 @@
         <div class="col-12 col-sm-auto col-xl-4">
             <div class="d-flex">
                 <a class="btn btn-primary px-5 w-100 text-nowrap" asp-area="Admin"
-                                  asp-controller="PropertySelectedLanguage"
-                                  asp-action="Index" 
-                                asp-route-propertyIdId="@Model.PropertyId">@SharedLocalizer.GetString("Close")</a>
+                   asp-controller="PropertySelectedLanguage"
+                   asp-action="Index"
+                   asp-route-propertyIdId="@Model.PropertyId">@SharedLocalizer.GetString("Close")</a>
             </div>
         </div>
     </div>
     <div class="row g-5">
 
-                <div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control Hidden-input"  asp-for="@Model.Id"  placeholder="" />
-        <label asp-for="@Model.Id"></label>
-    </div>
-    <span asp-validation-for="@Model.Id"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control Others-input"  asp-for="@Model.PropertyName"  placeholder="" />
-        <label asp-for="@Model.PropertyName"></label>
-    </div>
-    <span asp-validation-for="@Model.PropertyName"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <select disabled class="form-select"  asp-for="@Model.LanguageName"  asp-items="languages" >
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Hidden-input" asp-for="@Model.Id" placeholder="" />
+                <label asp-for="@Model.Id"></label>
+            </div>
+            <span asp-validation-for="@Model.Id"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Others-input" asp-for="@Model.PropertyName" placeholder="" />
+                <label asp-for="@Model.PropertyName"></label>
+            </div>
+            <span asp-validation-for="@Model.PropertyName"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <select disabled class="form-select" asp-for="@Model.LanguageName" asp-items="languages">
+                </select>
+                <label asp-for="@Model.LanguageName"></label>
+            </div>
+            <span asp-validation-for="@Model.LanguageName"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Title-input" asp-for="@Model.Title" placeholder="" />
+                <label asp-for="@Model.Title"></label>
+            </div>
+            <span asp-validation-for="@Model.Title"></span>
+        </div>
 
-        </select>
-        <label asp-for="@Model.LanguageName"></label>
-    </div>
-    <span asp-validation-for="@Model.LanguageName"></span>
-</div>
-
-                    <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6">
             <div class="form-floating">
                 <input disabled class="form-control" value="@Model.CreateDate.ToShamsi()" asp-for="@Model.CreateDate" type="text" placeholder="" />
                 <label asp-for="@Model.CreateDate"></label>
@@ -96,10 +105,10 @@
 @section Scripts
 {
 
-	<script>
-		$(document).ready(function (e) {
-			$('.PropertySelectedLanguagesManagement').addClass('active');
+    <script>
+        $(document).ready(function (e) {
+            $('.PropertySelectedLanguagesManagement').addClass('active');
             $('.PropertySelectedLanguagesManagement').addClass('show');
-		});
-	</script>
+        });
+    </script>
 }

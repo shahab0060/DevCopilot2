@@ -9,32 +9,39 @@
 @using DevCopilot2.Domain.DTOs.Entities
 @model PropertyListDto
 @{
-	ViewData["Title"] = $"{SharedEntitiesLocalizer.GetString("Property")} {SharedLocalizer.GetString("Detail")}";
+    ViewData["Title"] = $"{SharedEntitiesLocalizer.GetString("Property")} {SharedLocalizer.GetString("Detail")}";
     List<SelectListItem> projectEnums = ViewData["ProjectEnums"] as List<SelectListItem>;
-List<SelectListItem> entities = ViewData["Entities"] as List<SelectListItem>;
-List<SelectListItem> languages = ViewData["Languages"] as List<SelectListItem>;
+    List<SelectListItem> entities = ViewData["Entities"] as List<SelectListItem>;
+    List<SelectListItem> middleEntities = [
+            ListMappers.GetDefault(),
+        .. entities
+        ];
+    List<SelectListItem> languages = ViewData["Languages"] as List<SelectListItem>;
     CreateEntityRelationDto createEntityRelation = new CreateEntityRelationDto();
-CreatePropertyImageResizeInformationDto createPropertyImageResizeInformation = new CreatePropertyImageResizeInformationDto();
-CreatePropertySelectedLanguageDto createPropertySelectedLanguage = new CreatePropertySelectedLanguageDto();
+    CreatePropertyImageResizeInformationDto createPropertyImageResizeInformation = new CreatePropertyImageResizeInformationDto();
+    CreatePropertySelectedLanguageDto createPropertySelectedLanguage = new CreatePropertySelectedLanguageDto();
 }
 
 <nav class="mb-3" aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
 
-        <li class="breadcrumb-item"><a asp-area="Admin"
-                                  asp-controller="Home"
-                                  asp-action="Index" 
-                                   title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a></li>
-<li class="breadcrumb-item"><a asp-area="Admin"
-                                  asp-controller="Property"
-                                  asp-action="Index" 
-
-                                asp-route-entityId="@Model.EntityId" title="@SharedEntitiesLocalizer.GetString("Properties")">@SharedEntitiesLocalizer.GetString("Properties")</a></li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Home"
+               asp-action="Index"
+               title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Property"
+               asp-action="Index"
+               asp-route-entityId="@Model.EntityId" title="@SharedEntitiesLocalizer.GetString("Properties")">@SharedEntitiesLocalizer.GetString("Properties")</a>
+        </li>
 
         <li class="breadcrumb-item active">@SharedEntitiesLocalizer.GetString("Property") @SharedLocalizer.GetString("Detail")</li>
-    </ol>   
+    </ol>
 </nav>
-<form class="mb-9" method="post" >
+<form class="mb-9" method="post">
 
     <div class="row justify-content-between align-items-end g-3 mb-5">
         <div class="col-12 col-sm-auto col-xl-8">
@@ -43,195 +50,420 @@ CreatePropertySelectedLanguageDto createPropertySelectedLanguage = new CreatePro
         <div class="col-12 col-sm-auto col-xl-4">
             <div class="d-flex">
                 <a class="btn btn-primary px-5 w-100 text-nowrap" asp-area="Admin"
-                                  asp-controller="Property"
-                                  asp-action="Index" 
-                                asp-route-entityIdId="@Model.EntityId">@SharedLocalizer.GetString("Close")</a>
+                   asp-controller="Property"
+                   asp-action="Index"
+                   asp-route-entityIdId="@Model.EntityId">@SharedLocalizer.GetString("Close")</a>
             </div>
         </div>
     </div>
     <div class="row g-5">
 
-                <div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control Hidden-input"  asp-for="@Model.Id"  placeholder="" />
-        <label asp-for="@Model.Id"></label>
-    </div>
-    <span asp-validation-for="@Model.Id"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <select disabled class="form-select"  asp-for="@Model.ProjectEnumEnglishName"  asp-items="projectEnums" >
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Hidden-input" asp-for="@Model.Id" placeholder="" />
+                <label asp-for="@Model.Id"></label>
+            </div>
+            <span asp-validation-for="@Model.Id"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Title-input" asp-for="@Model.Name" placeholder="" />
+                <label asp-for="@Model.Name"></label>
+            </div>
+            <span asp-validation-for="@Model.Name"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <select disabled class="form-select" asp-for="@Model.DataType" name="DataType">
 
-        </select>
-        <label asp-for="@Model.ProjectEnumEnglishName"></label>
-    </div>
-    <span asp-validation-for="@Model.ProjectEnumEnglishName"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control Others-input"  asp-for="@Model.EntityPluralName"  placeholder="" />
-        <label asp-for="@Model.EntityPluralName"></label>
-    </div>
-    <span asp-validation-for="@Model.EntityPluralName"></span>
-</div>
+                    @foreach (DataTypeEnum dataTypeEnum in (DataTypeEnum[])Enum.GetValues(typeof(DataTypeEnum)))
+                    {
+                        <option value="@dataTypeEnum">@dataTypeEnum.GetEnumName()</option>
+                    }
+                </select>
+                <label asp-for="@Model.DataType"></label>
+            </div>
+            <span asp-validation-for="@Model.DataType"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Others-input" asp-for="@Model.MaxLength" type="number" placeholder="" />
+                <label asp-for="@Model.MaxLength"></label>
+            </div>
+            <span asp-validation-for="@Model.MaxLength"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Others-input" asp-for="@Model.MinLength" type="number" placeholder="" />
+                <label asp-for="@Model.MinLength"></label>
+            </div>
+            <span asp-validation-for="@Model.MinLength"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Others-input" asp-for="@Model.RangeFrom" type="number" placeholder="" />
+                <label asp-for="@Model.RangeFrom"></label>
+            </div>
+            <span asp-validation-for="@Model.RangeFrom"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Others-input" asp-for="@Model.RangeTo" type="number" placeholder="" />
+                <label asp-for="@Model.RangeTo"></label>
+            </div>
+            <span asp-validation-for="@Model.RangeTo"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <select disabled class="form-select" asp-for="@Model.ProjectEnumEnglishName" asp-items="projectEnums">
+                </select>
+                <label asp-for="@Model.ProjectEnumEnglishName"></label>
+            </div>
+            <span asp-validation-for="@Model.ProjectEnumEnglishName"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <select disabled class="form-select" asp-for="@Model.DataAnnotationDataType" name="DataAnnotationDataType">
 
-                                 <div class="sub-form-container" data-name="@("EntityRelationsList")">
-                                 <h3>@SharedEntitiesLocalizer.GetString("EntityRelations")</h3>
-                                     @if (Model.EntityRelationsList is not null)
-                                     {
-                                         for (int entityRelation = 0; entityRelation < Model.EntityRelationsList.Count; entityRelation++)
-                                         {
+                    @foreach (DataAnnotationsDataType dataAnnotationsDataType in (DataAnnotationsDataType[])Enum.GetValues(typeof(DataAnnotationsDataType)))
+                    {
+                        <option value="@dataAnnotationsDataType">@dataAnnotationsDataType.GetEnumName()</option>
+                    }
+                </select>
+                <label asp-for="@Model.DataAnnotationDataType"></label>
+            </div>
+            <span asp-validation-for="@Model.DataAnnotationDataType"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Others-input" asp-for="@Model.Order" type="number" placeholder="" />
+                <label asp-for="@Model.Order"></label>
+            </div>
+            <span asp-validation-for="@Model.Order"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Others-input" asp-for="@Model.EntityPluralName" placeholder="" />
+                <label asp-for="@Model.EntityPluralName"></label>
+            </div>
+            <span asp-validation-for="@Model.EntityPluralName"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input disabled class="form-control Others-input" asp-for="@Model.ForceMapperCode" placeholder="" />
+                <label asp-for="@Model.ForceMapperCode"></label>
+            </div>
+            <span asp-validation-for="@Model.ForceMapperCode"></span>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input disabled class="form-check-input Others-input" asp-for="@Model.IsRequired" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.IsRequired"></label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input disabled class="form-check-input Others-input" asp-for="@Model.IsUnique" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.IsUnique"></label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input disabled class="form-check-input Others-input" asp-for="@Model.IsUpdatable" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.IsUpdatable"></label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input disabled class="form-check-input Others-input" asp-for="@Model.ShowInList" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.ShowInList"></label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input disabled class="form-check-input Others-input" asp-for="@Model.IsFilterContain" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.IsFilterContain"></label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input disabled class="form-check-input Others-input" asp-for="@Model.IsFilterEqual" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.IsFilterEqual"></label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input disabled class="form-check-input Others-input" asp-for="@Model.UseEditor" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.UseEditor"></label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input disabled class="form-check-input Others-input" asp-for="@Model.ExcludeFromListDto" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.ExcludeFromListDto"></label>
+            </div>
+        </div>
 
-                                                string entityRelationDataName = "EntityRelationsList" + "[" + entityRelation + "]";
+        <div class="sub-form-container" data-name="@("EntityRelationsList")">
+            <h3>@SharedEntitiesLocalizer.GetString("EntityRelations")</h3>
+            @if (Model.EntityRelationsList is not null)
+            {
+                for (int entityRelation = 0; entityRelation < Model.EntityRelationsList.Count; entityRelation++)
+                {
 
-                                         <div class="single-sub-form row g-5" data-name="@("EntityRelationsList")">
-                                                 <div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control sub-form-input Hidden-input" 
-               data-name="EntityRelationsList"
-               data-prefix="EntityRelationsList"
-               data-suffix="Id"
-                 asp-for="@Model.EntityRelationsList[entityRelation].Id"  placeholder="" />
-        <label asp-for="@Model.EntityRelationsList[entityRelation].Id"></label>
-    </div>
-    <span asp-validation-for="@Model.EntityRelationsList[entityRelation].Id"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control sub-form-input Hidden-input" 
-               data-name="EntityRelationsList"
-               data-prefix="EntityRelationsList"
-               data-suffix="PrimaryPropertyName"
-               data-value="1"  asp-for="@Model.EntityRelationsList[entityRelation].PrimaryPropertyName"  placeholder="" />
-        <label asp-for="@Model.EntityRelationsList[entityRelation].PrimaryPropertyName"></label>
-    </div>
-    <span asp-validation-for="@Model.EntityRelationsList[entityRelation].PrimaryPropertyName"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <select disabled class="form-select" 
-               data-name="EntityRelationsList"
-               data-prefix="EntityRelationsList"
-               data-suffix="SecondaryEntityPluralName"
-                 asp-for="@Model.EntityRelationsList[entityRelation].SecondaryEntityPluralName"  asp-items="entities" >
+                    string entityRelationDataName = "EntityRelationsList" + "[" + entityRelation + "]";
 
-        </select>
-        <label asp-for="@Model.EntityRelationsList[entityRelation].SecondaryEntityPluralName"></label>
-    </div>
-    <span asp-validation-for="@Model.EntityRelationsList[entityRelation].SecondaryEntityPluralName"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <select disabled class="form-select" 
-               data-name="EntityRelationsList"
-               data-prefix="EntityRelationsList"
-               data-suffix="MiddleEntityPluralName"
-                 asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityPluralName"  asp-items="entities" >
+                    <div class="single-sub-form row g-5" data-name="@("EntityRelationsList")">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Hidden-input"
+                                       data-name="EntityRelationsList"
+                                       data-prefix="EntityRelationsList"
+                                       data-suffix="Id"
+                                       asp-for="@Model.EntityRelationsList[entityRelation].Id" placeholder="" />
+                                <label asp-for="@Model.EntityRelationsList[entityRelation].Id"></label>
+                            </div>
+                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].Id"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Hidden-input"
+                                       data-name="EntityRelationsList"
+                                       data-prefix="EntityRelationsList"
+                                       data-suffix="PrimaryPropertyName"
+                                       data-value="1" asp-for="@Model.EntityRelationsList[entityRelation].PrimaryPropertyName" placeholder="" />
+                                <label asp-for="@Model.EntityRelationsList[entityRelation].PrimaryPropertyName"></label>
+                            </div>
+                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].PrimaryPropertyName"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <select disabled class="form-select"
+                                        data-name="EntityRelationsList"
+                                        data-prefix="EntityRelationsList"
+                                        data-suffix="SecondaryEntityPluralName"
+                                        asp-for="@Model.EntityRelationsList[entityRelation].SecondaryEntityPluralName" asp-items="entities">
+                                </select>
+                                <label asp-for="@Model.EntityRelationsList[entityRelation].SecondaryEntityPluralName"></label>
+                            </div>
+                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].SecondaryEntityPluralName"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <select disabled class="form-select"
+                                        data-name="EntityRelationsList"
+                                        data-prefix="EntityRelationsList"
+                                        data-suffix="MiddleEntityPluralName"
+                                        asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityPluralName" asp-items="middleEntities">
+                                </select>
+                                <label asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityPluralName"></label>
+                            </div>
+                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].MiddleEntityPluralName"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <select disabled class="form-select"
+                                        data-name="EntityRelationsList"
+                                        data-prefix="EntityRelationsList"
+                                        data-suffix="RelationType"
+                                        asp-for="@Model.EntityRelationsList[entityRelation].RelationType" name="RelationType">
 
-        </select>
-        <label asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityPluralName"></label>
-    </div>
-    <span asp-validation-for="@Model.EntityRelationsList[entityRelation].MiddleEntityPluralName"></span>
-</div>
+                                    @foreach (RelationTypeEnum relationTypeEnum in (RelationTypeEnum[])Enum.GetValues(typeof(RelationTypeEnum)))
+                                    {
+                                        <option value="@relationTypeEnum">@relationTypeEnum.GetEnumName()</option>
+                                    }
+                                </select>
+                                <label asp-for="@Model.EntityRelationsList[entityRelation].RelationType"></label>
+                            </div>
+                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].RelationType"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <select disabled class="form-select"
+                                        data-name="EntityRelationsList"
+                                        data-prefix="EntityRelationsList"
+                                        data-suffix="InputType"
+                                        asp-for="@Model.EntityRelationsList[entityRelation].InputType" name="InputType">
 
-                                         </div>
+                                    @foreach (InputTypeEnum inputTypeEnum in (InputTypeEnum[])Enum.GetValues(typeof(InputTypeEnum)))
+                                    {
+                                        <option value="@inputTypeEnum">@inputTypeEnum.GetEnumName()</option>
+                                    }
+                                </select>
+                                <label asp-for="@Model.EntityRelationsList[entityRelation].InputType"></label>
+                            </div>
+                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].InputType"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <select disabled class="form-select"
+                                        data-name="EntityRelationsList"
+                                        data-prefix="EntityRelationsList"
+                                        data-suffix="FillingType"
+                                        asp-for="@Model.EntityRelationsList[entityRelation].FillingType" name="FillingType">
 
-                                         }
-                                     }  
-                                 </div>
+                                    @foreach (FillingTypeEnum fillingTypeEnum in (FillingTypeEnum[])Enum.GetValues(typeof(FillingTypeEnum)))
+                                    {
+                                        <option value="@fillingTypeEnum">@fillingTypeEnum.GetEnumName()</option>
+                                    }
+                                </select>
+                                <label asp-for="@Model.EntityRelationsList[entityRelation].FillingType"></label>
+                            </div>
+                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].FillingType"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Title-input"
+                                       data-name="EntityRelationsList"
+                                       data-prefix="EntityRelationsList"
+                                       data-suffix="FillingCode"
+                                       asp-for="@Model.EntityRelationsList[entityRelation].FillingCode" placeholder="" />
+                                <label asp-for="@Model.EntityRelationsList[entityRelation].FillingCode"></label>
+                            </div>
+                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].FillingCode"></span>
+                        </div>
 
-                                 <div class="sub-form-container" data-name="@("PropertyImageResizeInformationList")">
-                                 <h3>@SharedEntitiesLocalizer.GetString("PropertyImageResizeInformation")</h3>
-                                     @if (Model.PropertyImageResizeInformationList is not null)
-                                     {
-                                         for (int propertyImageResizeInformation = 0; propertyImageResizeInformation < Model.PropertyImageResizeInformationList.Count; propertyImageResizeInformation++)
-                                         {
+                    </div>
 
-                                                string propertyImageResizeInformationDataName = "PropertyImageResizeInformationList" + "[" + propertyImageResizeInformation + "]";
+                }
+            }
+        </div>
 
-                                         <div class="single-sub-form row g-5" data-name="@("PropertyImageResizeInformationList")">
-                                                 <div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control sub-form-input Hidden-input" 
-               data-name="PropertyImageResizeInformationList"
-               data-prefix="PropertyImageResizeInformationList"
-               data-suffix="Id"
-                 asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Id"  placeholder="" />
-        <label asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Id"></label>
-    </div>
-    <span asp-validation-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Id"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control sub-form-input Hidden-input" 
-               data-name="PropertyImageResizeInformationList"
-               data-prefix="PropertyImageResizeInformationList"
-               data-suffix="PropertyName"
-               data-value="1"  asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].PropertyName"  placeholder="" />
-        <label asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].PropertyName"></label>
-    </div>
-    <span asp-validation-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].PropertyName"></span>
-</div>
+        <div class="sub-form-container" data-name="@("PropertyImageResizeInformationList")">
+            <h3>@SharedEntitiesLocalizer.GetString("PropertyImageResizeInformation")</h3>
+            @if (Model.PropertyImageResizeInformationList is not null)
+            {
+                for (int propertyImageResizeInformation = 0; propertyImageResizeInformation < Model.PropertyImageResizeInformationList.Count; propertyImageResizeInformation++)
+                {
 
-                                         </div>
+                    string propertyImageResizeInformationDataName = "PropertyImageResizeInformationList" + "[" + propertyImageResizeInformation + "]";
 
-                                         }
-                                     }  
-                                 </div>
+                    <div class="single-sub-form row g-5" data-name="@("PropertyImageResizeInformationList")">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Hidden-input"
+                                       data-name="PropertyImageResizeInformationList"
+                                       data-prefix="PropertyImageResizeInformationList"
+                                       data-suffix="Id"
+                                       asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Id" placeholder="" />
+                                <label asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Id"></label>
+                            </div>
+                            <span asp-validation-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Id"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Hidden-input"
+                                       data-name="PropertyImageResizeInformationList"
+                                       data-prefix="PropertyImageResizeInformationList"
+                                       data-suffix="PropertyName"
+                                       data-value="1" asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].PropertyName" placeholder="" />
+                                <label asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].PropertyName"></label>
+                            </div>
+                            <span asp-validation-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].PropertyName"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Title-input"
+                                       data-name="PropertyImageResizeInformationList"
+                                       data-prefix="PropertyImageResizeInformationList"
+                                       data-suffix="Name"
+                                       asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Name" placeholder="" />
+                                <label asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Name"></label>
+                            </div>
+                            <span asp-validation-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Name"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Others-input"
+                                       data-name="PropertyImageResizeInformationList"
+                                       data-prefix="PropertyImageResizeInformationList"
+                                       data-suffix="Width"
+                                       asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Width" type="number" placeholder="" />
+                                <label asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Width"></label>
+                            </div>
+                            <span asp-validation-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Width"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Others-input"
+                                       data-name="PropertyImageResizeInformationList"
+                                       data-prefix="PropertyImageResizeInformationList"
+                                       data-suffix="Height"
+                                       asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Height" type="number" placeholder="" />
+                                <label asp-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Height"></label>
+                            </div>
+                            <span asp-validation-for="@Model.PropertyImageResizeInformationList[propertyImageResizeInformation].Height"></span>
+                        </div>
 
-                                 <div class="sub-form-container" data-name="@("PropertySelectedLanguagesList")">
-                                 <h3>@SharedEntitiesLocalizer.GetString("PropertySelectedLanguages")</h3>
-                                     @if (Model.PropertySelectedLanguagesList is not null)
-                                     {
-                                         for (int propertySelectedLanguage = 0; propertySelectedLanguage < Model.PropertySelectedLanguagesList.Count; propertySelectedLanguage++)
-                                         {
+                    </div>
 
-                                                string propertySelectedLanguageDataName = "PropertySelectedLanguagesList" + "[" + propertySelectedLanguage + "]";
+                }
+            }
+        </div>
 
-                                         <div class="single-sub-form row g-5" data-name="@("PropertySelectedLanguagesList")">
-                                                 <div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control sub-form-input Hidden-input" 
-               data-name="PropertySelectedLanguagesList"
-               data-prefix="PropertySelectedLanguagesList"
-               data-suffix="Id"
-                 asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].Id"  placeholder="" />
-        <label asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].Id"></label>
-    </div>
-    <span asp-validation-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].Id"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control sub-form-input Hidden-input" 
-               data-name="PropertySelectedLanguagesList"
-               data-prefix="PropertySelectedLanguagesList"
-               data-suffix="PropertyName"
-               data-value="1"  asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].PropertyName"  placeholder="" />
-        <label asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].PropertyName"></label>
-    </div>
-    <span asp-validation-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].PropertyName"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <select disabled class="form-select" 
-               data-name="PropertySelectedLanguagesList"
-               data-prefix="PropertySelectedLanguagesList"
-               data-suffix="LanguageName"
-                 asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].LanguageName"  asp-items="languages" >
+        <div class="sub-form-container" data-name="@("PropertySelectedLanguagesList")">
+            <h3>@SharedEntitiesLocalizer.GetString("PropertySelectedLanguages")</h3>
+            @if (Model.PropertySelectedLanguagesList is not null)
+            {
+                for (int propertySelectedLanguage = 0; propertySelectedLanguage < Model.PropertySelectedLanguagesList.Count; propertySelectedLanguage++)
+                {
 
-        </select>
-        <label asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].LanguageName"></label>
-    </div>
-    <span asp-validation-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].LanguageName"></span>
-</div>
+                    string propertySelectedLanguageDataName = "PropertySelectedLanguagesList" + "[" + propertySelectedLanguage + "]";
 
-                                         </div>
+                    <div class="single-sub-form row g-5" data-name="@("PropertySelectedLanguagesList")">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Hidden-input"
+                                       data-name="PropertySelectedLanguagesList"
+                                       data-prefix="PropertySelectedLanguagesList"
+                                       data-suffix="Id"
+                                       asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].Id" placeholder="" />
+                                <label asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].Id"></label>
+                            </div>
+                            <span asp-validation-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].Id"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Hidden-input"
+                                       data-name="PropertySelectedLanguagesList"
+                                       data-prefix="PropertySelectedLanguagesList"
+                                       data-suffix="PropertyName"
+                                       data-value="1" asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].PropertyName" placeholder="" />
+                                <label asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].PropertyName"></label>
+                            </div>
+                            <span asp-validation-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].PropertyName"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <select disabled class="form-select"
+                                        data-name="PropertySelectedLanguagesList"
+                                        data-prefix="PropertySelectedLanguagesList"
+                                        data-suffix="LanguageName"
+                                        asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].LanguageName" asp-items="languages">
+                                </select>
+                                <label asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].LanguageName"></label>
+                            </div>
+                            <span asp-validation-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].LanguageName"></span>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input disabled class="form-control sub-form-input Title-input"
+                                       data-name="PropertySelectedLanguagesList"
+                                       data-prefix="PropertySelectedLanguagesList"
+                                       data-suffix="Title"
+                                       asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].Title" placeholder="" />
+                                <label asp-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].Title"></label>
+                            </div>
+                            <span asp-validation-for="@Model.PropertySelectedLanguagesList[propertySelectedLanguage].Title"></span>
+                        </div>
 
-                                         }
-                                     }  
-                                 </div>
+                    </div>
 
-                    <div class="col-sm-12 col-md-6">
+                }
+            }
+        </div>
+
+        <div class="col-sm-12 col-md-6">
             <div class="form-floating">
                 <input disabled class="form-control" value="@Model.CreateDate.ToShamsi()" asp-for="@Model.CreateDate" type="text" placeholder="" />
                 <label asp-for="@Model.CreateDate"></label>
@@ -259,10 +491,10 @@ CreatePropertySelectedLanguageDto createPropertySelectedLanguage = new CreatePro
 @section Scripts
 {
 
-	<script>
-		$(document).ready(function (e) {
-			$('.PropertiesManagement').addClass('active');
+    <script>
+        $(document).ready(function (e) {
+            $('.PropertiesManagement').addClass('active');
             $('.PropertiesManagement').addClass('show');
-		});
-	</script>
+        });
+    </script>
 }

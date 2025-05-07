@@ -13,6 +13,10 @@
 
     List<SelectListItem> projectEnums = ViewData["ProjectEnums"] as List<SelectListItem>;
     List<SelectListItem> entities = ViewData["Entities"] as List<SelectListItem>;
+    List<SelectListItem> middleEntities = [
+            ListMappers.GetDefault(),
+        .. entities
+        ];
     List<SelectListItem> languages = ViewData["Languages"] as List<SelectListItem>;
     UpdateEntityRelationDto updateEntityRelation = new UpdateEntityRelationDto();
     UpdatePropertyImageResizeInformationDto updatePropertyImageResizeInformation = new UpdatePropertyImageResizeInformationDto();
@@ -225,7 +229,7 @@
                                         data-name="EntityRelationsList"
                                         data-prefix="EntityRelationsList"
                                         data-suffix="MiddleEntityId"
-                                        asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId" asp-items="entities">
+                                        asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId" asp-items="middleEntities">
                                 </select>
                                 <label asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId"></label>
                             </div>
@@ -442,7 +446,6 @@
                         </div>
 
                         <div class="buttons-container" data-name="@propertySelectedLanguageDataName">
-
                         </div>
                     </div>
 
@@ -485,7 +488,7 @@
                             data-name="EntityRelationsList"
                             data-prefix="EntityRelationsList"
                             data-suffix="MiddleEntityId"
-                            asp-for="@updateEntityRelation.MiddleEntityId" asp-items="entities">
+                            asp-for="@updateEntityRelation.MiddleEntityId" asp-items="middleEntities">
                     </select>
                     <label asp-for="@updateEntityRelation.MiddleEntityId"></label>
                 </div>

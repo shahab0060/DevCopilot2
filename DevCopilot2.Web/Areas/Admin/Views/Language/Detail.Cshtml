@@ -48,6 +48,27 @@
     </div>
     <span asp-validation-for="@Model.Id"></span>
 </div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Title-input"  asp-for="@Model.Name"  placeholder="" />
+        <label asp-for="@Model.Name"></label>
+    </div>
+    <span asp-validation-for="@Model.Name"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Others-input"  asp-for="@Model.Culture"  placeholder="" />
+        <label asp-for="@Model.Culture"></label>
+    </div>
+    <span asp-validation-for="@Model.Culture"></span>
+</div>
+<div class="col-sm-12 col-md-6">
+    <div class="form-floating">
+        <input disabled class="form-control Others-input"  asp-for="@Model.DefaultPluralSuffix"  placeholder="" />
+        <label asp-for="@Model.DefaultPluralSuffix"></label>
+    </div>
+    <span asp-validation-for="@Model.DefaultPluralSuffix"></span>
+</div>
 
                     <div class="col-sm-12 col-md-6">
             <div class="form-floating">

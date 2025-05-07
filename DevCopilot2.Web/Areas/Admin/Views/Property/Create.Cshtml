@@ -13,11 +13,14 @@
 
     List<SelectListItem> projectEnums = ViewData["ProjectEnums"] as List<SelectListItem>;
     List<SelectListItem> entities = ViewData["Entities"] as List<SelectListItem>;
+    List<SelectListItem> middleEntities = [
+        ListMappers.GetDefault(),
+        .. entities
+    ];
     List<SelectListItem> languages = ViewData["Languages"] as List<SelectListItem>;
     CreateEntityRelationDto createEntityRelation = new CreateEntityRelationDto();
     CreatePropertyImageResizeInformationDto createPropertyImageResizeInformation = new CreatePropertyImageResizeInformationDto();
     CreatePropertySelectedLanguageDto createPropertySelectedLanguage = new CreatePropertySelectedLanguageDto();
-
 }
 
 <nav class="mb-3" aria-label="breadcrumb">
@@ -221,7 +224,7 @@
                                         data-name="EntityRelationsList"
                                         data-prefix="EntityRelationsList"
                                         data-suffix="MiddleEntityId"
-                                        asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId" asp-items="entities">
+                                        asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId" asp-items="middleEntities">
                                 </select>
                                 <label asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId"></label>
                             </div>
@@ -429,8 +432,6 @@
                         </div>
 
                         <div class="buttons-container" data-name="@propertySelectedLanguageDataName">
-
-                            
                         </div>
                     </div>
 
@@ -439,7 +440,6 @@
         </div>
 
         <div class="d-flex justify-content-end mt-3">
-            
         </div>
 
         <div class="sub-form-template d-none"
@@ -471,7 +471,7 @@
                             data-name="EntityRelationsList"
                             data-prefix="EntityRelationsList"
                             data-suffix="MiddleEntityId"
-                            asp-for="@createEntityRelation.MiddleEntityId" asp-items="entities">
+                            asp-for="@createEntityRelation.MiddleEntityId" asp-items="middleEntities">
                     </select>
                     <label asp-for="@createEntityRelation.MiddleEntityId"></label>
                 </div>
