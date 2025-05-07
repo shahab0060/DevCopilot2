@@ -123,6 +123,6 @@
   </data>
 
   <data name="AuthorId" xml:space="preserve">
-    <value>Creator Id</value>
+    <value>Creator</value>
   </data>
 </root>

@@ -39,7 +39,7 @@ namespace DevCopilot2.Core.Services.Classes
                            ICrudRepository<User, long> userRepository,
                            ICrudRepository<ProjectSelectedLanguage, int> projectSelectedLanguageRepository,
                            ICrudRepository<ProjectArea, int> projectAreaRepository,
-                           ICrudRepository<ProjectEnumPropertySelectedLanguage, int> projectEnumPropertySelectedLanguageRepository 
+                           ICrudRepository<ProjectEnumPropertySelectedLanguage, int> projectEnumPropertySelectedLanguageRepository
                                       )
         {
             this._projectRepository = projectRepository;
@@ -70,7 +70,7 @@ namespace DevCopilot2.Core.Services.Classes
             if (filter.ToDate!.ToMiladiDateTime() != null)
                 query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());
 
-                        if (filter.ProjectId > 0)
+            if (filter.ProjectId > 0)
                 query = query.Where(q => q.ProjectId == filter.ProjectId);
 
             if (filter.LanguageId > 0)
@@ -82,7 +82,7 @@ namespace DevCopilot2.Core.Services.Classes
 
             query = filter.SortProperty switch
             {
-                                SortProjectSelectedLanguageType.ProjectTitle => query.OrderBy(a => a.Project.Title),
+                SortProjectSelectedLanguageType.ProjectTitle => query.OrderBy(a => a.Project.Title),
                 SortProjectSelectedLanguageType.ProjectId => query.OrderBy(a => a.ProjectId),
                 SortProjectSelectedLanguageType.LanguageName => query.OrderBy(a => a.Language.Name),
                 SortProjectSelectedLanguageType.LanguageId => query.OrderBy(a => a.LanguageId),
@@ -115,13 +115,13 @@ namespace DevCopilot2.Core.Services.Classes
 
         public async Task<FilterProjectSelectedLanguagesDto> FilterProjectSelectedLanguages(FilterProjectSelectedLanguagesDto filter)
         {
-            IQueryable<ProjectSelectedLanguage> query = 
+            IQueryable<ProjectSelectedLanguage> query =
                 GetProjectSelectedLanguagesWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.ProjectSelectedLanguages = await query
@@ -145,7 +145,7 @@ namespace DevCopilot2.Core.Services.Classes
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateProjectSelectedLanguage(CreateProjectSelectedLanguageDto create)
-        { 
+        {
 
             #region validate relation ids
 
@@ -161,20 +161,20 @@ namespace DevCopilot2.Core.Services.Classes
 
             #endregion
 
-            ProjectSelectedLanguage projectSelectedLanguage =  create.ToModel();
+            ProjectSelectedLanguage projectSelectedLanguage = create.ToModel();
             await _projectSelectedLanguageRepository.Add(projectSelectedLanguage);
             await _projectSelectedLanguageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateProjectSelectedLanguageDto?> GetProjectSelectedLanguageInformation(int projectSelectedLanguageId)
-        =>  await _projectSelectedLanguageRepository
-            .GetQueryable()
-            .Where(a => a.Id == projectSelectedLanguageId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateProjectSelectedLanguage(UpdateProjectSelectedLanguageDto update)
-        { 
+        public async Task<UpdateProjectSelectedLanguageDto?> GetProjectSelectedLanguageInformation(int projectSelectedLanguageId)
+                => await _projectSelectedLanguageRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == projectSelectedLanguageId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateProjectSelectedLanguage(UpdateProjectSelectedLanguageDto update)
+        {
             ProjectSelectedLanguage? projectSelectedLanguage = await _projectSelectedLanguageRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -195,13 +195,13 @@ public async Task<BaseChangeEntityResult> UpdateProjectSelectedLanguage(UpdatePr
 
             #endregion
 
-            projectSelectedLanguage =  projectSelectedLanguage.ToModel(update);
+            projectSelectedLanguage = projectSelectedLanguage.ToModel(update);
             _projectSelectedLanguageRepository.Update(projectSelectedLanguage);
             await _projectSelectedLanguageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteProjectSelectedLanguage(int projectSelectedLanguageId)
+        public async Task<BaseChangeEntityResult> DeleteProjectSelectedLanguage(int projectSelectedLanguageId)
         {
             ProjectSelectedLanguage? projectSelectedLanguage = await _projectSelectedLanguageRepository.GetAsTracking(projectSelectedLanguageId);
             if (projectSelectedLanguage is null) return BaseChangeEntityResult.NotFound;
@@ -212,10 +212,10 @@ public async Task<BaseChangeEntityResult> DeleteProjectSelectedLanguage(int proj
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteProjectSelectedLanguage(List<int> projectSelectedLanguageIds)
+        public async Task DeleteProjectSelectedLanguage(List<int> projectSelectedLanguageIds)
         {
             foreach (int projectSelectedLanguageId in projectSelectedLanguageIds)
-            { 
+            {
                 ProjectSelectedLanguage? projectSelectedLanguage = await _projectSelectedLanguageRepository.GetAsTracking(projectSelectedLanguageId);
                 if (projectSelectedLanguage is not null)
                     _projectSelectedLanguageRepository.SoftDelete(projectSelectedLanguage);
@@ -241,10 +241,10 @@ public async Task DeleteProjectSelectedLanguage(List<int> projectSelectedLanguag
             if (!string.IsNullOrEmpty(filter.Search))
                 query = query.Where(q => EF.Functions.Like(q.EnglishName, $"%{filter.Search}%") ||
 
-EF.Functions.Like(q.Title, $"%{filter.Search}%")   
+EF.Functions.Like(q.Title, $"%{filter.Search}%")
                                          );
 
-                        if (filter.ProjectId > 0)
+            if (filter.ProjectId > 0)
                 query = query.Where(q => q.ProjectId == filter.ProjectId);
 
             if (filter.TemplateId > 0)
@@ -256,7 +256,7 @@ EF.Functions.Like(q.Title, $"%{filter.Search}%")
 
             query = filter.SortProperty switch
             {
-                                SortProjectAreaType.ProjectTitle => query.OrderBy(a => a.Project.Title),
+                SortProjectAreaType.ProjectTitle => query.OrderBy(a => a.Project.Title),
                 SortProjectAreaType.ProjectId => query.OrderBy(a => a.ProjectId),
                 SortProjectAreaType.EnglishName => query.OrderBy(a => a.EnglishName),
                 SortProjectAreaType.Title => query.OrderBy(a => a.Title),
@@ -291,13 +291,13 @@ EF.Functions.Like(q.Title, $"%{filter.Search}%")
 
         public async Task<FilterProjectAreasDto> FilterProjectAreas(FilterProjectAreasDto filter)
         {
-            IQueryable<ProjectArea> query = 
+            IQueryable<ProjectArea> query =
                 GetProjectAreasWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.ProjectAreas = await query
@@ -321,7 +321,7 @@ EF.Functions.Like(q.Title, $"%{filter.Search}%")
             .FirstOrDefaultAsync();
 
         public async Task<ChangeProjectAreaResult> CreateProjectArea(CreateProjectAreaDto create)
-        { 
+        {
 
             #region validate unique properties
 
@@ -351,20 +351,20 @@ EF.Functions.Like(q.Title, $"%{filter.Search}%")
 
             #endregion
 
-            ProjectArea projectArea =  create.ToModel();
+            ProjectArea projectArea = create.ToModel();
             await _projectAreaRepository.Add(projectArea);
             await _projectAreaRepository.SaveChanges();
 
             return ChangeProjectAreaResult.Success;
         }
-public async Task<UpdateProjectAreaDto?> GetProjectAreaInformation(int projectAreaId)
-        =>  await _projectAreaRepository
-            .GetQueryable()
-            .Where(a => a.Id == projectAreaId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<ChangeProjectAreaResult> UpdateProjectArea(UpdateProjectAreaDto update)
-        { 
+        public async Task<UpdateProjectAreaDto?> GetProjectAreaInformation(int projectAreaId)
+                => await _projectAreaRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == projectAreaId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<ChangeProjectAreaResult> UpdateProjectArea(UpdateProjectAreaDto update)
+        {
             ProjectArea? projectArea = await _projectAreaRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -376,13 +376,13 @@ public async Task<ChangeProjectAreaResult> UpdateProjectArea(UpdateProjectAreaDt
             if (await _projectAreaRepository
                 .GetQueryable()
                 .AnyAsync(a => a.EnglishName == update.EnglishName.SanitizeText()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return ChangeProjectAreaResult.EnglishNameExists;
 
             if (await _projectAreaRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Title == update.Title.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return ChangeProjectAreaResult.TitleExists;
 
             #endregion
@@ -401,13 +401,13 @@ public async Task<ChangeProjectAreaResult> UpdateProjectArea(UpdateProjectAreaDt
 
             #endregion
 
-            projectArea =  projectArea.ToModel(update);
+            projectArea = projectArea.ToModel(update);
             _projectAreaRepository.Update(projectArea);
             await _projectAreaRepository.SaveChanges();
 
             return ChangeProjectAreaResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteProjectArea(int projectAreaId)
+        public async Task<BaseChangeEntityResult> DeleteProjectArea(int projectAreaId)
         {
             ProjectArea? projectArea = await _projectAreaRepository.GetAsTracking(projectAreaId);
             if (projectArea is null) return BaseChangeEntityResult.NotFound;
@@ -418,10 +418,10 @@ public async Task<BaseChangeEntityResult> DeleteProjectArea(int projectAreaId)
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteProjectArea(List<int> projectAreaIds)
+        public async Task DeleteProjectArea(List<int> projectAreaIds)
         {
             foreach (int projectAreaId in projectAreaIds)
-            { 
+            {
                 ProjectArea? projectArea = await _projectAreaRepository.GetAsTracking(projectAreaId);
                 if (projectArea is not null)
                     _projectAreaRepository.SoftDelete(projectArea);
@@ -445,10 +445,10 @@ public async Task DeleteProjectArea(List<int> projectAreaIds)
                 query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());
 
             if (!string.IsNullOrEmpty(filter.Search))
-                query = query.Where(q => EF.Functions.Like(q.Name, $"%{filter.Search}%")   
+                query = query.Where(q => EF.Functions.Like(q.Name, $"%{filter.Search}%")
                                          );
 
-                        if (filter.ProjectEnumId > 0)
+            if (filter.ProjectEnumId > 0)
                 query = query.Where(q => q.ProjectEnumId == filter.ProjectEnumId);
 
             #endregion
@@ -457,7 +457,7 @@ public async Task DeleteProjectArea(List<int> projectAreaIds)
 
             query = filter.SortProperty switch
             {
-                                SortProjectEnumPropertyType.ProjectEnumEnglishName => query.OrderBy(a => a.ProjectEnum.EnglishName),
+                SortProjectEnumPropertyType.ProjectEnumEnglishName => query.OrderBy(a => a.ProjectEnum.EnglishName),
                 SortProjectEnumPropertyType.ProjectEnumId => query.OrderBy(a => a.ProjectEnumId),
                 SortProjectEnumPropertyType.Name => query.OrderBy(a => a.Name),
                 SortProjectEnumPropertyType.Order => query.OrderBy(a => a.Order),
@@ -490,13 +490,13 @@ public async Task DeleteProjectArea(List<int> projectAreaIds)
 
         public async Task<FilterProjectEnumPropertiesDto> FilterProjectEnumProperties(FilterProjectEnumPropertiesDto filter)
         {
-            IQueryable<ProjectEnumProperty> query = 
+            IQueryable<ProjectEnumProperty> query =
                 GetProjectEnumPropertiesWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.ProjectEnumProperties = await query
@@ -520,7 +520,7 @@ public async Task DeleteProjectArea(List<int> projectAreaIds)
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateProjectEnumProperty(CreateProjectEnumPropertyDto create)
-        { 
+        {
 
             #region validate relation ids
 
@@ -531,7 +531,7 @@ public async Task DeleteProjectArea(List<int> projectAreaIds)
 
             #endregion
 
-            ProjectEnumProperty projectEnumProperty =  create.ToModel();
+            ProjectEnumProperty projectEnumProperty = create.ToModel();
             await _projectEnumPropertyRepository.Add(projectEnumProperty);
             await _projectEnumPropertyRepository.SaveChanges();
 
@@ -555,14 +555,14 @@ public async Task DeleteProjectArea(List<int> projectAreaIds)
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateProjectEnumPropertyDto?> GetProjectEnumPropertyInformation(int projectEnumPropertyId)
-        =>  await _projectEnumPropertyRepository
-            .GetQueryable()
-            .Where(a => a.Id == projectEnumPropertyId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateProjectEnumProperty(UpdateProjectEnumPropertyDto update)
-        { 
+        public async Task<UpdateProjectEnumPropertyDto?> GetProjectEnumPropertyInformation(int projectEnumPropertyId)
+                => await _projectEnumPropertyRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == projectEnumPropertyId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateProjectEnumProperty(UpdateProjectEnumPropertyDto update)
+        {
             ProjectEnumProperty? projectEnumProperty = await _projectEnumPropertyRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -578,7 +578,7 @@ public async Task<BaseChangeEntityResult> UpdateProjectEnumProperty(UpdateProjec
 
             #endregion
 
-            projectEnumProperty =  projectEnumProperty.ToModel(update);
+            projectEnumProperty = projectEnumProperty.ToModel(update);
             _projectEnumPropertyRepository.Update(projectEnumProperty);
             await _projectEnumPropertyRepository.SaveChanges();
 
@@ -639,7 +639,7 @@ public async Task<BaseChangeEntityResult> UpdateProjectEnumProperty(UpdateProjec
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteProjectEnumProperty(int projectEnumPropertyId)
+        public async Task<BaseChangeEntityResult> DeleteProjectEnumProperty(int projectEnumPropertyId)
         {
             ProjectEnumProperty? projectEnumProperty = await _projectEnumPropertyRepository.GetAsTracking(projectEnumPropertyId);
             if (projectEnumProperty is null) return BaseChangeEntityResult.NotFound;
@@ -650,10 +650,10 @@ public async Task<BaseChangeEntityResult> DeleteProjectEnumProperty(int projectE
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteProjectEnumProperty(List<int> projectEnumPropertyIds)
+        public async Task DeleteProjectEnumProperty(List<int> projectEnumPropertyIds)
         {
             foreach (int projectEnumPropertyId in projectEnumPropertyIds)
-            { 
+            {
                 ProjectEnumProperty? projectEnumProperty = await _projectEnumPropertyRepository.GetAsTracking(projectEnumPropertyId);
                 if (projectEnumProperty is not null)
                     _projectEnumPropertyRepository.SoftDelete(projectEnumProperty);
@@ -679,16 +679,16 @@ public async Task DeleteProjectEnumProperty(List<int> projectEnumPropertyIds)
             if (!string.IsNullOrEmpty(filter.Search))
                 query = query.Where(q => EF.Functions.Like(q.EnglishName, $"%{filter.Search}%") ||
 
-EF.Functions.Like(q.FolderName, $"%{filter.Search}%")   
+EF.Functions.Like(q.FolderName, $"%{filter.Search}%")
                                          );
-                        if (filter.EnglishName is not null)
+            if (filter.EnglishName is not null)
                 query = query.Where(q => q.EnglishName == filter.EnglishName);
 
             if (filter.FolderName is not null)
                 query = query.Where(q => q.FolderName == filter.FolderName);
 
-                        if (filter.ProjectId > 0)
-                query = query.Where(q => q.ProjectId == filter.ProjectId);
+            if (filter.ProjectId > 0)
+                query = query.Where(q => q.ProjectId == filter.ProjectId || q.ProjectId == null);
 
             if (filter.AuthorId > 0)
                 query = query.Where(q => q.AuthorId == filter.AuthorId);
@@ -699,7 +699,7 @@ EF.Functions.Like(q.FolderName, $"%{filter.Search}%")
 
             query = filter.SortProperty switch
             {
-                                SortProjectEnumType.ProjectTitle => query.OrderBy(a => a.Project.Title),
+                SortProjectEnumType.ProjectTitle => query.OrderBy(a => a.Project.Title),
                 SortProjectEnumType.ProjectId => query.OrderBy(a => a.ProjectId),
                 SortProjectEnumType.EnglishName => query.OrderBy(a => a.EnglishName),
                 SortProjectEnumType.FolderName => query.OrderBy(a => a.FolderName),
@@ -734,13 +734,13 @@ EF.Functions.Like(q.FolderName, $"%{filter.Search}%")
 
         public async Task<FilterProjectEnumsDto> FilterProjectEnums(FilterProjectEnumsDto filter)
         {
-            IQueryable<ProjectEnum> query = 
+            IQueryable<ProjectEnum> query =
                 GetProjectEnumsWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.ProjectEnums = await query
@@ -764,7 +764,7 @@ EF.Functions.Like(q.FolderName, $"%{filter.Search}%")
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateProjectEnum(CreateProjectEnumDto create)
-        { 
+        {
 
             #region validate unique properties
 
@@ -777,11 +777,11 @@ EF.Functions.Like(q.FolderName, $"%{filter.Search}%")
 
             #region validate relation ids
 
-            if(create.ProjectId>0)
-            if (!await _projectRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == create.ProjectId))
-                return BaseChangeEntityResult.NotFound;
+            if (create.ProjectId > 0)
+                if (!await _projectRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == create.ProjectId))
+                    return BaseChangeEntityResult.NotFound;
 
             if (!await _userRepository
                 .GetQueryable()
@@ -790,7 +790,7 @@ EF.Functions.Like(q.FolderName, $"%{filter.Search}%")
 
             #endregion
 
-            ProjectEnum projectEnum =  create.ToModel();
+            ProjectEnum projectEnum = create.ToModel();
             await _projectEnumRepository.Add(projectEnum);
             await _projectEnumRepository.SaveChanges();
 
@@ -814,14 +814,14 @@ EF.Functions.Like(q.FolderName, $"%{filter.Search}%")
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateProjectEnumDto?> GetProjectEnumInformation(int projectEnumId)
-        =>  await _projectEnumRepository
-            .GetQueryable()
-            .Where(a => a.Id == projectEnumId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateProjectEnum(UpdateProjectEnumDto update)
-        { 
+        public async Task<UpdateProjectEnumDto?> GetProjectEnumInformation(int projectEnumId)
+                => await _projectEnumRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == projectEnumId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateProjectEnum(UpdateProjectEnumDto update)
+        {
             ProjectEnum? projectEnum = await _projectEnumRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -833,18 +833,18 @@ public async Task<BaseChangeEntityResult> UpdateProjectEnum(UpdateProjectEnumDto
             if (await _projectEnumRepository
                 .GetQueryable()
                 .AnyAsync(a => a.EnglishName == update.EnglishName.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return BaseChangeEntityResult.Exists;
 
             #endregion
 
             #region validate relation ids
 
-            if(update.ProjectId>0)
-            if (!await _projectRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == update.ProjectId))
-                return BaseChangeEntityResult.NotFound;
+            if (update.ProjectId > 0)
+                if (!await _projectRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == update.ProjectId))
+                    return BaseChangeEntityResult.NotFound;
 
             if (!await _userRepository
                 .GetQueryable()
@@ -853,7 +853,7 @@ public async Task<BaseChangeEntityResult> UpdateProjectEnum(UpdateProjectEnumDto
 
             #endregion
 
-            projectEnum =  projectEnum.ToModel(update);
+            projectEnum = projectEnum.ToModel(update);
             _projectEnumRepository.Update(projectEnum);
             await _projectEnumRepository.SaveChanges();
 
@@ -914,7 +914,7 @@ public async Task<BaseChangeEntityResult> UpdateProjectEnum(UpdateProjectEnumDto
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteProjectEnum(int projectEnumId)
+        public async Task<BaseChangeEntityResult> DeleteProjectEnum(int projectEnumId)
         {
             ProjectEnum? projectEnum = await _projectEnumRepository.GetAsTracking(projectEnumId);
             if (projectEnum is null) return BaseChangeEntityResult.NotFound;
@@ -925,10 +925,10 @@ public async Task<BaseChangeEntityResult> DeleteProjectEnum(int projectEnumId)
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteProjectEnum(List<int> projectEnumIds)
+        public async Task DeleteProjectEnum(List<int> projectEnumIds)
         {
             foreach (int projectEnumId in projectEnumIds)
-            { 
+            {
                 ProjectEnum? projectEnum = await _projectEnumRepository.GetAsTracking(projectEnumId);
                 if (projectEnum is not null)
                     _projectEnumRepository.SoftDelete(projectEnum);
@@ -958,10 +958,10 @@ EF.Functions.Like(q.Title, $"%{filter.Search}%") ||
 
 EF.Functions.Like(q.Location, $"%{filter.Search}%") ||
 
-EF.Functions.Like(q.ReactProjectLocation, $"%{filter.Search}%")   
+EF.Functions.Like(q.ReactProjectLocation, $"%{filter.Search}%")
                                          );
 
-                        if (filter.AuthorId > 0)
+            if (filter.AuthorId > 0)
                 query = query.Where(q => q.AuthorId == filter.AuthorId);
 
             #endregion
@@ -970,7 +970,7 @@ EF.Functions.Like(q.ReactProjectLocation, $"%{filter.Search}%")
 
             query = filter.SortProperty switch
             {
-                                SortProjectType.EnglishName => query.OrderBy(a => a.EnglishName),
+                SortProjectType.EnglishName => query.OrderBy(a => a.EnglishName),
                 SortProjectType.Title => query.OrderBy(a => a.Title),
                 SortProjectType.Location => query.OrderBy(a => a.Location),
                 SortProjectType.Architecture => query.OrderBy(a => a.Architecture),
@@ -1006,13 +1006,13 @@ EF.Functions.Like(q.ReactProjectLocation, $"%{filter.Search}%")
 
         public async Task<FilterProjectsDto> FilterProjects(FilterProjectsDto filter)
         {
-            IQueryable<Project> query = 
+            IQueryable<Project> query =
                 GetProjectsWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.Projects = await query
@@ -1036,7 +1036,7 @@ EF.Functions.Like(q.ReactProjectLocation, $"%{filter.Search}%")
             .FirstOrDefaultAsync();
 
         public async Task<ChangeProjectResult> CreateProject(CreateProjectDto create)
-        { 
+        {
 
             #region validate unique properties
 
@@ -1066,7 +1066,7 @@ EF.Functions.Like(q.ReactProjectLocation, $"%{filter.Search}%")
 
             #endregion
 
-            Project project =  create.ToModel();
+            Project project = create.ToModel();
             await _projectRepository.Add(project);
             await _projectRepository.SaveChanges();
 
@@ -1104,14 +1104,14 @@ EF.Functions.Like(q.ReactProjectLocation, $"%{filter.Search}%")
 
             return ChangeProjectResult.Success;
         }
-public async Task<UpdateProjectDto?> GetProjectInformation(int projectId)
-        =>  await _projectRepository
-            .GetQueryable()
-            .Where(a => a.Id == projectId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<ChangeProjectResult> UpdateProject(UpdateProjectDto update)
-        { 
+        public async Task<UpdateProjectDto?> GetProjectInformation(int projectId)
+                => await _projectRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == projectId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<ChangeProjectResult> UpdateProject(UpdateProjectDto update)
+        {
             Project? project = await _projectRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -1123,19 +1123,19 @@ public async Task<ChangeProjectResult> UpdateProject(UpdateProjectDto update)
             if (await _projectRepository
                 .GetQueryable()
                 .AnyAsync(a => a.EnglishName == update.EnglishName.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return ChangeProjectResult.EnglishNameExists;
 
             if (await _projectRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Title == update.Title.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return ChangeProjectResult.TitleExists;
 
             if (await _projectRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Location == update.Location.SanitizeText()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return ChangeProjectResult.LocationExists;
 
             #endregion
@@ -1149,7 +1149,7 @@ public async Task<ChangeProjectResult> UpdateProject(UpdateProjectDto update)
 
             #endregion
 
-            project =  project.ToModel(update);
+            project = project.ToModel(update);
             _projectRepository.Update(project);
             await _projectRepository.SaveChanges();
 
@@ -1261,7 +1261,7 @@ public async Task<ChangeProjectResult> UpdateProject(UpdateProjectDto update)
 
             return ChangeProjectResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteProject(int projectId)
+        public async Task<BaseChangeEntityResult> DeleteProject(int projectId)
         {
             Project? project = await _projectRepository.GetAsTracking(projectId);
             if (project is null) return BaseChangeEntityResult.NotFound;
@@ -1272,10 +1272,10 @@ public async Task<BaseChangeEntityResult> DeleteProject(int projectId)
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteProject(List<int> projectIds)
+        public async Task DeleteProject(List<int> projectIds)
         {
             foreach (int projectId in projectIds)
-            { 
+            {
                 Project? project = await _projectRepository.GetAsTracking(projectId);
                 if (project is not null)
                     _projectRepository.SoftDelete(project);
@@ -1299,10 +1299,10 @@ public async Task DeleteProject(List<int> projectIds)
                 query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());
 
             if (!string.IsNullOrEmpty(filter.Search))
-                query = query.Where(q => EF.Functions.Like(q.Title, $"%{filter.Search}%")   
+                query = query.Where(q => EF.Functions.Like(q.Title, $"%{filter.Search}%")
                                          );
 
-                        if (filter.LanguageId > 0)
+            if (filter.LanguageId > 0)
                 query = query.Where(q => q.LanguageId == filter.LanguageId);
 
             if (filter.ProjectEnumPropertyId > 0)
@@ -1314,7 +1314,7 @@ public async Task DeleteProject(List<int> projectIds)
 
             query = filter.SortProperty switch
             {
-                                SortProjectEnumPropertySelectedLanguageType.LanguageName => query.OrderBy(a => a.Language.Name),
+                SortProjectEnumPropertySelectedLanguageType.LanguageName => query.OrderBy(a => a.Language.Name),
                 SortProjectEnumPropertySelectedLanguageType.LanguageId => query.OrderBy(a => a.LanguageId),
                 SortProjectEnumPropertySelectedLanguageType.ProjectEnumPropertyName => query.OrderBy(a => a.ProjectEnumProperty.Name),
                 SortProjectEnumPropertySelectedLanguageType.ProjectEnumPropertyId => query.OrderBy(a => a.ProjectEnumPropertyId),
@@ -1348,13 +1348,13 @@ public async Task DeleteProject(List<int> projectIds)
 
         public async Task<FilterProjectEnumPropertySelectedLanguagesDto> FilterProjectEnumPropertySelectedLanguages(FilterProjectEnumPropertySelectedLanguagesDto filter)
         {
-            IQueryable<ProjectEnumPropertySelectedLanguage> query = 
+            IQueryable<ProjectEnumPropertySelectedLanguage> query =
                 GetProjectEnumPropertySelectedLanguagesWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.ProjectEnumPropertySelectedLanguages = await query
@@ -1378,7 +1378,7 @@ public async Task DeleteProject(List<int> projectIds)
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateProjectEnumPropertySelectedLanguage(CreateProjectEnumPropertySelectedLanguageDto create)
-        { 
+        {
 
             #region validate relation ids
 
@@ -1394,20 +1394,20 @@ public async Task DeleteProject(List<int> projectIds)
 
             #endregion
 
-            ProjectEnumPropertySelectedLanguage projectEnumPropertySelectedLanguage =  create.ToModel();
+            ProjectEnumPropertySelectedLanguage projectEnumPropertySelectedLanguage = create.ToModel();
             await _projectEnumPropertySelectedLanguageRepository.Add(projectEnumPropertySelectedLanguage);
             await _projectEnumPropertySelectedLanguageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateProjectEnumPropertySelectedLanguageDto?> GetProjectEnumPropertySelectedLanguageInformation(int projectEnumPropertySelectedLanguageId)
-        =>  await _projectEnumPropertySelectedLanguageRepository
-            .GetQueryable()
-            .Where(a => a.Id == projectEnumPropertySelectedLanguageId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateProjectEnumPropertySelectedLanguage(UpdateProjectEnumPropertySelectedLanguageDto update)
-        { 
+        public async Task<UpdateProjectEnumPropertySelectedLanguageDto?> GetProjectEnumPropertySelectedLanguageInformation(int projectEnumPropertySelectedLanguageId)
+                => await _projectEnumPropertySelectedLanguageRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == projectEnumPropertySelectedLanguageId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateProjectEnumPropertySelectedLanguage(UpdateProjectEnumPropertySelectedLanguageDto update)
+        {
             ProjectEnumPropertySelectedLanguage? projectEnumPropertySelectedLanguage = await _projectEnumPropertySelectedLanguageRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -1428,13 +1428,13 @@ public async Task<BaseChangeEntityResult> UpdateProjectEnumPropertySelectedLangu
 
             #endregion
 
-            projectEnumPropertySelectedLanguage =  projectEnumPropertySelectedLanguage.ToModel(update);
+            projectEnumPropertySelectedLanguage = projectEnumPropertySelectedLanguage.ToModel(update);
             _projectEnumPropertySelectedLanguageRepository.Update(projectEnumPropertySelectedLanguage);
             await _projectEnumPropertySelectedLanguageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteProjectEnumPropertySelectedLanguage(int projectEnumPropertySelectedLanguageId)
+        public async Task<BaseChangeEntityResult> DeleteProjectEnumPropertySelectedLanguage(int projectEnumPropertySelectedLanguageId)
         {
             ProjectEnumPropertySelectedLanguage? projectEnumPropertySelectedLanguage = await _projectEnumPropertySelectedLanguageRepository.GetAsTracking(projectEnumPropertySelectedLanguageId);
             if (projectEnumPropertySelectedLanguage is null) return BaseChangeEntityResult.NotFound;
@@ -1445,10 +1445,10 @@ public async Task<BaseChangeEntityResult> DeleteProjectEnumPropertySelectedLangu
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteProjectEnumPropertySelectedLanguage(List<int> projectEnumPropertySelectedLanguageIds)
+        public async Task DeleteProjectEnumPropertySelectedLanguage(List<int> projectEnumPropertySelectedLanguageIds)
         {
             foreach (int projectEnumPropertySelectedLanguageId in projectEnumPropertySelectedLanguageIds)
-            { 
+            {
                 ProjectEnumPropertySelectedLanguage? projectEnumPropertySelectedLanguage = await _projectEnumPropertySelectedLanguageRepository.GetAsTracking(projectEnumPropertySelectedLanguageId);
                 if (projectEnumPropertySelectedLanguage is not null)
                     _projectEnumPropertySelectedLanguageRepository.SoftDelete(projectEnumPropertySelectedLanguage);

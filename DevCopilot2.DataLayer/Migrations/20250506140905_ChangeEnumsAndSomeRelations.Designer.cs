@@ -4,6 +4,7 @@ using DevCopilot2.DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevCopilot2.DataLayer.Migrations
 {
     [DbContext(typeof(DevCopilot2DbContext))]
-    partial class DevCopilot2DbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506140905_ChangeEnumsAndSomeRelations")]
+    partial class ChangeEnumsAndSomeRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -768,6 +771,9 @@ namespace DevCopilot2.DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<long>("AuthorId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -842,6 +848,8 @@ namespace DevCopilot2.DataLayer.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("CreateDate");
 
@@ -1571,6 +1579,12 @@ namespace DevCopilot2.DataLayer.Migrations
 
             modelBuilder.Entity("DevCopilot2.Domain.Entities.Properties.Property", b =>
                 {
+                    b.HasOne("DevCopilot2.Domain.Entities.Users.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DevCopilot2.Domain.Entities.Entities.Entity", "Entity")
                         .WithMany("Properties")
                         .HasForeignKey("EntityId")
@@ -1580,6 +1594,8 @@ namespace DevCopilot2.DataLayer.Migrations
                     b.HasOne("DevCopilot2.Domain.Entities.Projects.ProjectEnum", "ProjectEnum")
                         .WithMany("Properties")
                         .HasForeignKey("ProjectEnumId");
+
+                    b.Navigation("Author");
 
                     b.Navigation("Entity");
 

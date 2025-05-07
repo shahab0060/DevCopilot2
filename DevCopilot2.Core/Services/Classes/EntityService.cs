@@ -469,8 +469,8 @@ EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")
             if (filter.EntityId > 0)
                 query = query.Where(q => q.EntityId == filter.EntityId);
 
-            if (filter.AuthorId > 0)
-                query = query.Where(q => q.AuthorId == filter.AuthorId);
+            if (filter.ProjectId > 0)
+                query = query.Where(q => q.Entity.ProjectId == filter.ProjectId);
 
             #endregion
 
@@ -497,8 +497,6 @@ EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")
                 SortPropertyType.UseEditor => query.OrderBy(a => a.UseEditor),
                 SortPropertyType.EntityPluralName => query.OrderBy(a => a.Entity.PluralName),
                 SortPropertyType.EntityId => query.OrderBy(a => a.EntityId),
-                SortPropertyType.AuthorPhoneNumber => query.OrderBy(a => a.Author.PhoneNumber),
-                SortPropertyType.AuthorId => query.OrderBy(a => a.AuthorId),
                 SortPropertyType.ForceMapperCode => query.OrderBy(a => a.ForceMapperCode),
                 SortPropertyType.ExcludeFromListDto => query.OrderBy(a => a.ExcludeFromListDto),
                 _ => query
@@ -573,11 +571,6 @@ EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")
             if (!await _entityRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Id == create.EntityId))
-                return BaseChangeEntityResult.NotFound;
-
-            if (!await _userRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == create.AuthorId))
                 return BaseChangeEntityResult.NotFound;
 
             #endregion
@@ -659,11 +652,6 @@ public async Task<BaseChangeEntityResult> UpdateProperty(UpdatePropertyDto updat
             if (!await _entityRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Id == update.EntityId))
-                return BaseChangeEntityResult.NotFound;
-
-            if (!await _userRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == update.AuthorId))
                 return BaseChangeEntityResult.NotFound;
 
             #endregion

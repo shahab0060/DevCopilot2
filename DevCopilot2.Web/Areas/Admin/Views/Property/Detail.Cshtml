@@ -29,7 +29,7 @@ CreatePropertySelectedLanguageDto createPropertySelectedLanguage = new CreatePro
                                   asp-controller="Property"
                                   asp-action="Index" 
 
-                                asp-route-entityIdId="@Model.EntityId" title="@SharedEntitiesLocalizer.GetString("Properties")">@SharedEntitiesLocalizer.GetString("Properties")</a></li>
+                                asp-route-entityId="@Model.EntityId" title="@SharedEntitiesLocalizer.GetString("Properties")">@SharedEntitiesLocalizer.GetString("Properties")</a></li>
 
         <li class="breadcrumb-item active">@SharedEntitiesLocalizer.GetString("Property") @SharedLocalizer.GetString("Detail")</li>
     </ol>   
@@ -73,13 +73,6 @@ CreatePropertySelectedLanguageDto createPropertySelectedLanguage = new CreatePro
         <label asp-for="@Model.EntityPluralName"></label>
     </div>
     <span asp-validation-for="@Model.EntityPluralName"></span>
-</div>
-<div class="col-sm-12 col-md-6">
-    <div class="form-floating">
-        <input disabled class="form-control Others-input"  asp-for="@Model.AuthorPhoneNumber"  placeholder="" />
-        <label asp-for="@Model.AuthorPhoneNumber"></label>
-    </div>
-    <span asp-validation-for="@Model.AuthorPhoneNumber"></span>
 </div>
 
                                  <div class="sub-form-container" data-name="@("EntityRelationsList")">

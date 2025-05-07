@@ -1,22 +1,17 @@
-using System;
-using System.Text;
-using DevCopilot2.Core.Extensions.BasicExtensions;
-using DevCopilot2.Core.Services.Interfaces;
-using DevCopilot2.Domain.Enums.Common;
-using DevCopilot2.Web.PresentationExtensions;
-using DevCopilot2.Web.PresentationMappers;
-using DevCopilot2.Domain.Enums.Languages;
-using DevCopilot2.Domain.DTOs.Languages;
-using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Mvc;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using ClosedXML.Excel;
 using DevCopilot2.Core.Exporters;
+using DevCopilot2.Core.Services.Interfaces;
+using DevCopilot2.Domain.DTOs.Languages;
+using DevCopilot2.Domain.Enums.Common;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using System.Text;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Languages
 {
-	//[PermissionChecker("LanguageManagement")]
+    [PermissionChecker("LanguageManagement")]
     public class LanguageController : BaseAdminController<LanguageListDto>
     {
 

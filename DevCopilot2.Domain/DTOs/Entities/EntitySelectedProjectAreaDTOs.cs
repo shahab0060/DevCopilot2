@@ -79,7 +79,10 @@ namespace DevCopilot2.Domain.DTOs.Entities
         public bool HasApi { get; set; } 
 
         [Display(Name="HasWeb")]
-        public bool HasWeb { get; set; } 
+        public bool HasWeb { get; set; }
+
+        [Display(Name = "ProjectId")]
+        public int ProjectId { get; set; }
 
         [Display(Name="EntitySelectedProjectAreaSelectedFiltersList")]
         public List<EntitySelectedProjectAreaSelectedFilterListDto> EntitySelectedProjectAreaSelectedFiltersList { get; set; } = new List<EntitySelectedProjectAreaSelectedFilterListDto>();
@@ -127,8 +130,8 @@ namespace DevCopilot2.Domain.DTOs.Entities
     public class CreateEntitySelectedProjectAreaDto: BaseUpsertEntitySelectedProjectAreaDto
     {
         [Display(Name = "EntitySelectedProjectAreaSelectedFiltersList")]
-        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
-        [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+     //   [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+      //  [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
         public List<CreateEntitySelectedProjectAreaSelectedFilterDto> EntitySelectedProjectAreaSelectedFiltersList { get; set; } =new List<CreateEntitySelectedProjectAreaSelectedFilterDto>();
 
@@ -142,8 +145,8 @@ namespace DevCopilot2.Domain.DTOs.Entities
         public int Id { get; set; } = 0;
 
         [Display(Name = "EntitySelectedProjectAreaSelectedFiltersList")]
-        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
-        [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+      //  [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+     //   [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
         public List<UpdateEntitySelectedProjectAreaSelectedFilterDto> EntitySelectedProjectAreaSelectedFiltersList { get; set; } =new List<UpdateEntitySelectedProjectAreaSelectedFilterDto>();
 

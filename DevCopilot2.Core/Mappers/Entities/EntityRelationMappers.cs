@@ -26,13 +26,13 @@ namespace DevCopilot2.Core.Mappers.Entities
                         PrimaryPropertyId = entityRelation.PrimaryPropertyId,
                         SecondaryEntityPluralName = entityRelation.SecondaryEntity.PluralName,
                         SecondaryEntityId = entityRelation.SecondaryEntityId,
-                        MiddleEntityPluralName = entityRelation.MiddleEntity.PluralName,
+                        MiddleEntityPluralName = entityRelation.MiddleEntity!.PluralName,
                         MiddleEntityId = entityRelation.MiddleEntityId,
                         RelationType = entityRelation.RelationType,
                         InputType = entityRelation.InputType,
                         FillingType = entityRelation.FillingType,
                         FillingCode = entityRelation.FillingCode,
-
+                        ProjectId = entityRelation.SecondaryEntity.ProjectId
                     });
 
         #endregion

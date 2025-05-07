@@ -1,25 +1,25 @@
-using System;
-using System.Text;
-using DevCopilot2.Core.Extensions.BasicExtensions;
-using DevCopilot2.Core.Services.Interfaces;
-using DevCopilot2.Domain.Enums.Common;
-using DevCopilot2.Web.PresentationExtensions;
-using DevCopilot2.Web.PresentationMappers;
-using DevCopilot2.Domain.Enums.Entities;
-using DevCopilot2.Domain.DTOs.Entities;
-using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Mvc;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using ClosedXML.Excel;
 using DevCopilot2.Core.Exporters;
-using DevCopilot2.Domain.DTOs.Projects;
+using DevCopilot2.Core.Extensions.BasicExtensions;
+using DevCopilot2.Core.Services.Interfaces;
+using DevCopilot2.Domain.DTOs.Entities;
 using DevCopilot2.Domain.DTOs.Languages;
+using DevCopilot2.Domain.DTOs.Projects;
 using DevCopilot2.Domain.DTOs.Properties;
+using DevCopilot2.Domain.Enums.Common;
+using DevCopilot2.Domain.Enums.Entities;
+using DevCopilot2.Web.PresentationExtensions;
+using DevCopilot2.Web.PresentationMappers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Localization;
+using System.Text;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 {
-	//[PermissionChecker("EntityManagement")]
+    [PermissionChecker("EntityManagement")]
     public class EntityController : BaseAdminController<EntityListDto>
     {
 
@@ -37,7 +37,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
                            IStringLocalizer<EntityController> localizer,
                            IEntityService entityService,
                            IProjectService projectService,
-                           ISiteService siteService 
+                           ISiteService siteService
                                       )
         {
             this._sharedLocalizer = sharedLocalizer;
@@ -63,226 +63,254 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 
         #region detail
 
-		[HttpGet]
-		public async Task<IActionResult>Detail(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
 
             EntityListDto? entityInformation = await _entityService.GetSingleEntityInformation(id);
-			if (
-            entityInformation is null)return NotFound();
+            if (
+            entityInformation is null) return NotFound();
 
-            await GetViewDatas();
+            await GetViewDatas(entityInformation.ProjectId);
             return View(
-            entityInformation);	
-		}
+            entityInformation);
+        }
 
-		#endregion
+        #endregion
+
+        #region select project
+
+        [HttpGet]
+        public async Task<IActionResult> SelectProject()
+        {
+            await GetProjectsViewData();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SelectProject(CreateEntityDto create)
+        {
+            if (create is null || create.ProjectId is not > 0)
+            {
+                //TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
+                await GetProjectsViewData();
+                return View(create);
+            }
+            return RedirectToAction("Create", "Entity", new { area = "Admin", projectId = create.ProjectId });
+        }
+
+        #endregion
 
         #region create
 
-		[HttpGet]
-		public async Task<IActionResult> Create()
-		{
-            await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Create(int projectId)
+        {
+            await GetViewDatas(projectId);
             CreateEntityDto create = new CreateEntityDto()
             {
-
+                ProjectId = projectId
             };
             return View(create);
         }
 
-		[HttpPost]
-		public async Task<IActionResult> Create(CreateEntityDto create)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateEntityDto create)
+        {
 
             create.AuthorId = User.GetCurrentUserId();
 
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(create.ProjectId);
                 return View(create);
             }
-			ChangeEntityResult result = await _entityService.CreateEntity(create);
+            ChangeEntityResult result = await _entityService.CreateEntity(create);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case ChangeEntityResult.Success:
+                case ChangeEntityResult.Success:
                     {
                         TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Entity")} {_sharedLocalizer.GetString("Created Successfully")}";
                         return RedirectToAction("Index", "Entity", new { Area = "Admin", });
                     }
 
-				case ChangeEntityResult.NotFound:
+                case ChangeEntityResult.NotFound:
                     {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
                     }
 
-				case ChangeEntityResult.SingularNameExists:
-                {
+                case ChangeEntityResult.SingularNameExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Entity")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("SingularName")} {create.SingularName}";
                         break;
-                }
+                    }
 
-				case ChangeEntityResult.PluralNameExists:
-                {
+                case ChangeEntityResult.PluralNameExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Entity")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("PluralName")} {create.PluralName}";
                         break;
-                }
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(create);
-		}
+            await GetViewDatas(create.ProjectId);
+            return View(create);
+        }
 
-		#endregion
+        #endregion
 
         #region update
 
-		[HttpGet]
-		public async Task<IActionResult> Update(int id)
-		{
-			UpdateEntityDto? entityInformation = await _entityService.GetEntityInformation(id);
-			if (entityInformation is null) return NotFound();
-			await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            UpdateEntityDto? entityInformation = await _entityService.GetEntityInformation(id);
+            if (entityInformation is null) return NotFound();
+            await GetViewDatas(entityInformation.ProjectId);
             return View(entityInformation);
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Update(UpdateEntityDto update)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateEntityDto update)
+        {
 
             update.AuthorId = User.GetCurrentUserId();
 
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(update.ProjectId);
                 return View(update);
             }
-			ChangeEntityResult result = await _entityService.UpdateEntity(update);
+            ChangeEntityResult result = await _entityService.UpdateEntity(update);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case ChangeEntityResult.Success:
+                case ChangeEntityResult.Success:
                     {
                         TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Entity")} {_sharedLocalizer.GetString("Updated Successfully.")}";
                         return RedirectToAction("Index", "Entity", new { Area = "Admin", });
                     }
 
-				case ChangeEntityResult.NotFound:
+                case ChangeEntityResult.NotFound:
                     {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
                     }
 
-				case ChangeEntityResult.SingularNameExists:
-                {
+                case ChangeEntityResult.SingularNameExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Entity")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("SingularName")} {update.SingularName}";
                         break;
-                }
+                    }
 
-				case ChangeEntityResult.PluralNameExists:
-                {
+                case ChangeEntityResult.PluralNameExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Entity")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("PluralName")} {update.PluralName}";
                         break;
-                }
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(update);
-		}
+            await GetViewDatas(update.ProjectId);
+            return View(update);
+        }
 
-		#endregion
+        #endregion
 
         #region view datas
 
-        async Task GetViewDatas()
+        async Task GetViewDatas(int projectId)
         {
-            await GetEntitiesViewData();
+            await GetEntitiesViewData(projectId);
             await GetProjectsViewData();
-            await GetProjectEnumsViewData();
-            await GetLanguagesViewData();
-            await GetProjectAreasViewData();
-            await GetPropertiesViewData();
+            await GetProjectEnumsViewData(projectId);
+            await GetLanguagesViewData(projectId);
+            await GetProjectAreasViewData(projectId);
+            await GetPropertiesViewData(projectId);
         }
 
-        async Task GetEntitiesViewData()
+        async Task GetEntitiesViewData(int projectId)
         => ViewData["Entities"] = (await _entityService
-        .GetEntitiesAsCombo(new FilterEntitiesDto()))
-        .ToSelectListItem(false,true);
+        .GetEntitiesAsCombo(new FilterEntitiesDto() { ProjectId = projectId }))
+        .ToSelectListItem(false, true);
 
         async Task GetProjectsViewData()
         => ViewData["Projects"] = (await _projectService
         .GetProjectsAsCombo(new FilterProjectsDto()))
         .ToSelectListItem();
 
-        async Task GetProjectEnumsViewData()
+        async Task GetProjectEnumsViewData(int projectId)
         => ViewData["ProjectEnums"] = (await _projectService
-        .GetProjectEnumsAsCombo(new FilterProjectEnumsDto()))
-        .ToSelectListItem(false,true);
+        .GetProjectEnumsAsCombo(new FilterProjectEnumsDto() { ProjectId = projectId }))
+        .ToSelectListItem(false, true);
 
-        async Task GetLanguagesViewData()
-        => ViewData["Languages"] = (await _siteService
-        .GetLanguagesAsCombo(new FilterLanguagesDto()))
+        async Task GetLanguagesViewData(int projectId)
+        {
+            ViewData["LanguagesList"] = (await _siteService
+        .FilterLanguages(new FilterLanguagesDto() { ProjectId = projectId }))
+        .Languages;
+            ViewData["Languages"] = (await _siteService
+        .GetLanguagesAsCombo(new FilterLanguagesDto() { ProjectId = projectId }))
         .ToSelectListItem();
+        }
 
-        async Task GetProjectAreasViewData()
+        async Task GetProjectAreasViewData(int projectId)
         => ViewData["ProjectAreas"] = (await _projectService
-        .GetProjectAreasAsCombo(new FilterProjectAreasDto()))
+        .GetProjectAreasAsCombo(new FilterProjectAreasDto() { ProjectId = projectId }))
         .ToSelectListItem();
 
-        async Task GetPropertiesViewData()
+        async Task GetPropertiesViewData(int projectId)
         => ViewData["Properties"] = (await _entityService
-        .GetPropertiesAsCombo(new FilterPropertiesDto()))
+        .GetPropertiesAsCombo(new FilterPropertiesDto() { ProjectId = projectId }))
         .ToSelectListItem();
 
         #endregion
 
         #region delete
 
-		[HttpGet]
-		public async Task<IActionResult> Delete(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
             EntityListDto? entityInformation = await _entityService.GetSingleEntityInformation(id);
             if (entityInformation is null) return NotFound();
-			BaseChangeEntityResult result = await _entityService.DeleteEntity(id);
-			switch (result)
-			{
-				case BaseChangeEntityResult.Success:
-					{
-						TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Entity")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-					return RedirectToAction("Index", "Entity", new { Area = "Admin", });
-					}
-			}
-			return NotFound();
-		}
+            BaseChangeEntityResult result = await _entityService.DeleteEntity(id);
+            switch (result)
+            {
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Entity")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+                        return RedirectToAction("Index", "Entity", new { Area = "Admin", });
+                    }
+            }
+            return NotFound();
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> DeleteRange(List<int> ids)
-		{
-			if (!ids.Distinct().Any())
-			{
-				TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
-				return RedirectToAction("Index", "Entity", new { Area = "Admin" });
-			}
-			await _entityService.DeleteEntity(ids);
-			TempData[SuccessMessage] =$"{_sharedEntitiesLocalizer.GetString("Entities")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-			return RedirectToAction("Index", "Entity", new { Area = "Admin" });
-		}
+        [HttpGet]
+        public async Task<IActionResult> DeleteRange(List<int> ids)
+        {
+            if (!ids.Distinct().Any())
+            {
+                TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
+                return RedirectToAction("Index", "Entity", new { Area = "Admin" });
+            }
+            await _entityService.DeleteEntity(ids);
+            TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Entities")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+            return RedirectToAction("Index", "Entity", new { Area = "Admin" });
+        }
 
-		#endregion
+        #endregion
 
         #region export excel
 
@@ -298,24 +326,24 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
                 ws = excelExporter.AddHeaders(ws, title);
                 ws.Columns().AdjustToContents();
                 ws = excelExporter.AddColumn(ws, $"{_sharedLocalizer.GetString("Row")}", 1, 3);
-                ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("SingularName")}", 2, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("PluralName")}", 3, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("FolderName")}", 4, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("InheritedEntityPluralName")}", 5, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("InheritedEntityId")}", 6, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("IdType")}", 7, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ServiceName")}", 8, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("AuthorPhoneNumber")}", 9, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("AuthorId")}", 10, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ProjectTitle")}", 11, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ProjectId")}", 12, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("IsExcluded")}", 13, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("AddToMenu")}", 14, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("SingularName")}", 2, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("PluralName")}", 3, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("FolderName")}", 4, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("InheritedEntityPluralName")}", 5, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("InheritedEntityId")}", 6, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("IdType")}", 7, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("ServiceName")}", 8, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("AuthorPhoneNumber")}", 9, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("AuthorId")}", 10, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("ProjectTitle")}", 11, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("ProjectId")}", 12, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("IsExcluded")}", 13, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("AddToMenu")}", 14, 3);
 
                 int rowIndex = 4;
                 foreach (var item in result)
                 {
-                    ws = excelExporter.AddColumn(ws,(rowIndex-3).ToString(), 1, rowIndex);
+                    ws = excelExporter.AddColumn(ws, (rowIndex - 3).ToString(), 1, rowIndex);
 
                     ws = excelExporter.AddColumn(ws, item.SingularName, 2, rowIndex);
 
@@ -422,7 +450,7 @@ item.ProjectId.ToString("#,0"),
 
 item.IsExcluded.ConvertBoolToText(),
 
-item.AddToMenu.ConvertBoolToText() );
+item.AddToMenu.ConvertBoolToText());
                 index++;
             }
 

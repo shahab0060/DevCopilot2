@@ -13,11 +13,11 @@ namespace DevCopilot2.Domain.DTOs.Entities
     {
         #region properties
 
-		public List<EntitySelectedProjectAreaSelectedFilterListDto> EntitySelectedProjectAreaSelectedFilters { get; set; } = new List<EntitySelectedProjectAreaSelectedFilterListDto>();
+        public List<EntitySelectedProjectAreaSelectedFilterListDto> EntitySelectedProjectAreaSelectedFilters { get; set; } = new List<EntitySelectedProjectAreaSelectedFilterListDto>();
 
         public SortEntitySelectedProjectAreaSelectedFilterType? SortProperty { get; set; }
 
-                [Display(Name = "EntitySelectedProjectAreaId")]
+        [Display(Name = "EntitySelectedProjectAreaId")]
         public int? EntitySelectedProjectAreaId { get; set; }
         [Display(Name = "PropertyId")]
         public int? PropertyId { get; set; }
@@ -26,44 +26,47 @@ namespace DevCopilot2.Domain.DTOs.Entities
 
         #region methods
 
-        public FilterEntitySelectedProjectAreaSelectedFiltersDto  SetEntitySelectedProjectAreaSelectedFilters(List<EntitySelectedProjectAreaSelectedFilterListDto> entitySelectedProjectAreaSelectedFilters)
-		{
-			this.EntitySelectedProjectAreaSelectedFilters = entitySelectedProjectAreaSelectedFilters;
-			return this;
-		}
+        public FilterEntitySelectedProjectAreaSelectedFiltersDto SetEntitySelectedProjectAreaSelectedFilters(List<EntitySelectedProjectAreaSelectedFilterListDto> entitySelectedProjectAreaSelectedFilters)
+        {
+            this.EntitySelectedProjectAreaSelectedFilters = entitySelectedProjectAreaSelectedFilters;
+            return this;
+        }
 
-		public FilterEntitySelectedProjectAreaSelectedFiltersDto  SetPaging(BasePaging paging)
-		{
-			PageId = paging.PageId;
-			AllEntitiesCount = paging.AllEntitiesCount;
-			StartPage = paging.StartPage;
-			EndPage = paging.EndPage;
-			HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
-			TakeEntity = paging.TakeEntity;
-			SkipEntity = paging.SkipEntity;
-			PageCount = paging.PageCount;
-			return this;
-		}
+        public FilterEntitySelectedProjectAreaSelectedFiltersDto SetPaging(BasePaging paging)
+        {
+            PageId = paging.PageId;
+            AllEntitiesCount = paging.AllEntitiesCount;
+            StartPage = paging.StartPage;
+            EndPage = paging.EndPage;
+            HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
+            TakeEntity = paging.TakeEntity;
+            SkipEntity = paging.SkipEntity;
+            PageCount = paging.PageCount;
+            return this;
+        }
 
-		#endregion
+        #endregion
     }
 
     public class EntitySelectedProjectAreaSelectedFilterListDto : BaseListDto<int>
     {
 
-        [Display(Name="EntitySelectedProjectAreaId")]
-        public bool EntitySelectedProjectAreaHasWeb { get; set; } 
+        [Display(Name = "EntitySelectedProjectAreaId")]
+        public bool EntitySelectedProjectAreaHasWeb { get; set; }
 
-        [Display(Name="EntitySelectedProjectAreaId")]
-        public int EntitySelectedProjectAreaId { get; set; } 
+        [Display(Name = "EntitySelectedProjectAreaId")]
+        public int EntitySelectedProjectAreaId { get; set; }
 
-        [Display(Name="PropertyId")]
+        [Display(Name = "PropertyId")]
         public string PropertyName { get; set; } = null!;
 
-        [Display(Name="PropertyId")]
-        public int PropertyId { get; set; } 
+        [Display(Name = "PropertyId")]
+        public int PropertyId { get; set; }
 
-        [Display(Name="Value")]
+        [Display(Name = "EntityId")]
+        public int EntityId { get; set; }
+
+        [Display(Name = "Value")]
         public string Value { get; set; } = null!;
 
     }
@@ -78,7 +81,7 @@ namespace DevCopilot2.Domain.DTOs.Entities
         [Display(Name = "PropertyId")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public int PropertyId { get; set; } 
+        public int PropertyId { get; set; }
 
         [Display(Name = "Value")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
@@ -87,12 +90,12 @@ namespace DevCopilot2.Domain.DTOs.Entities
 
     }
 
-    public class CreateEntitySelectedProjectAreaSelectedFilterDto: BaseUpsertEntitySelectedProjectAreaSelectedFilterDto
+    public class CreateEntitySelectedProjectAreaSelectedFilterDto : BaseUpsertEntitySelectedProjectAreaSelectedFilterDto
     {
 
     }
 
-    public class UpdateEntitySelectedProjectAreaSelectedFilterDto: BaseUpsertEntitySelectedProjectAreaSelectedFilterDto
+    public class UpdateEntitySelectedProjectAreaSelectedFilterDto : BaseUpsertEntitySelectedProjectAreaSelectedFilterDto
     {
         [Display(Name = "Id")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]

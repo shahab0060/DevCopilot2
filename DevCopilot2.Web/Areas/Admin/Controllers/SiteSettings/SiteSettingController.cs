@@ -16,7 +16,7 @@ using DevCopilot2.Core.Exporters;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.SiteSettings
 {
-	//[PermissionChecker("SiteSettingManagement")]
+	[PermissionChecker("SiteSettingManagement")]
     public class SiteSettingController : BaseAdminController<SiteSettingListDto>
     {
 
@@ -91,40 +91,6 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.SiteSettings
             #endregion
 
 			return View(update);
-		}
-
-		#endregion
-
-        #region delete
-
-		[HttpGet]
-		public async Task<IActionResult> Delete(long id)
-		{
-            SiteSettingListDto? siteSettingInformation = await _siteService.GetSingleSiteSettingInformation(id);
-            if (siteSettingInformation is null) return NotFound();
-			BaseChangeEntityResult result = await _siteService.DeleteSiteSetting(id);
-			switch (result)
-			{
-				case BaseChangeEntityResult.Success:
-					{
-						TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("SiteSetting")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-					return RedirectToAction("Index", "SiteSetting", new { Area = "Admin", });
-					}
-			}
-			return NotFound();
-		}
-
-		[HttpGet]
-		public async Task<IActionResult> DeleteRange(List<long> ids)
-		{
-			if (!ids.Distinct().Any())
-			{
-				TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
-				return RedirectToAction("Index", "SiteSetting", new { Area = "Admin" });
-			}
-			await _siteService.DeleteSiteSetting(ids);
-			TempData[SuccessMessage] =$"{_sharedEntitiesLocalizer.GetString("SiteSettings")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-			return RedirectToAction("Index", "SiteSetting", new { Area = "Admin" });
 		}
 
 		#endregion

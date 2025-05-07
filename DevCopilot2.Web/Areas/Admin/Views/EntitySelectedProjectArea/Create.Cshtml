@@ -25,7 +25,7 @@ List<SelectListItem> properties = ViewData["Properties"] as List<SelectListItem>
                                   asp-controller="EntitySelectedProjectArea"
                                   asp-action="Index" 
 
-                                asp-route-entityIdId="@Model.EntityId" title="@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreas")">@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreas")</a></li>
+                                asp-route-entityId="@Model.EntityId" title="@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreas")">@SharedEntitiesLocalizer.GetString("EntitySelectedProjectAreas")</a></li>
 
         <li class="breadcrumb-item active">@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("EntitySelectedProjectArea")</li>
     </ol>   

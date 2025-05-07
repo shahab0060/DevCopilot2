@@ -16,7 +16,7 @@ using DevCopilot2.Core.Exporters;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
 {
-	//[PermissionChecker("PropertyImageResizeInformationManagement")]
+	[PermissionChecker("PropertyImageResizeInformationManagement")]
     public class PropertyImageResizeInformationController : BaseAdminController<PropertyImageResizeInformationListDto>
     {
 

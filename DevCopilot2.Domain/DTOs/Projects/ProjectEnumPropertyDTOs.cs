@@ -13,55 +13,58 @@ namespace DevCopilot2.Domain.DTOs.Projects
     {
         #region properties
 
-		public List<ProjectEnumPropertyListDto> ProjectEnumProperties { get; set; } = new List<ProjectEnumPropertyListDto>();
+        public List<ProjectEnumPropertyListDto> ProjectEnumProperties { get; set; } = new List<ProjectEnumPropertyListDto>();
 
         public SortProjectEnumPropertyType? SortProperty { get; set; }
 
-                [Display(Name = "ProjectEnumId")]
+        [Display(Name = "ProjectEnumId")]
         public int? ProjectEnumId { get; set; }
 
         #endregion
 
         #region methods
 
-        public FilterProjectEnumPropertiesDto  SetProjectEnumProperties(List<ProjectEnumPropertyListDto> projectEnumProperties)
-		{
-			this.ProjectEnumProperties = projectEnumProperties;
-			return this;
-		}
+        public FilterProjectEnumPropertiesDto SetProjectEnumProperties(List<ProjectEnumPropertyListDto> projectEnumProperties)
+        {
+            this.ProjectEnumProperties = projectEnumProperties;
+            return this;
+        }
 
-		public FilterProjectEnumPropertiesDto  SetPaging(BasePaging paging)
-		{
-			PageId = paging.PageId;
-			AllEntitiesCount = paging.AllEntitiesCount;
-			StartPage = paging.StartPage;
-			EndPage = paging.EndPage;
-			HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
-			TakeEntity = paging.TakeEntity;
-			SkipEntity = paging.SkipEntity;
-			PageCount = paging.PageCount;
-			return this;
-		}
+        public FilterProjectEnumPropertiesDto SetPaging(BasePaging paging)
+        {
+            PageId = paging.PageId;
+            AllEntitiesCount = paging.AllEntitiesCount;
+            StartPage = paging.StartPage;
+            EndPage = paging.EndPage;
+            HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
+            TakeEntity = paging.TakeEntity;
+            SkipEntity = paging.SkipEntity;
+            PageCount = paging.PageCount;
+            return this;
+        }
 
-		#endregion
+        #endregion
     }
 
     public class ProjectEnumPropertyListDto : BaseListDto<int>
     {
 
-        [Display(Name="ProjectEnumId")]
+        [Display(Name = "ProjectEnumId")]
         public string ProjectEnumEnglishName { get; set; } = null!;
 
-        [Display(Name="ProjectEnumId")]
-        public int ProjectEnumId { get; set; } 
+        [Display(Name = "ProjectEnumId")]
+        public int ProjectEnumId { get; set; }
 
-        [Display(Name="Name")]
+        [Display(Name = "ProjectId")]
+        public int ProjectId { get; set; }
+
+        [Display(Name = "Name")]
         public string Name { get; set; } = null!;
 
-        [Display(Name="Order")]
-        public int Order { get; set; } 
+        [Display(Name = "Order")]
+        public int Order { get; set; }
 
-        [Display(Name="ProjectEnumPropertySelectedLanguagesList")]
+        [Display(Name = "ProjectEnumPropertySelectedLanguagesList")]
         public List<ProjectEnumPropertySelectedLanguageListDto> ProjectEnumPropertySelectedLanguagesList { get; set; } = new List<ProjectEnumPropertySelectedLanguageListDto>();
 
     }
@@ -81,21 +84,21 @@ namespace DevCopilot2.Domain.DTOs.Projects
         [Display(Name = "Order")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public int Order { get; set; } 
+        public int Order { get; set; }
 
     }
 
-    public class CreateProjectEnumPropertyDto: BaseUpsertProjectEnumPropertyDto
+    public class CreateProjectEnumPropertyDto : BaseUpsertProjectEnumPropertyDto
     {
         [Display(Name = "ProjectEnumPropertySelectedLanguagesList")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public List<CreateProjectEnumPropertySelectedLanguageDto> ProjectEnumPropertySelectedLanguagesList { get; set; } =new List<CreateProjectEnumPropertySelectedLanguageDto>();
+        public List<CreateProjectEnumPropertySelectedLanguageDto> ProjectEnumPropertySelectedLanguagesList { get; set; } = new List<CreateProjectEnumPropertySelectedLanguageDto>();
 
     }
 
-    public class UpdateProjectEnumPropertyDto: BaseUpsertProjectEnumPropertyDto
+    public class UpdateProjectEnumPropertyDto : BaseUpsertProjectEnumPropertyDto
     {
         [Display(Name = "Id")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
@@ -106,7 +109,7 @@ namespace DevCopilot2.Domain.DTOs.Projects
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public List<UpdateProjectEnumPropertySelectedLanguageDto> ProjectEnumPropertySelectedLanguagesList { get; set; } =new List<UpdateProjectEnumPropertySelectedLanguageDto>();
+        public List<UpdateProjectEnumPropertySelectedLanguageDto> ProjectEnumPropertySelectedLanguagesList { get; set; } = new List<UpdateProjectEnumPropertySelectedLanguageDto>();
 
     }
 

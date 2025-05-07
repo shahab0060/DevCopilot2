@@ -26,7 +26,7 @@ namespace DevCopilot2.Core.Services.Classes
         public TemplateService(
                            ICrudRepository<Project, int> projectRepository,
                            ICrudRepository<User, long> userRepository,
-                           ICrudRepository<Template, int> templateRepository 
+                           ICrudRepository<Template, int> templateRepository
                                       )
         {
             this._projectRepository = projectRepository;
@@ -94,11 +94,11 @@ EF.Functions.Like(q.BreadCrumbCode, $"%{filter.Search}%") ||
 
 EF.Functions.Like(q.AnchorTagCode, $"%{filter.Search}%") ||
 
-EF.Functions.Like(q.SubmitBtnCode, $"%{filter.Search}%")   
+EF.Functions.Like(q.SubmitBtnCode, $"%{filter.Search}%")
                                          );
 
-                        if (filter.ProjectId > 0)
-                query = query.Where(q => q.ProjectId == filter.ProjectId);
+            if (filter.ProjectId > 0)
+                query = query.Where(q => q.ProjectId == filter.ProjectId || q.ProjectId == null);
 
             if (filter.AuthorId > 0)
                 query = query.Where(q => q.AuthorId == filter.AuthorId);
@@ -109,7 +109,7 @@ EF.Functions.Like(q.SubmitBtnCode, $"%{filter.Search}%")
 
             query = filter.SortProperty switch
             {
-                                SortTemplateType.Title => query.OrderBy(a => a.Title),
+                SortTemplateType.Title => query.OrderBy(a => a.Title),
                 SortTemplateType.ProjectTitle => query.OrderBy(a => a.Project.Title),
                 SortTemplateType.ProjectId => query.OrderBy(a => a.ProjectId),
                 SortTemplateType.ListViewHtml => query.OrderBy(a => a.ListViewHtml),
@@ -164,13 +164,13 @@ EF.Functions.Like(q.SubmitBtnCode, $"%{filter.Search}%")
 
         public async Task<FilterTemplatesDto> FilterTemplates(FilterTemplatesDto filter)
         {
-            IQueryable<Template> query = 
+            IQueryable<Template> query =
                 GetTemplatesWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.Templates = await query
@@ -194,7 +194,7 @@ EF.Functions.Like(q.SubmitBtnCode, $"%{filter.Search}%")
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateTemplate(CreateTemplateDto create)
-        { 
+        {
 
             #region validate unique properties
 
@@ -207,11 +207,11 @@ EF.Functions.Like(q.SubmitBtnCode, $"%{filter.Search}%")
 
             #region validate relation ids
 
-            if(create.ProjectId>0)
-            if (!await _projectRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == create.ProjectId))
-                return BaseChangeEntityResult.NotFound;
+            if (create.ProjectId > 0)
+                if (!await _projectRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == create.ProjectId))
+                    return BaseChangeEntityResult.NotFound;
 
             if (!await _userRepository
                 .GetQueryable()
@@ -220,20 +220,20 @@ EF.Functions.Like(q.SubmitBtnCode, $"%{filter.Search}%")
 
             #endregion
 
-            Template template =  create.ToModel();
+            Template template = create.ToModel();
             await _templateRepository.Add(template);
             await _templateRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateTemplateDto?> GetTemplateInformation(int templateId)
-        =>  await _templateRepository
-            .GetQueryable()
-            .Where(a => a.Id == templateId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateTemplate(UpdateTemplateDto update)
-        { 
+        public async Task<UpdateTemplateDto?> GetTemplateInformation(int templateId)
+                => await _templateRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == templateId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateTemplate(UpdateTemplateDto update)
+        {
             Template? template = await _templateRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -245,18 +245,18 @@ public async Task<BaseChangeEntityResult> UpdateTemplate(UpdateTemplateDto updat
             if (await _templateRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Title == update.Title.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return BaseChangeEntityResult.Exists;
 
             #endregion
 
             #region validate relation ids
 
-            if(update.ProjectId>0)
-            if (!await _projectRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == update.ProjectId))
-                return BaseChangeEntityResult.NotFound;
+            if (update.ProjectId > 0)
+                if (!await _projectRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == update.ProjectId))
+                    return BaseChangeEntityResult.NotFound;
 
             if (!await _userRepository
                 .GetQueryable()
@@ -265,13 +265,13 @@ public async Task<BaseChangeEntityResult> UpdateTemplate(UpdateTemplateDto updat
 
             #endregion
 
-            template =  template.ToModel(update);
+            template = template.ToModel(update);
             _templateRepository.Update(template);
             await _templateRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteTemplate(int templateId)
+        public async Task<BaseChangeEntityResult> DeleteTemplate(int templateId)
         {
             Template? template = await _templateRepository.GetAsTracking(templateId);
             if (template is null) return BaseChangeEntityResult.NotFound;
@@ -282,10 +282,10 @@ public async Task<BaseChangeEntityResult> DeleteTemplate(int templateId)
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteTemplate(List<int> templateIds)
+        public async Task DeleteTemplate(List<int> templateIds)
         {
             foreach (int templateId in templateIds)
-            { 
+            {
                 Template? template = await _templateRepository.GetAsTracking(templateId);
                 if (template is not null)
                     _templateRepository.SoftDelete(template);

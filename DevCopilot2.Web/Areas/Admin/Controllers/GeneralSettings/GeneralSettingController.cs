@@ -1,22 +1,15 @@
-using System;
-using System.Text;
-using DevCopilot2.Core.Extensions.BasicExtensions;
 using DevCopilot2.Core.Services.Interfaces;
-using DevCopilot2.Domain.Enums.Common;
-using DevCopilot2.Web.PresentationExtensions;
-using DevCopilot2.Web.PresentationMappers;
-using DevCopilot2.Domain.Enums.GeneralSettings;
 using DevCopilot2.Domain.DTOs.GeneralSettings;
-using Microsoft.Extensions.Localization;
+using DevCopilot2.Domain.Enums.Common;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using System.Text;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
-using ClosedXML.Excel;
-using DevCopilot2.Core.Exporters;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.GeneralSettings
 {
-	//[PermissionChecker("GeneralSettingManagement")]
+    [PermissionChecker("GeneralSettingManagement")]
     public class GeneralSettingController : BaseAdminController<GeneralSettingListDto>
     {
 

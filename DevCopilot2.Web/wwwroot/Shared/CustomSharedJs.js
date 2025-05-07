@@ -99,7 +99,7 @@ $(document).ready(function () {
         var name = $(this).data('name');
         var index = $(`.single-sub-form[data-name="${name}"]`).length;
         if (index === 0) {
-            AddSubItem(name);
+            AddSubItem(name, true);
         }
     });
 });
@@ -128,11 +128,11 @@ $(document).on("change", ".Image-input, .image-input", function () {
         reader.readAsDataURL(file);
     }
 });
-function AddSubItem(name) {
+function AddSubItem(name, showOnlyAddDefaults = true) {
 
     var index = $(`.single-sub-form[data-name="${name}"]`).length;
     var newName = `${name}[${index}]`;
-    var template = GetTemplate(name);
+    var template = GetTemplate(name, showOnlyAddDefaults);
     var replaceFrom = ChangeBrakcetsIndexesToZero(`${name}[0]`);
     var replaceFrom2 = ChangeBrakcetsIndexesToZero(`${name}`);
     //this code is for reArranging all indexes
@@ -157,14 +157,14 @@ function ChangeBrakcetsIndexesToZero(text) {
     return text.replace(/\[(\d+)\]/g, '[0]');
 }
 
-function GetTemplate(name) {
+function GetTemplate(name, showOnlyAddDefaults = false) {
     var nameLastPart = GetLastPart(name);
     var inputsHtml = $(`.sub-form-template[data-form-name="${nameLastPart}"]`).html();
     var replaceFrom = $(`.sub-form-template[data-form-name="${nameLastPart}"]`).data('replace-from');
     var replaceTo = $(`.sub-form-template[data-form-name="${nameLastPart}"]`).data('replace-to');
     inputsHtml = ReplaceAll(inputsHtml, replaceFrom, replaceTo);
     inputsHtml = ReplaceAll(inputsHtml, 'is-template', '');
-    var subTemplates = GetSubTemplates(name);
+    var subTemplates = GetSubTemplates(name, showOnlyAddDefaults);
     var template = `
          <div class="single-sub-form row g-5" data-name="${name}">
                             ${inputsHtml}
@@ -174,28 +174,37 @@ function GetTemplate(name) {
     return template;
 }
 
-function GetSubTemplates(name) {
-
+function GetSubTemplates(name, showOnlyAddDefaults = false) {
     var nameLastPart = GetLastPart(name);
-    element = $(`.sub-form-template[data-form-name="${nameLastPart}"]`);
+    var element = $(`.sub-form-template[data-form-name="${nameLastPart}"]`);
     var template = '';
-    console.log('*****');
 
     $.each(element[0].attributes, function (i, attr) {
         if (attr.name.startsWith('data-child')) {
-            console.log(attr);
             var value = attr.value;
             var valueLastPart = GetLastPart(value);
-            var title = $(`.sub-form-template[data-form-name="${valueLastPart}"]`).data('title');
-            var subTemplate = GetTemplate(value);
-            template += `<div class="sub-form-container" data-name="${value}">
-                              <h3>${title}</h3>
-                              ${subTemplate}
-                        </div>`;
+            var subElement = $(`.sub-form-template[data-form-name="${valueLastPart}"]`);
+
+            // Ensure subElement exists before proceeding
+            if (subElement.length > 0) {
+                var title = subElement.data('title');
+                var subTemplate = GetTemplate(value);
+
+                // Always add the sub-form container
+                template += `<div class="sub-form-container" data-name="${value}"><h3>${title}</h3>`;
+
+                // Show h3 and sub-template only if condition is met
+                if (!showOnlyAddDefaults || subElement.hasClass('add-default-sub-form')) {
+                    template += `${subTemplate}`;
+                }
+
+                // Close the div
+                template += `</div>`;
+            }
         }
     });
-    if (template === undefined || template === null) return '';
-    return template;
+
+    return template || '';
 }
 
 function prependBeforeLastOccurrence(htmlString, className, newHtml) {

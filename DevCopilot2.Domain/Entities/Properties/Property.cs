@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using DevCopilot2.Domain.Entities.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using DevCopilot2.Domain.Entities.Projects;
-using DevCopilot2.Domain.Entities.Users;
 using DevCopilot2.Domain.Enums.DataTypes;
 
 namespace DevCopilot2.Domain.Entities.Properties
@@ -88,11 +87,6 @@ namespace DevCopilot2.Domain.Entities.Properties
 
         public int EntityId { get; set; } 
 
-        [Display(Name = "AuthorId")]
-        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
-
-        public long AuthorId { get; set; } 
-
         [Display(Name = "ForceMapperCode")]
 
         public string? ForceMapperCode { get; set; } = null!;
@@ -118,9 +112,6 @@ namespace DevCopilot2.Domain.Entities.Properties
 
         [ForeignKey(nameof(EntityId))]
         public virtual Entity Entity { get; set; } = null!;
-
-        [ForeignKey(nameof(AuthorId))]
-        public virtual User Author { get; set; } = null!;
 
         #endregion
     }

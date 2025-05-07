@@ -26,7 +26,7 @@ namespace DevCopilot2.Core.Mappers.Entities
                         PropertyName = entitySelectedProjectAreaSelectedFilter.Property.Name,
                         PropertyId = entitySelectedProjectAreaSelectedFilter.PropertyId,
                         Value = entitySelectedProjectAreaSelectedFilter.Value,
-
+                        EntityId = entitySelectedProjectAreaSelectedFilter.Property.EntityId
                     });
 
         #endregion

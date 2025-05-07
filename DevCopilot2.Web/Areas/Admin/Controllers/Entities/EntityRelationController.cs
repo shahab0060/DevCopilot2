@@ -1,22 +1,20 @@
-using System;
-using System.Text;
-using DevCopilot2.Core.Extensions.BasicExtensions;
-using DevCopilot2.Core.Services.Interfaces;
-using DevCopilot2.Domain.Enums.Common;
-using DevCopilot2.Web.PresentationExtensions;
-using DevCopilot2.Web.PresentationMappers;
-using DevCopilot2.Domain.Enums.Entities;
-using DevCopilot2.Domain.DTOs.Entities;
-using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Mvc;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using ClosedXML.Excel;
 using DevCopilot2.Core.Exporters;
+using DevCopilot2.Core.Extensions.BasicExtensions;
+using DevCopilot2.Core.Services.Interfaces;
+using DevCopilot2.Domain.DTOs.Entities;
+using DevCopilot2.Domain.Enums.Common;
+using DevCopilot2.Web.PresentationMappers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using System.Text;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 {
-	//[PermissionChecker("EntityRelationManagement")]
+    [PermissionChecker("EntityRelationManagement")]
     public class EntityRelationController : BaseAdminController<EntityRelationListDto>
     {
 
@@ -30,7 +28,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
                            IStringLocalizer<SharedResources> sharedLocalizer,
                            IStringLocalizer<EntitiesSharedResources> sharedEntitiesLocalizer,
                            IStringLocalizer<EntityRelationController> localizer,
-                           IEntityService entityService 
+                           IEntityService entityService
                                       )
         {
             this._sharedLocalizer = sharedLocalizer;
@@ -54,180 +52,220 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 
         #region detail
 
-		[HttpGet]
-		public async Task<IActionResult>Detail(int id)
-		{
-
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
             EntityRelationListDto? entityRelationInformation = await _entityService.GetSingleEntityRelationInformation(id);
-			if (
-            entityRelationInformation is null)return NotFound();
+            if (entityRelationInformation is null) return NotFound();
 
-            await GetViewDatas();
-            return View(
-            entityRelationInformation);	
-		}
+            await GetViewDatas(entityRelationInformation.ProjectId);
+            return View(entityRelationInformation);
+        }
 
-		#endregion
+        #endregion
 
         #region create
 
-		[HttpGet]
-		public async Task<IActionResult> Create(int primaryPropertyId)
-		{
-            await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Create(int primaryPropertyId, int secondaryEntityId)
+        {
+            #region get project id
+
+            int? projectId = 0;
+            if (primaryPropertyId > 0)
+                projectId = (await _entityService
+                    .GetSinglePropertyInformation(primaryPropertyId))!
+                    .ProjectId;
+            if (secondaryEntityId > 0)
+                projectId = (await _entityService
+                    .GetSingleEntityInformation(secondaryEntityId))!
+                    .ProjectId;
+            if (projectId is not > 0) return NotFound();
+
+            #endregion
+
+            await GetViewDatas(projectId.Value);
             CreateEntityRelationDto create = new CreateEntityRelationDto()
             {
-                PrimaryPropertyId = primaryPropertyId, 
+                PrimaryPropertyId = primaryPropertyId,
+                SecondaryEntityId = secondaryEntityId
             };
             return View(create);
         }
 
-		[HttpPost]
-		public async Task<IActionResult> Create(CreateEntityRelationDto create)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateEntityRelationDto create)
+        {
+            #region get project id
 
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            int? projectId = (await _entityService
+                    .GetSingleEntityInformation(create.SecondaryEntityId))!
+                    .ProjectId;
+            if (projectId is not > 0) return NotFound();
+
+            #endregion
+
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(projectId.Value);
                 return View(create);
             }
-			BaseChangeEntityResult result = await _entityService.CreateEntityRelation(create);
+            BaseChangeEntityResult result = await _entityService.CreateEntityRelation(create);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntityRelation")} {_sharedLocalizer.GetString("Created Successfully")}";
-					return RedirectToAction("Index", "EntityRelation", new { Area = "Admin",primaryPropertyId=create.PrimaryPropertyId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntityRelation")} {_sharedLocalizer.GetString("Created Successfully")}";
+                        return RedirectToAction("Index", "EntityRelation", new { Area = "Admin", primaryPropertyId = create.PrimaryPropertyId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(create);
-		}
+            await GetViewDatas(projectId.Value);
+            return View(create);
+        }
 
-		#endregion
+        #endregion
 
         #region update
 
-		[HttpGet]
-		public async Task<IActionResult> Update(int id)
-		{
-			UpdateEntityRelationDto? entityRelationInformation = await _entityService.GetEntityRelationInformation(id);
-			if (entityRelationInformation is null) return NotFound();
-			await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            UpdateEntityRelationDto? entityRelationInformation = await _entityService.GetEntityRelationInformation(id);
+            if (entityRelationInformation is null) return NotFound();
+
+            #region get project id
+
+            int? projectId = (await _entityService
+                    .GetSingleEntityInformation(entityRelationInformation.SecondaryEntityId))!
+                    .ProjectId;
+            if (projectId is not > 0) return NotFound();
+
+            #endregion
+
+            await GetViewDatas(projectId.Value);
             return View(entityRelationInformation);
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Update(UpdateEntityRelationDto update)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateEntityRelationDto update)
+        {
 
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            #region get project id
+
+            int? projectId = (await _entityService
+                    .GetSingleEntityInformation(update.SecondaryEntityId))!
+                    .ProjectId;
+            if (projectId is not > 0) return NotFound();
+
+            #endregion
+
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(projectId.Value);
                 return View(update);
             }
-			BaseChangeEntityResult result = await _entityService.UpdateEntityRelation(update);
+            BaseChangeEntityResult result = await _entityService.UpdateEntityRelation(update);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntityRelation")} {_sharedLocalizer.GetString("Updated Successfully.")}";
-					return RedirectToAction("Index", "EntityRelation", new { Area = "Admin",primaryPropertyId=update.PrimaryPropertyId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntityRelation")} {_sharedLocalizer.GetString("Updated Successfully.")}";
+                        return RedirectToAction("Index", "EntityRelation", new { Area = "Admin", primaryPropertyId = update.PrimaryPropertyId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(update);
-		}
+            await GetViewDatas(projectId.Value);
+            return View(update);
+        }
 
-		#endregion
+        #endregion
 
         #region view datas
 
-        async Task GetViewDatas()
+        async Task GetViewDatas(int projectId)
         {
-            await GetEntitiesViewData();
+            await GetEntitiesViewData(projectId);
         }
 
-        async Task GetEntitiesViewData()
+        async Task GetEntitiesViewData(int projectId)
         => ViewData["Entities"] = (await _entityService
-        .GetEntitiesAsCombo(new FilterEntitiesDto()))
+        .GetEntitiesAsCombo(new FilterEntitiesDto() { ProjectId = projectId }))
         .ToSelectListItem();
 
         #endregion
 
         #region delete
 
-		[HttpGet]
-		public async Task<IActionResult> Delete(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
             EntityRelationListDto? entityRelationInformation = await _entityService.GetSingleEntityRelationInformation(id);
             if (entityRelationInformation is null) return NotFound();
-			BaseChangeEntityResult result = await _entityService.DeleteEntityRelation(id);
-			switch (result)
-			{
-				case BaseChangeEntityResult.Success:
-					{
-						TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntityRelation")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-					return RedirectToAction("Index", "EntityRelation", new { Area = "Admin",primaryPropertyId=entityRelationInformation.PrimaryPropertyId, });
-					}
-			}
-			return NotFound();
-		}
+            BaseChangeEntityResult result = await _entityService.DeleteEntityRelation(id);
+            switch (result)
+            {
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntityRelation")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+                        return RedirectToAction("Index", "EntityRelation", new { Area = "Admin", primaryPropertyId = entityRelationInformation.PrimaryPropertyId, });
+                    }
+            }
+            return NotFound();
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> DeleteRange(List<int> ids)
-		{
-			if (!ids.Distinct().Any())
-			{
-				TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
-				return RedirectToAction("Index", "EntityRelation", new { Area = "Admin" });
-			}
-			await _entityService.DeleteEntityRelation(ids);
-			TempData[SuccessMessage] =$"{_sharedEntitiesLocalizer.GetString("EntityRelations")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-			return RedirectToAction("Index", "EntityRelation", new { Area = "Admin" });
-		}
+        [HttpGet]
+        public async Task<IActionResult> DeleteRange(List<int> ids)
+        {
+            if (!ids.Distinct().Any())
+            {
+                TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
+                return RedirectToAction("Index", "EntityRelation", new { Area = "Admin" });
+            }
+            await _entityService.DeleteEntityRelation(ids);
+            TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntityRelations")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+            return RedirectToAction("Index", "EntityRelation", new { Area = "Admin" });
+        }
 
-		#endregion
+        #endregion
 
         #region export excel
 
@@ -243,21 +281,21 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
                 ws = excelExporter.AddHeaders(ws, title);
                 ws.Columns().AdjustToContents();
                 ws = excelExporter.AddColumn(ws, $"{_sharedLocalizer.GetString("Row")}", 1, 3);
-                ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("PrimaryPropertyName")}", 2, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("PrimaryPropertyId")}", 3, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("SecondaryEntityPluralName")}", 4, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("SecondaryEntityId")}", 5, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("MiddleEntityPluralName")}", 6, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("MiddleEntityId")}", 7, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("RelationType")}", 8, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("InputType")}", 9, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("FillingType")}", 10, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("FillingCode")}", 11, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("PrimaryPropertyName")}", 2, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("PrimaryPropertyId")}", 3, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("SecondaryEntityPluralName")}", 4, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("SecondaryEntityId")}", 5, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("MiddleEntityPluralName")}", 6, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("MiddleEntityId")}", 7, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("RelationType")}", 8, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("InputType")}", 9, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("FillingType")}", 10, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("FillingCode")}", 11, 3);
 
                 int rowIndex = 4;
                 foreach (var item in result)
                 {
-                    ws = excelExporter.AddColumn(ws,(rowIndex-3).ToString(), 1, rowIndex);
+                    ws = excelExporter.AddColumn(ws, (rowIndex - 3).ToString(), 1, rowIndex);
 
                     ws = excelExporter.AddColumn(ws, item.PrimaryPropertyName, 2, rowIndex);
 
@@ -346,7 +384,7 @@ item.InputType.GetEnumName(),
 
 item.FillingType.GetEnumName(),
 
-item.FillingCode?.ToString() );
+item.FillingCode?.ToString());
                 index++;
             }
 

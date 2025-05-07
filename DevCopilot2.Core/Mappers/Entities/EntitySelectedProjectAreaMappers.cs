@@ -1,10 +1,6 @@
-using System;
-using DevCopilot2.Domain.Entities.Entities;
-using DevCopilot2.Domain.DTOs.Entities;
 using DevCopilot2.Domain.DTOs.Common;
-using DevCopilot2.Core.Extensions.BasicExtensions;
-using DevCopilot2.Core.Utils;
-using DevCopilot2.Core.Security;
+using DevCopilot2.Domain.DTOs.Entities;
+using DevCopilot2.Domain.Entities.Entities;
 
 namespace DevCopilot2.Core.Mappers.Entities
 {
@@ -20,7 +16,7 @@ namespace DevCopilot2.Core.Mappers.Entities
                         LatestEditDate = entitySelectedProjectArea.LatestEditDate,
                         CreateDate = entitySelectedProjectArea.CreateDate,
                         EditCounts = entitySelectedProjectArea.EditCounts,
-
+                        ProjectId = entitySelectedProjectArea.ProjectArea.ProjectId,
                         EntityPluralName = entitySelectedProjectArea.Entity.PluralName,
                         EntityId = entitySelectedProjectArea.EntityId,
                         ProjectAreaTitle = entitySelectedProjectArea.ProjectArea.Title,

@@ -1,23 +1,21 @@
-using System;
-using System.Text;
-using DevCopilot2.Core.Extensions.BasicExtensions;
-using DevCopilot2.Core.Services.Interfaces;
-using DevCopilot2.Domain.Enums.Common;
-using DevCopilot2.Web.PresentationExtensions;
-using DevCopilot2.Web.PresentationMappers;
-using DevCopilot2.Domain.Enums.Properties;
-using DevCopilot2.Domain.DTOs.Properties;
-using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Mvc;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using ClosedXML.Excel;
 using DevCopilot2.Core.Exporters;
+using DevCopilot2.Core.Services.Classes;
+using DevCopilot2.Core.Services.Interfaces;
+using DevCopilot2.Domain.DTOs.Entities;
 using DevCopilot2.Domain.DTOs.Languages;
+using DevCopilot2.Domain.DTOs.Properties;
+using DevCopilot2.Domain.Enums.Common;
+using DevCopilot2.Web.PresentationMappers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using System.Text;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
 {
-	//[PermissionChecker("PropertySelectedLanguageManagement")]
+    [PermissionChecker("PropertySelectedLanguageManagement")]
     public class PropertySelectedLanguageController : BaseAdminController<PropertySelectedLanguageListDto>
     {
 
@@ -33,7 +31,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
                            IStringLocalizer<EntitiesSharedResources> sharedEntitiesLocalizer,
                            IStringLocalizer<PropertySelectedLanguageController> localizer,
                            IEntityService entityService,
-                           ISiteService siteService 
+                           ISiteService siteService
                                       )
         {
             this._sharedLocalizer = sharedLocalizer;
@@ -58,180 +56,186 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
 
         #region detail
 
-		[HttpGet]
-		public async Task<IActionResult>Detail(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
 
             PropertySelectedLanguageListDto? propertySelectedLanguageInformation = await _entityService.GetSinglePropertySelectedLanguageInformation(id);
-			if (
-            propertySelectedLanguageInformation is null)return NotFound();
+            if (
+            propertySelectedLanguageInformation is null) return NotFound();
 
-            await GetViewDatas();
-            return View(
-            propertySelectedLanguageInformation);	
-		}
+            await GetViewDatas(propertySelectedLanguageInformation.PropertyId);
+            return View(propertySelectedLanguageInformation);
+        }
 
-		#endregion
+        #endregion
 
         #region create
 
-		[HttpGet]
-		public async Task<IActionResult> Create(int propertyId)
-		{
-            await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Create(int propertyId)
+        {
+            await GetViewDatas(propertyId);
             CreatePropertySelectedLanguageDto create = new CreatePropertySelectedLanguageDto()
             {
-                PropertyId = propertyId, 
+                PropertyId = propertyId,
             };
             return View(create);
         }
 
-		[HttpPost]
-		public async Task<IActionResult> Create(CreatePropertySelectedLanguageDto create)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Create(CreatePropertySelectedLanguageDto create)
+        {
 
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(create.PropertyId);
                 return View(create);
             }
-			BaseChangeEntityResult result = await _entityService.CreatePropertySelectedLanguage(create);
+            BaseChangeEntityResult result = await _entityService.CreatePropertySelectedLanguage(create);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {_sharedLocalizer.GetString("Created Successfully")}";
-					return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin",propertyId=create.PropertyId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {_sharedLocalizer.GetString("Created Successfully")}";
+                        return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin", propertyId = create.PropertyId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-                {
+                case BaseChangeEntityResult.Exists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("Title")} {create.Title}";
                         break;
-                }
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(create);
-		}
+            await GetViewDatas(create.PropertyId);
+            return View(create);
+        }
 
-		#endregion
+        #endregion
 
         #region update
 
-		[HttpGet]
-		public async Task<IActionResult> Update(int id)
-		{
-			UpdatePropertySelectedLanguageDto? propertySelectedLanguageInformation = await _entityService.GetPropertySelectedLanguageInformation(id);
-			if (propertySelectedLanguageInformation is null) return NotFound();
-			await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            UpdatePropertySelectedLanguageDto? propertySelectedLanguageInformation = await _entityService.GetPropertySelectedLanguageInformation(id);
+            if (propertySelectedLanguageInformation is null) return NotFound();
+            await GetViewDatas(propertySelectedLanguageInformation.PropertyId);
             return View(propertySelectedLanguageInformation);
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Update(UpdatePropertySelectedLanguageDto update)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdatePropertySelectedLanguageDto update)
+        {
 
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(update.PropertyId);
                 return View(update);
             }
-			BaseChangeEntityResult result = await _entityService.UpdatePropertySelectedLanguage(update);
+            BaseChangeEntityResult result = await _entityService.UpdatePropertySelectedLanguage(update);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {_sharedLocalizer.GetString("Updated Successfully.")}";
-					return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin",propertyId=update.PropertyId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {_sharedLocalizer.GetString("Updated Successfully.")}";
+                        return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin", propertyId = update.PropertyId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-                {
+                case BaseChangeEntityResult.Exists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("Title")} {update.Title}";
                         break;
-                }
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(update);
-		}
+            await GetViewDatas(update.PropertyId);
+            return View(update);
+        }
 
-		#endregion
+        #endregion
 
         #region view datas
 
-        async Task GetViewDatas()
+        async Task GetViewDatas(int propertyId, bool showNotUsedLanguagesInProject = false)
         {
-            await GetLanguagesViewData();
+            await GetLanguagesViewData(propertyId, showNotUsedLanguagesInProject);
         }
 
-        async Task GetLanguagesViewData()
-        => ViewData["Languages"] = (await _siteService
-        .GetLanguagesAsCombo(new FilterLanguagesDto()))
-        .ToSelectListItem();
+        async Task GetLanguagesViewData(int propertyId, bool showNotUsedLanguagesInProject = false)
+        {
+            PropertyListDto propertyInformation = await _entityService
+                .GetSinglePropertyInformation(propertyId) ?? new PropertyListDto();
+            ViewData["Languages"] = (await _siteService
+                                    .GetLanguagesAsCombo(new FilterLanguagesDto()
+                                    {
+                                        ProjectId = propertyInformation.ProjectId,
+                                        ExcludePropertyId = showNotUsedLanguagesInProject ? propertyId : 0
+                                    })).ToSelectListItem();
+        }
 
         #endregion
 
         #region delete
 
-		[HttpGet]
-		public async Task<IActionResult> Delete(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
             PropertySelectedLanguageListDto? propertySelectedLanguageInformation = await _entityService.GetSinglePropertySelectedLanguageInformation(id);
             if (propertySelectedLanguageInformation is null) return NotFound();
-			BaseChangeEntityResult result = await _entityService.DeletePropertySelectedLanguage(id);
-			switch (result)
-			{
-				case BaseChangeEntityResult.Success:
-					{
-						TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-					return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin",propertyId=propertySelectedLanguageInformation.PropertyId, });
-					}
-			}
-			return NotFound();
-		}
+            BaseChangeEntityResult result = await _entityService.DeletePropertySelectedLanguage(id);
+            switch (result)
+            {
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("PropertySelectedLanguage")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+                        return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin", propertyId = propertySelectedLanguageInformation.PropertyId, });
+                    }
+            }
+            return NotFound();
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> DeleteRange(List<int> ids)
-		{
-			if (!ids.Distinct().Any())
-			{
-				TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
-				return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin" });
-			}
-			await _entityService.DeletePropertySelectedLanguage(ids);
-			TempData[SuccessMessage] =$"{_sharedEntitiesLocalizer.GetString("PropertySelectedLanguages")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-			return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin" });
-		}
+        [HttpGet]
+        public async Task<IActionResult> DeleteRange(List<int> ids)
+        {
+            if (!ids.Distinct().Any())
+            {
+                TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
+                return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin" });
+            }
+            await _entityService.DeletePropertySelectedLanguage(ids);
+            TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("PropertySelectedLanguages")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+            return RedirectToAction("Index", "PropertySelectedLanguage", new { Area = "Admin" });
+        }
 
-		#endregion
+        #endregion
 
         #region export excel
 
@@ -247,16 +251,16 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
                 ws = excelExporter.AddHeaders(ws, title);
                 ws.Columns().AdjustToContents();
                 ws = excelExporter.AddColumn(ws, $"{_sharedLocalizer.GetString("Row")}", 1, 3);
-                ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("PropertyName")}", 2, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("PropertyId")}", 3, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("LanguageName")}", 4, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("LanguageId")}", 5, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("Title")}", 6, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("PropertyName")}", 2, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("PropertyId")}", 3, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("LanguageName")}", 4, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("LanguageId")}", 5, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("Title")}", 6, 3);
 
                 int rowIndex = 4;
                 foreach (var item in result)
                 {
-                    ws = excelExporter.AddColumn(ws,(rowIndex-3).ToString(), 1, rowIndex);
+                    ws = excelExporter.AddColumn(ws, (rowIndex - 3).ToString(), 1, rowIndex);
 
                     ws = excelExporter.AddColumn(ws, item.PropertyName, 2, rowIndex);
 
@@ -315,7 +319,7 @@ item.LanguageName,
 
 item.LanguageId.ToString("#,0"),
 
-item.Title );
+item.Title);
                 index++;
             }
 

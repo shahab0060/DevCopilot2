@@ -15,7 +15,7 @@ namespace DevCopilot2.Core.Mappers.Properties
     {
         #region to dto
 
-        public static IQueryable<PropertyListDto>ToDto(this IQueryable<Property> query)
+        public static IQueryable<PropertyListDto> ToDto(this IQueryable<Property> query)
                     => query.Select(property => new PropertyListDto()
                     {
 
@@ -43,8 +43,6 @@ namespace DevCopilot2.Core.Mappers.Properties
                         UseEditor = property.UseEditor,
                         EntityPluralName = property.Entity.PluralName,
                         EntityId = property.EntityId,
-                        AuthorPhoneNumber = property.Author.PhoneNumber,
-                        AuthorId = property.AuthorId,
                         ForceMapperCode = property.ForceMapperCode,
                         ExcludeFromListDto = property.ExcludeFromListDto,
 
@@ -52,21 +50,21 @@ namespace DevCopilot2.Core.Mappers.Properties
                         .Select(entityRelation => new EntityRelationListDto()
                         {
 
-                        Id = entityRelation.Id,
-                        LatestEditDate = entityRelation.LatestEditDate,
-                        CreateDate = entityRelation.CreateDate,
-                        EditCounts = entityRelation.EditCounts,
+                            Id = entityRelation.Id,
+                            LatestEditDate = entityRelation.LatestEditDate,
+                            CreateDate = entityRelation.CreateDate,
+                            EditCounts = entityRelation.EditCounts,
 
-                        PrimaryPropertyName = entityRelation.PrimaryProperty.Name,
-                        PrimaryPropertyId = entityRelation.PrimaryPropertyId,
-                        SecondaryEntityPluralName = entityRelation.SecondaryEntity.PluralName,
-                        SecondaryEntityId = entityRelation.SecondaryEntityId,
-                        MiddleEntityPluralName = entityRelation.MiddleEntity.PluralName,
-                        MiddleEntityId = entityRelation.MiddleEntityId,
-                        RelationType = entityRelation.RelationType,
-                        InputType = entityRelation.InputType,
-                        FillingType = entityRelation.FillingType,
-                        FillingCode = entityRelation.FillingCode,
+                            PrimaryPropertyName = entityRelation.PrimaryProperty.Name,
+                            PrimaryPropertyId = entityRelation.PrimaryPropertyId,
+                            SecondaryEntityPluralName = entityRelation.SecondaryEntity.PluralName,
+                            SecondaryEntityId = entityRelation.SecondaryEntityId,
+                            MiddleEntityPluralName = entityRelation.MiddleEntity.PluralName,
+                            MiddleEntityId = entityRelation.MiddleEntityId,
+                            RelationType = entityRelation.RelationType,
+                            InputType = entityRelation.InputType,
+                            FillingType = entityRelation.FillingType,
+                            FillingCode = entityRelation.FillingCode,
 
                         })
                         .ToList(),
@@ -74,16 +72,16 @@ namespace DevCopilot2.Core.Mappers.Properties
                         .Select(propertyImageResizeInformation => new PropertyImageResizeInformationListDto()
                         {
 
-                        Id = propertyImageResizeInformation.Id,
-                        LatestEditDate = propertyImageResizeInformation.LatestEditDate,
-                        CreateDate = propertyImageResizeInformation.CreateDate,
-                        EditCounts = propertyImageResizeInformation.EditCounts,
+                            Id = propertyImageResizeInformation.Id,
+                            LatestEditDate = propertyImageResizeInformation.LatestEditDate,
+                            CreateDate = propertyImageResizeInformation.CreateDate,
+                            EditCounts = propertyImageResizeInformation.EditCounts,
 
-                        PropertyName = propertyImageResizeInformation.Property.Name,
-                        PropertyId = propertyImageResizeInformation.PropertyId,
-                        Name = propertyImageResizeInformation.Name,
-                        Width = propertyImageResizeInformation.Width,
-                        Height = propertyImageResizeInformation.Height,
+                            PropertyName = propertyImageResizeInformation.Property.Name,
+                            PropertyId = propertyImageResizeInformation.PropertyId,
+                            Name = propertyImageResizeInformation.Name,
+                            Width = propertyImageResizeInformation.Width,
+                            Height = propertyImageResizeInformation.Height,
 
                         })
                         .ToList(),
@@ -91,26 +89,27 @@ namespace DevCopilot2.Core.Mappers.Properties
                         .Select(propertySelectedLanguage => new PropertySelectedLanguageListDto()
                         {
 
-                        Id = propertySelectedLanguage.Id,
-                        LatestEditDate = propertySelectedLanguage.LatestEditDate,
-                        CreateDate = propertySelectedLanguage.CreateDate,
-                        EditCounts = propertySelectedLanguage.EditCounts,
+                            Id = propertySelectedLanguage.Id,
+                            LatestEditDate = propertySelectedLanguage.LatestEditDate,
+                            CreateDate = propertySelectedLanguage.CreateDate,
+                            EditCounts = propertySelectedLanguage.EditCounts,
 
-                        PropertyName = propertySelectedLanguage.Property.Name,
-                        PropertyId = propertySelectedLanguage.PropertyId,
-                        LanguageName = propertySelectedLanguage.Language.Name,
-                        LanguageId = propertySelectedLanguage.LanguageId,
-                        Title = propertySelectedLanguage.Title,
+                            PropertyName = propertySelectedLanguage.Property.Name,
+                            PropertyId = propertySelectedLanguage.PropertyId,
+                            LanguageName = propertySelectedLanguage.Language.Name,
+                            LanguageId = propertySelectedLanguage.LanguageId,
+                            Title = propertySelectedLanguage.Title,
 
                         })
                         .ToList(),
+                        ProjectId = property.Entity.ProjectId
                     });
 
         #endregion
 
         #region to update dto
 
-        public static IQueryable<UpdatePropertyDto>ToUpdateDto(this IQueryable<Property> query)
+        public static IQueryable<UpdatePropertyDto> ToUpdateDto(this IQueryable<Property> query)
                     => query.Select(property => new UpdatePropertyDto()
                     {
 
@@ -133,7 +132,6 @@ namespace DevCopilot2.Core.Mappers.Properties
                         Order = property.Order,
                         UseEditor = property.UseEditor,
                         EntityId = property.EntityId,
-                        AuthorId = property.AuthorId,
                         ForceMapperCode = property.ForceMapperCode,
                         ExcludeFromListDto = property.ExcludeFromListDto,
 
@@ -141,15 +139,15 @@ namespace DevCopilot2.Core.Mappers.Properties
                         .Select(entityRelation => new UpdateEntityRelationDto()
                         {
 
-                        Id = entityRelation.Id,
+                            Id = entityRelation.Id,
 
-                        PrimaryPropertyId = entityRelation.PrimaryPropertyId,
-                        SecondaryEntityId = entityRelation.SecondaryEntityId,
-                        MiddleEntityId = entityRelation.MiddleEntityId,
-                        RelationType = entityRelation.RelationType,
-                        InputType = entityRelation.InputType,
-                        FillingType = entityRelation.FillingType,
-                        FillingCode = entityRelation.FillingCode,
+                            PrimaryPropertyId = entityRelation.PrimaryPropertyId,
+                            SecondaryEntityId = entityRelation.SecondaryEntityId,
+                            MiddleEntityId = entityRelation.MiddleEntityId,
+                            RelationType = entityRelation.RelationType,
+                            InputType = entityRelation.InputType,
+                            FillingType = entityRelation.FillingType,
+                            FillingCode = entityRelation.FillingCode,
 
                         })
                         .ToList(),
@@ -157,12 +155,12 @@ namespace DevCopilot2.Core.Mappers.Properties
                         .Select(propertyImageResizeInformation => new UpdatePropertyImageResizeInformationDto()
                         {
 
-                        Id = propertyImageResizeInformation.Id,
+                            Id = propertyImageResizeInformation.Id,
 
-                        PropertyId = propertyImageResizeInformation.PropertyId,
-                        Name = propertyImageResizeInformation.Name,
-                        Width = propertyImageResizeInformation.Width,
-                        Height = propertyImageResizeInformation.Height,
+                            PropertyId = propertyImageResizeInformation.PropertyId,
+                            Name = propertyImageResizeInformation.Name,
+                            Width = propertyImageResizeInformation.Width,
+                            Height = propertyImageResizeInformation.Height,
 
                         })
                         .ToList(),
@@ -170,11 +168,11 @@ namespace DevCopilot2.Core.Mappers.Properties
                         .Select(propertySelectedLanguage => new UpdatePropertySelectedLanguageDto()
                         {
 
-                        Id = propertySelectedLanguage.Id,
+                            Id = propertySelectedLanguage.Id,
 
-                        PropertyId = propertySelectedLanguage.PropertyId,
-                        LanguageId = propertySelectedLanguage.LanguageId,
-                        Title = propertySelectedLanguage.Title,
+                            PropertyId = propertySelectedLanguage.PropertyId,
+                            LanguageId = propertySelectedLanguage.LanguageId,
+                            Title = propertySelectedLanguage.Title,
 
                         })
                         .ToList(),
@@ -184,8 +182,8 @@ namespace DevCopilot2.Core.Mappers.Properties
 
         #region to create dto
 
-        public static List<CreatePropertyDto>ToCreateDto(this IEnumerable<UpdatePropertyDto> properties)
-                    =>  properties.Select(property => new CreatePropertyDto()
+        public static List<CreatePropertyDto> ToCreateDto(this IEnumerable<UpdatePropertyDto> properties)
+                    => properties.Select(property => new CreatePropertyDto()
                     {
 
                         Name = property.Name,
@@ -205,7 +203,6 @@ namespace DevCopilot2.Core.Mappers.Properties
                         Order = property.Order,
                         UseEditor = property.UseEditor,
                         EntityId = property.EntityId,
-                        AuthorId = property.AuthorId,
                         ForceMapperCode = property.ForceMapperCode,
                         ExcludeFromListDto = property.ExcludeFromListDto,
 
@@ -213,13 +210,13 @@ namespace DevCopilot2.Core.Mappers.Properties
                         .Select(entityRelation => new CreateEntityRelationDto()
                         {
 
-                        PrimaryPropertyId = entityRelation.PrimaryPropertyId,
-                        SecondaryEntityId = entityRelation.SecondaryEntityId,
-                        MiddleEntityId = entityRelation.MiddleEntityId,
-                        RelationType = entityRelation.RelationType,
-                        InputType = entityRelation.InputType,
-                        FillingType = entityRelation.FillingType,
-                        FillingCode = entityRelation.FillingCode,
+                            PrimaryPropertyId = entityRelation.PrimaryPropertyId,
+                            SecondaryEntityId = entityRelation.SecondaryEntityId,
+                            MiddleEntityId = entityRelation.MiddleEntityId,
+                            RelationType = entityRelation.RelationType,
+                            InputType = entityRelation.InputType,
+                            FillingType = entityRelation.FillingType,
+                            FillingCode = entityRelation.FillingCode,
 
                         })
                         .ToList(),
@@ -227,10 +224,10 @@ namespace DevCopilot2.Core.Mappers.Properties
                         .Select(propertyImageResizeInformation => new CreatePropertyImageResizeInformationDto()
                         {
 
-                        PropertyId = propertyImageResizeInformation.PropertyId,
-                        Name = propertyImageResizeInformation.Name,
-                        Width = propertyImageResizeInformation.Width,
-                        Height = propertyImageResizeInformation.Height,
+                            PropertyId = propertyImageResizeInformation.PropertyId,
+                            Name = propertyImageResizeInformation.Name,
+                            Width = propertyImageResizeInformation.Width,
+                            Height = propertyImageResizeInformation.Height,
 
                         })
                         .ToList(),
@@ -238,9 +235,9 @@ namespace DevCopilot2.Core.Mappers.Properties
                         .Select(propertySelectedLanguage => new CreatePropertySelectedLanguageDto()
                         {
 
-                        PropertyId = propertySelectedLanguage.PropertyId,
-                        LanguageId = propertySelectedLanguage.LanguageId,
-                        Title = propertySelectedLanguage.Title,
+                            PropertyId = propertySelectedLanguage.PropertyId,
+                            LanguageId = propertySelectedLanguage.LanguageId,
+                            Title = propertySelectedLanguage.Title,
 
                         })
                         .ToList(),
@@ -251,19 +248,19 @@ namespace DevCopilot2.Core.Mappers.Properties
         #region to combo
 
         public static IQueryable<ComboDto> ToCombo(this IQueryable<Property> query)
-			    => query.Select(property => new ComboDto()
-			{
-            Title = property.Name,
-            Value = property.Id.ToString()
-            });
+                => query.Select(property => new ComboDto()
+                {
+                    Title = property.Name,
+                    Value = property.Id.ToString()
+                });
 
         #endregion
 
         #region to create model
 
         public static Property ToModel(this CreatePropertyDto create)
-				=> new Property()
-				{
+                => new Property()
+                {
                     Name = create.Name.ToTitle()!,
                     DataType = create.DataType,
                     MaxLength = create.MaxLength,
@@ -271,7 +268,7 @@ namespace DevCopilot2.Core.Mappers.Properties
                     RangeFrom = create.RangeFrom,
                     RangeTo = create.RangeTo,
                     IsRequired = create.IsRequired,
-                    ProjectEnumId = create.ProjectEnumId > 0 ? create.ProjectEnumId: null,
+                    ProjectEnumId = create.ProjectEnumId > 0 ? create.ProjectEnumId : null,
                     DataAnnotationDataType = create.DataAnnotationDataType,
                     IsUnique = create.IsUnique,
                     IsUpdatable = create.IsUpdatable,
@@ -281,10 +278,9 @@ namespace DevCopilot2.Core.Mappers.Properties
                     Order = create.Order,
                     UseEditor = create.UseEditor,
                     EntityId = create.EntityId,
-                    AuthorId = create.AuthorId,
                     ForceMapperCode = create.ForceMapperCode.SanitizeText()!,
                     ExcludeFromListDto = create.ExcludeFromListDto,
-				};
+                };
 
         #endregion
 
@@ -299,7 +295,7 @@ namespace DevCopilot2.Core.Mappers.Properties
             property.RangeFrom = update.RangeFrom;
             property.RangeTo = update.RangeTo;
             property.IsRequired = update.IsRequired;
-            property.ProjectEnumId = update.ProjectEnumId > 0 ? update.ProjectEnumId: null;
+            property.ProjectEnumId = update.ProjectEnumId > 0 ? update.ProjectEnumId : null;
             property.DataAnnotationDataType = update.DataAnnotationDataType;
             property.IsUnique = update.IsUnique;
             property.IsUpdatable = update.IsUpdatable;
@@ -309,7 +305,6 @@ namespace DevCopilot2.Core.Mappers.Properties
             property.Order = update.Order;
             property.UseEditor = update.UseEditor;
             property.EntityId = update.EntityId;
-            property.AuthorId = update.AuthorId;
             property.ForceMapperCode = update.ForceMapperCode.SanitizeText()!;
             property.ExcludeFromListDto = update.ExcludeFromListDto;
             return property;

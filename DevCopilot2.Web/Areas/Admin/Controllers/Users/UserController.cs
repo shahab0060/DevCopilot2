@@ -1,23 +1,19 @@
-
-using System;
-
-using System.Text;
-using DevCopilot2.Core.Extensions.BasicExtensions;
-using DevCopilot2.Core.Services.Interfaces;
-using DevCopilot2.Domain.DTOs.Users;
-using DevCopilot2.Domain.Enums.Common;
-using DevCopilot2.Web.PresentationExtensions;
-using DevCopilot2.Web.PresentationMappers;
-using Microsoft.AspNetCore.Mvc;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using ClosedXML.Excel;
 using DevCopilot2.Core.Exporters;
+using DevCopilot2.Core.Extensions.BasicExtensions;
+using DevCopilot2.Core.Services.Interfaces;
 using DevCopilot2.Domain.DTOs.Roles;
+using DevCopilot2.Domain.DTOs.Users;
+using DevCopilot2.Domain.Enums.Common;
+using DevCopilot2.Web.PresentationMappers;
+using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Users
 {
-	[PermissionChecker("UserManagement")]
+    [PermissionChecker("UserManagement")]
     public class UserController : BaseAdminController<UserListDto>
     {
 
@@ -218,7 +214,7 @@ this._userService = userService;
 
         #endregion
 
-       #region export excel
+        #region export excel
 
         [HttpGet]
         public async Task<IActionResult> ExportExcel(FilterUsersDto filter)

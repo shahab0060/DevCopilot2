@@ -70,7 +70,10 @@ namespace DevCopilot2.Domain.DTOs.Entities
         public string MiddleEntityPluralName { get; set; } = null!;
 
         [Display(Name="MiddleEntityId")]
-        public int? MiddleEntityId { get; set; } 
+        public int? MiddleEntityId { get; set; }
+
+        [Display(Name = "ProjectId")]
+        public int ProjectId { get; set; }
 
         [Display(Name="RelationType")]
         public RelationTypeEnum RelationType { get; set; } 

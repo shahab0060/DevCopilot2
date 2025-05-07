@@ -1,23 +1,23 @@
-using System;
-using System.Text;
-using DevCopilot2.Core.Extensions.BasicExtensions;
-using DevCopilot2.Core.Services.Interfaces;
-using DevCopilot2.Domain.Enums.Common;
-using DevCopilot2.Web.PresentationExtensions;
-using DevCopilot2.Web.PresentationMappers;
-using DevCopilot2.Domain.Enums.Entities;
-using DevCopilot2.Domain.DTOs.Entities;
-using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Mvc;
-using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
-using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using ClosedXML.Excel;
 using DevCopilot2.Core.Exporters;
+using DevCopilot2.Core.Extensions.BasicExtensions;
+using DevCopilot2.Core.Services.Interfaces;
+using DevCopilot2.Domain.DTOs.Entities;
 using DevCopilot2.Domain.DTOs.Properties;
+using DevCopilot2.Domain.Entities.Common;
+using DevCopilot2.Domain.Entities.Entities;
+using DevCopilot2.Domain.Enums.Common;
+using DevCopilot2.Web.PresentationMappers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 {
-	//[PermissionChecker("EntitySelectedProjectAreaSelectedFilterManagement")]
+    [PermissionChecker("EntitySelectedProjectAreaSelectedFilterManagement")]
     public class EntitySelectedProjectAreaSelectedFilterController : BaseAdminController<EntitySelectedProjectAreaSelectedFilterListDto>
     {
 
@@ -31,7 +31,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
                            IStringLocalizer<SharedResources> sharedLocalizer,
                            IStringLocalizer<EntitiesSharedResources> sharedEntitiesLocalizer,
                            IStringLocalizer<EntitySelectedProjectAreaSelectedFilterController> localizer,
-                           IEntityService entityService 
+                           IEntityService entityService
                                       )
         {
             this._sharedLocalizer = sharedLocalizer;
@@ -55,180 +55,187 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 
         #region detail
 
-		[HttpGet]
-		public async Task<IActionResult>Detail(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
 
             EntitySelectedProjectAreaSelectedFilterListDto? entitySelectedProjectAreaSelectedFilterInformation = await _entityService.GetSingleEntitySelectedProjectAreaSelectedFilterInformation(id);
-			if (
-            entitySelectedProjectAreaSelectedFilterInformation is null)return NotFound();
+            if (entitySelectedProjectAreaSelectedFilterInformation is null) return NotFound();
+            await GetViewDatas(entitySelectedProjectAreaSelectedFilterInformation.EntityId);
+            return View(entitySelectedProjectAreaSelectedFilterInformation);
+        }
 
-            await GetViewDatas();
-            return View(
-            entitySelectedProjectAreaSelectedFilterInformation);	
-		}
-
-		#endregion
+        #endregion
 
         #region create
 
-		[HttpGet]
-		public async Task<IActionResult> Create(int entitySelectedProjectAreaId)
-		{
-            await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Create(int entitySelectedProjectAreaId)
+        {
+            EntitySelectedProjectAreaListDto? entitySelectedProjectAreaInformation =
+                await _entityService.GetSingleEntitySelectedProjectAreaInformation(entitySelectedProjectAreaId);
+            if (entitySelectedProjectAreaInformation is null) return NotFound();
+            await GetViewDatas(entitySelectedProjectAreaInformation.EntityId);
             CreateEntitySelectedProjectAreaSelectedFilterDto create = new CreateEntitySelectedProjectAreaSelectedFilterDto()
             {
-                EntitySelectedProjectAreaId = entitySelectedProjectAreaId, 
+                EntitySelectedProjectAreaId = entitySelectedProjectAreaId,
             };
             return View(create);
         }
 
-		[HttpPost]
-		public async Task<IActionResult> Create(CreateEntitySelectedProjectAreaSelectedFilterDto create)
-		{
-
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateEntitySelectedProjectAreaSelectedFilterDto create)
+        {
+            EntitySelectedProjectAreaSelectedFilterListDto? entitySelectedProjectAreaSelectedFilterInformation =
+                await _entityService.GetSingleEntitySelectedProjectAreaSelectedFilterInformation(create.EntitySelectedProjectAreaId);
+            if (entitySelectedProjectAreaSelectedFilterInformation is null) return NotFound();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(entitySelectedProjectAreaSelectedFilterInformation.EntityId);
                 return View(create);
             }
-			BaseChangeEntityResult result = await _entityService.CreateEntitySelectedProjectAreaSelectedFilter(create);
+            BaseChangeEntityResult result = await _entityService.CreateEntitySelectedProjectAreaSelectedFilter(create);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")} {_sharedLocalizer.GetString("Created Successfully")}";
-					return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin",entitySelectedProjectAreaId=create.EntitySelectedProjectAreaId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")} {_sharedLocalizer.GetString("Created Successfully")}";
+                        return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin", entitySelectedProjectAreaId = create.EntitySelectedProjectAreaId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(create);
-		}
+            await GetViewDatas(entitySelectedProjectAreaSelectedFilterInformation.EntityId);
+            return View(create);
+        }
 
-		#endregion
+        #endregion
 
         #region update
 
-		[HttpGet]
-		public async Task<IActionResult> Update(int id)
-		{
-			UpdateEntitySelectedProjectAreaSelectedFilterDto? entitySelectedProjectAreaSelectedFilterInformation = await _entityService.GetEntitySelectedProjectAreaSelectedFilterInformation(id);
-			if (entitySelectedProjectAreaSelectedFilterInformation is null) return NotFound();
-			await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            UpdateEntitySelectedProjectAreaSelectedFilterDto? entitySelectedProjectAreaSelectedFilterInformation = await _entityService.GetEntitySelectedProjectAreaSelectedFilterInformation(id);
+            if (entitySelectedProjectAreaSelectedFilterInformation is null) return NotFound();
+            PropertyListDto? propertyInformation =
+               await _entityService.GetSinglePropertyInformation(entitySelectedProjectAreaSelectedFilterInformation.PropertyId);
+            if (propertyInformation is null) return NotFound();
+            await GetViewDatas(propertyInformation.EntityId);
             return View(entitySelectedProjectAreaSelectedFilterInformation);
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Update(UpdateEntitySelectedProjectAreaSelectedFilterDto update)
-		{
-
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateEntitySelectedProjectAreaSelectedFilterDto update)
+        {
+            PropertyListDto? propertyInformation =
+               await _entityService.GetSinglePropertyInformation(update.PropertyId);
+            if (propertyInformation is null) return NotFound();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(propertyInformation.EntityId);
                 return View(update);
             }
-			BaseChangeEntityResult result = await _entityService.UpdateEntitySelectedProjectAreaSelectedFilter(update);
+            BaseChangeEntityResult result = await _entityService.UpdateEntitySelectedProjectAreaSelectedFilter(update);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")} {_sharedLocalizer.GetString("Updated Successfully.")}";
-					return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin",entitySelectedProjectAreaId=update.EntitySelectedProjectAreaId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")} {_sharedLocalizer.GetString("Updated Successfully.")}";
+                        return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin", entitySelectedProjectAreaId = update.EntitySelectedProjectAreaId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(update);
-		}
+            await GetViewDatas(propertyInformation.EntityId);
+            return View(update);
+        }
 
-		#endregion
+        #endregion
 
         #region view datas
 
-        async Task GetViewDatas()
+        async Task GetViewDatas(int entityId)
         {
-            await GetPropertiesViewData();
+            await GetPropertiesViewData(entityId);
         }
 
-        async Task GetPropertiesViewData()
+        async Task GetPropertiesViewData(int entityId)
         => ViewData["Properties"] = (await _entityService
-        .GetPropertiesAsCombo(new FilterPropertiesDto()))
+        .GetPropertiesAsCombo(new FilterPropertiesDto() { EntityId = entityId }))
         .ToSelectListItem();
 
         #endregion
 
         #region delete
 
-		[HttpGet]
-		public async Task<IActionResult> Delete(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
             EntitySelectedProjectAreaSelectedFilterListDto? entitySelectedProjectAreaSelectedFilterInformation = await _entityService.GetSingleEntitySelectedProjectAreaSelectedFilterInformation(id);
             if (entitySelectedProjectAreaSelectedFilterInformation is null) return NotFound();
-			BaseChangeEntityResult result = await _entityService.DeleteEntitySelectedProjectAreaSelectedFilter(id);
-			switch (result)
-			{
-				case BaseChangeEntityResult.Success:
-					{
-						TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-					return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin",entitySelectedProjectAreaId=entitySelectedProjectAreaSelectedFilterInformation.EntitySelectedProjectAreaId, });
-					}
-			}
-			return NotFound();
-		}
+            BaseChangeEntityResult result = await _entityService.DeleteEntitySelectedProjectAreaSelectedFilter(id);
+            switch (result)
+            {
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilter")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+                        return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin", entitySelectedProjectAreaId = entitySelectedProjectAreaSelectedFilterInformation.EntitySelectedProjectAreaId, });
+                    }
+            }
+            return NotFound();
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> DeleteRange(List<int> ids)
-		{
-			if (!ids.Distinct().Any())
-			{
-				TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
-				return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin" });
-			}
-			await _entityService.DeleteEntitySelectedProjectAreaSelectedFilter(ids);
-			TempData[SuccessMessage] =$"{_sharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilters")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-			return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin" });
-		}
+        [HttpGet]
+        public async Task<IActionResult> DeleteRange(List<int> ids)
+        {
+            if (!ids.Distinct().Any())
+            {
+                TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
+                return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin" });
+            }
+            await _entityService.DeleteEntitySelectedProjectAreaSelectedFilter(ids);
+            TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedProjectAreaSelectedFilters")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+            return RedirectToAction("Index", "EntitySelectedProjectAreaSelectedFilter", new { Area = "Admin" });
+        }
 
-		#endregion
+        #endregion
 
         #region export excel
 
@@ -244,16 +251,16 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
                 ws = excelExporter.AddHeaders(ws, title);
                 ws.Columns().AdjustToContents();
                 ws = excelExporter.AddColumn(ws, $"{_sharedLocalizer.GetString("Row")}", 1, 3);
-                ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("EntitySelectedProjectAreaHasWeb")}", 2, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("EntitySelectedProjectAreaId")}", 3, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("PropertyName")}", 4, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("PropertyId")}", 5, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("Value")}", 6, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("EntitySelectedProjectAreaHasWeb")}", 2, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("EntitySelectedProjectAreaId")}", 3, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("PropertyName")}", 4, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("PropertyId")}", 5, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("Value")}", 6, 3);
 
                 int rowIndex = 4;
                 foreach (var item in result)
                 {
-                    ws = excelExporter.AddColumn(ws,(rowIndex-3).ToString(), 1, rowIndex);
+                    ws = excelExporter.AddColumn(ws, (rowIndex - 3).ToString(), 1, rowIndex);
 
                     ws = excelExporter.AddColumn(ws, item.EntitySelectedProjectAreaHasWeb.ConvertBoolToText(), 2, rowIndex);
 
@@ -312,7 +319,7 @@ item.PropertyName,
 
 item.PropertyId.ToString("#,0"),
 
-item.Value );
+item.Value);
                 index++;
             }
 

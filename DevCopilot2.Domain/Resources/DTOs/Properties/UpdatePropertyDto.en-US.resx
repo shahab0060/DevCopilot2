@@ -202,10 +202,6 @@
     <value>Entity</value>
   </data>
 
-  <data name="AuthorId" xml:space="preserve">
-    <value>Created By</value>
-  </data>
-
   <data name="ForceMapperCode" xml:space="preserve">
     <value>Force Mapper Code</value>
   </data>

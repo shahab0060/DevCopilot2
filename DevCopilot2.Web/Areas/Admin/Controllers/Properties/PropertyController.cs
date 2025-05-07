@@ -19,7 +19,7 @@ using DevCopilot2.Domain.DTOs.Languages;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
 {
-	//[PermissionChecker("PropertyManagement")]
+    [PermissionChecker("PropertyManagement")]
     public class PropertyController : BaseAdminController<PropertyListDto>
     {
 
@@ -37,7 +37,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
                            IStringLocalizer<PropertyController> localizer,
                            IEntityService entityService,
                            IProjectService projectService,
-                           ISiteService siteService 
+                           ISiteService siteService
                                       )
         {
             this._sharedLocalizer = sharedLocalizer;
@@ -63,196 +63,192 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
 
         #region detail
 
-		[HttpGet]
-		public async Task<IActionResult>Detail(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
 
             PropertyListDto? propertyInformation = await _entityService.GetSinglePropertyInformation(id);
-			if (
-            propertyInformation is null)return NotFound();
+            if (propertyInformation is null) return NotFound();
 
-            await GetViewDatas();
-            return View(
-            propertyInformation);	
-		}
+            await GetViewDatas(propertyInformation.ProjectId);
+            return View(propertyInformation);
+        }
 
-		#endregion
+        #endregion
 
         #region create
 
-		[HttpGet]
-		public async Task<IActionResult> Create(int entityId)
-		{
-            await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Create(int entityId)
+        {
+            await GetViewDatas(entityId);
             CreatePropertyDto create = new CreatePropertyDto()
             {
-                EntityId = entityId, 
+                EntityId = entityId,
             };
             return View(create);
         }
 
-		[HttpPost]
-		public async Task<IActionResult> Create(CreatePropertyDto create)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Create(CreatePropertyDto create)
+        {
 
-            create.AuthorId = User.GetCurrentUserId();
-
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(create.EntityId);
                 return View(create);
             }
-			BaseChangeEntityResult result = await _entityService.CreateProperty(create);
+            BaseChangeEntityResult result = await _entityService.CreateProperty(create);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Property")} {_sharedLocalizer.GetString("Created Successfully")}";
-					return RedirectToAction("Index", "Property", new { Area = "Admin",entityId=create.EntityId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Property")} {_sharedLocalizer.GetString("Created Successfully")}";
+                        return RedirectToAction("Index", "Property", new { Area = "Admin", entityId = create.EntityId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(create);
-		}
+            await GetViewDatas(create.EntityId);
+            return View(create);
+        }
 
-		#endregion
+        #endregion
 
         #region update
 
-		[HttpGet]
-		public async Task<IActionResult> Update(int id)
-		{
-			UpdatePropertyDto? propertyInformation = await _entityService.GetPropertyInformation(id);
-			if (propertyInformation is null) return NotFound();
-			await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            UpdatePropertyDto? propertyInformation = await _entityService.GetPropertyInformation(id);
+            if (propertyInformation is null) return NotFound();
+            await GetViewDatas(propertyInformation.EntityId);
             return View(propertyInformation);
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Update(UpdatePropertyDto update)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdatePropertyDto update)
+        {
 
-            update.AuthorId = User.GetCurrentUserId();
-
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(update.EntityId);
                 return View(update);
             }
-			BaseChangeEntityResult result = await _entityService.UpdateProperty(update);
+            BaseChangeEntityResult result = await _entityService.UpdateProperty(update);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Property")} {_sharedLocalizer.GetString("Updated Successfully.")}";
-					return RedirectToAction("Index", "Property", new { Area = "Admin",entityId=update.EntityId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Property")} {_sharedLocalizer.GetString("Updated Successfully.")}";
+                        return RedirectToAction("Index", "Property", new { Area = "Admin", entityId = update.EntityId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(update);
-		}
+            await GetViewDatas(update.EntityId);
+            return View(update);
+        }
 
-		#endregion
+        #endregion
 
         #region view datas
 
-        async Task GetViewDatas()
+        async Task GetViewDatas(int entityId)
         {
-            await GetProjectEnumsViewData();
-            await GetEntitiesViewData();
-            await GetLanguagesViewData();
+            EntityListDto entityInformation = await _entityService
+                .GetSingleEntityInformation(entityId) ?? new EntityListDto();
+            await GetProjectEnumsViewData(entityInformation.ProjectId);
+            await GetEntitiesViewData(entityInformation.ProjectId);
+            await GetLanguagesViewData(entityInformation.ProjectId);
         }
 
-        async Task GetProjectEnumsViewData()
+        async Task GetProjectEnumsViewData(int projectId)
         => ViewData["ProjectEnums"] = (await _projectService
-        .GetProjectEnumsAsCombo(new FilterProjectEnumsDto()))
-        .ToSelectListItem(false,true);
+        .GetProjectEnumsAsCombo(new FilterProjectEnumsDto() { ProjectId = projectId }))
+        .ToSelectListItem(false, true);
 
-        async Task GetEntitiesViewData()
+        async Task GetEntitiesViewData(int projectId)
         => ViewData["Entities"] = (await _entityService
-        .GetEntitiesAsCombo(new FilterEntitiesDto()))
+        .GetEntitiesAsCombo(new FilterEntitiesDto() { ProjectId = projectId }))
         .ToSelectListItem();
 
-        async Task GetLanguagesViewData()
+        async Task GetLanguagesViewData(int projectId)
         => ViewData["Languages"] = (await _siteService
-        .GetLanguagesAsCombo(new FilterLanguagesDto()))
+        .GetLanguagesAsCombo(new FilterLanguagesDto() { ProjectId = projectId }))
         .ToSelectListItem();
 
         #endregion
 
         #region delete
 
-		[HttpGet]
-		public async Task<IActionResult> Delete(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
             PropertyListDto? propertyInformation = await _entityService.GetSinglePropertyInformation(id);
             if (propertyInformation is null) return NotFound();
-			BaseChangeEntityResult result = await _entityService.DeleteProperty(id);
-			switch (result)
-			{
-				case BaseChangeEntityResult.Success:
-					{
-						TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Property")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-					return RedirectToAction("Index", "Property", new { Area = "Admin",entityId=propertyInformation.EntityId, });
-					}
-			}
-			return NotFound();
-		}
+            BaseChangeEntityResult result = await _entityService.DeleteProperty(id);
+            switch (result)
+            {
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Property")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+                        return RedirectToAction("Index", "Property", new { Area = "Admin", entityId = propertyInformation.EntityId, });
+                    }
+            }
+            return NotFound();
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> DeleteRange(List<int> ids)
-		{
-			if (!ids.Distinct().Any())
-			{
-				TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
-				return RedirectToAction("Index", "Property", new { Area = "Admin" });
-			}
-			await _entityService.DeleteProperty(ids);
-			TempData[SuccessMessage] =$"{_sharedEntitiesLocalizer.GetString("Properties")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-			return RedirectToAction("Index", "Property", new { Area = "Admin" });
-		}
+        [HttpGet]
+        public async Task<IActionResult> DeleteRange(List<int> ids)
+        {
+            if (!ids.Distinct().Any())
+            {
+                TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
+                return RedirectToAction("Index", "Property", new { Area = "Admin" });
+            }
+            await _entityService.DeleteProperty(ids);
+            TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Properties")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+            return RedirectToAction("Index", "Property", new { Area = "Admin" });
+        }
 
-		#endregion
+        #endregion
 
         #region export excel
 
@@ -268,34 +264,32 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Properties
                 ws = excelExporter.AddHeaders(ws, title);
                 ws.Columns().AdjustToContents();
                 ws = excelExporter.AddColumn(ws, $"{_sharedLocalizer.GetString("Row")}", 1, 3);
-                ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("Name")}", 2, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("DataType")}", 3, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("MaxLength")}", 4, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("MinLength")}", 5, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("RangeFrom")}", 6, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("RangeTo")}", 7, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("IsRequired")}", 8, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ProjectEnumEnglishName")}", 9, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ProjectEnumId")}", 10, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("DataAnnotationDataType")}", 11, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("IsUnique")}", 12, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("IsUpdatable")}", 13, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ShowInList")}", 14, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("IsFilterContain")}", 15, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("IsFilterEqual")}", 16, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("Order")}", 17, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("UseEditor")}", 18, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("EntityPluralName")}", 19, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("EntityId")}", 20, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("AuthorPhoneNumber")}", 21, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("AuthorId")}", 22, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ForceMapperCode")}", 23, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ExcludeFromListDto")}", 24, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("Name")}", 2, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("DataType")}", 3, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("MaxLength")}", 4, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("MinLength")}", 5, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("RangeFrom")}", 6, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("RangeTo")}", 7, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("IsRequired")}", 8, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("ProjectEnumEnglishName")}", 9, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("ProjectEnumId")}", 10, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("DataAnnotationDataType")}", 11, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("IsUnique")}", 12, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("IsUpdatable")}", 13, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("ShowInList")}", 14, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("IsFilterContain")}", 15, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("IsFilterEqual")}", 16, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("Order")}", 17, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("UseEditor")}", 18, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("EntityPluralName")}", 19, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("EntityId")}", 20, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("ForceMapperCode")}", 21, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("ExcludeFromListDto")}", 22, 3);
 
                 int rowIndex = 4;
                 foreach (var item in result)
                 {
-                    ws = excelExporter.AddColumn(ws,(rowIndex-3).ToString(), 1, rowIndex);
+                    ws = excelExporter.AddColumn(ws, (rowIndex - 3).ToString(), 1, rowIndex);
 
                     ws = excelExporter.AddColumn(ws, item.Name, 2, rowIndex);
 
@@ -335,13 +329,9 @@ ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ExcludeFromListDto")}",
 
                     ws = excelExporter.AddColumn(ws, item.EntityId.ToString("#,0"), 20, rowIndex);
 
-                    ws = excelExporter.AddColumn(ws, item.AuthorPhoneNumber, 21, rowIndex);
+                    ws = excelExporter.AddColumn(ws, item.ForceMapperCode?.ToString(), 21, rowIndex);
 
-                    ws = excelExporter.AddColumn(ws, item.AuthorId.ToString(), 22, rowIndex);
-
-                    ws = excelExporter.AddColumn(ws, item.ForceMapperCode?.ToString(), 23, rowIndex);
-
-                    ws = excelExporter.AddColumn(ws, item.ExcludeFromListDto.ConvertBoolToText(), 24, rowIndex);
+                    ws = excelExporter.AddColumn(ws, item.ExcludeFromListDto.ConvertBoolToText(), 22, rowIndex);
 
                     rowIndex++;
                 }
@@ -407,10 +397,6 @@ ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ExcludeFromListDto")}",
 
             dataTable = dataTable.AddHeader($"{_localizer.GetString("EntityId")}");
 
-            dataTable = dataTable.AddHeader($"{_localizer.GetString("AuthorPhoneNumber")}");
-
-            dataTable = dataTable.AddHeader($"{_localizer.GetString("AuthorId")}");
-
             dataTable = dataTable.AddHeader($"{_localizer.GetString("ForceMapperCode")}");
 
             dataTable = dataTable.AddHeader($"{_localizer.GetString("ExcludeFromListDto")}");
@@ -456,13 +442,9 @@ item.EntityPluralName,
 
 item.EntityId.ToString("#,0"),
 
-item.AuthorPhoneNumber,
-
-item.AuthorId.ToString(),
-
 item.ForceMapperCode?.ToString(),
 
-item.ExcludeFromListDto.ConvertBoolToText() );
+item.ExcludeFromListDto.ConvertBoolToText());
                 index++;
             }
 

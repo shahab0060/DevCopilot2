@@ -66,8 +66,6 @@ namespace DevCopilot2.Core.Mappers.Entities
                         UseEditor = property.UseEditor,
                         EntityPluralName = property.Entity.PluralName,
                         EntityId = property.EntityId,
-                        AuthorPhoneNumber = property.Author.PhoneNumber,
-                        AuthorId = property.AuthorId,
                         ForceMapperCode = property.ForceMapperCode,
                         ExcludeFromListDto = property.ExcludeFromListDto,
 
@@ -232,7 +230,6 @@ namespace DevCopilot2.Core.Mappers.Entities
                         Order = property.Order,
                         UseEditor = property.UseEditor,
                         EntityId = property.EntityId,
-                        AuthorId = property.AuthorId,
                         ForceMapperCode = property.ForceMapperCode,
                         ExcludeFromListDto = property.ExcludeFromListDto,
 

@@ -14,10 +14,11 @@ using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using ClosedXML.Excel;
 using DevCopilot2.Core.Exporters;
 using DevCopilot2.Domain.DTOs.Languages;
+using DevCopilot2.Core.Services.Classes;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 {
-	//[PermissionChecker("EntitySelectedLanguageManagement")]
+    [PermissionChecker("EntitySelectedLanguageManagement")]
     public class EntitySelectedLanguageController : BaseAdminController<EntitySelectedLanguageListDto>
     {
 
@@ -33,7 +34,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
                            IStringLocalizer<EntitiesSharedResources> sharedEntitiesLocalizer,
                            IStringLocalizer<EntitySelectedLanguageController> localizer,
                            IEntityService entityService,
-                           ISiteService siteService 
+                           ISiteService siteService
                                       )
         {
             this._sharedLocalizer = sharedLocalizer;
@@ -58,180 +59,188 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
 
         #region detail
 
-		[HttpGet]
-		public async Task<IActionResult>Detail(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
 
             EntitySelectedLanguageListDto? entitySelectedLanguageInformation = await _entityService.GetSingleEntitySelectedLanguageInformation(id);
-			if (
-            entitySelectedLanguageInformation is null)return NotFound();
+            if (entitySelectedLanguageInformation is null) return NotFound();
 
-            await GetViewDatas();
-            return View(
-            entitySelectedLanguageInformation);	
-		}
+            await GetViewDatas(entitySelectedLanguageInformation.EntityId);
+            return View(entitySelectedLanguageInformation);
+        }
 
-		#endregion
+        #endregion
 
         #region create
 
-		[HttpGet]
-		public async Task<IActionResult> Create(int entityId)
-		{
-            await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Create(int entityId)
+        {
+            await GetViewDatas(entityId);
             CreateEntitySelectedLanguageDto create = new CreateEntitySelectedLanguageDto()
             {
-                EntityId = entityId, 
+                EntityId = entityId,
             };
             return View(create);
         }
 
-		[HttpPost]
-		public async Task<IActionResult> Create(CreateEntitySelectedLanguageDto create)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateEntitySelectedLanguageDto create)
+        {
 
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(create.EntityId);
                 return View(create);
             }
-			BaseChangeEntityResult result = await _entityService.CreateEntitySelectedLanguage(create);
+            BaseChangeEntityResult result = await _entityService.CreateEntitySelectedLanguage(create);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedLanguage")} {_sharedLocalizer.GetString("Created Successfully")}";
-					return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin",entityId=create.EntityId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedLanguage")} {_sharedLocalizer.GetString("Created Successfully")}";
+                        return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin", entityId = create.EntityId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(create);
-		}
+            await GetViewDatas(create.EntityId);
+            return View(create);
+        }
 
-		#endregion
+        #endregion
 
         #region update
 
-		[HttpGet]
-		public async Task<IActionResult> Update(int id)
-		{
-			UpdateEntitySelectedLanguageDto? entitySelectedLanguageInformation = await _entityService.GetEntitySelectedLanguageInformation(id);
-			if (entitySelectedLanguageInformation is null) return NotFound();
-			await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            UpdateEntitySelectedLanguageDto? entitySelectedLanguageInformation = await _entityService.GetEntitySelectedLanguageInformation(id);
+            if (entitySelectedLanguageInformation is null) return NotFound();
+            await GetViewDatas(entitySelectedLanguageInformation.EntityId);
             return View(entitySelectedLanguageInformation);
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Update(UpdateEntitySelectedLanguageDto update)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateEntitySelectedLanguageDto update)
+        {
 
-			if (!ModelState.IsValid)
-			{
-                await GetViewDatas();
+            if (!ModelState.IsValid)
+            {
+                await GetViewDatas(update.EntityId);
                 return View(update);
             }
-			BaseChangeEntityResult result = await _entityService.UpdateEntitySelectedLanguage(update);
+            BaseChangeEntityResult result = await _entityService.UpdateEntitySelectedLanguage(update);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case BaseChangeEntityResult.Success:
-				{
-					TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedLanguage")} {_sharedLocalizer.GetString("Updated Successfully.")}";
-					return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin",entityId=update.EntityId, });
-				}
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedLanguage")} {_sharedLocalizer.GetString("Updated Successfully.")}";
+                        return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin", entityId = update.EntityId, });
+                    }
 
                 case BaseChangeEntityResult.NotFound:
-                {
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
-                }
+                    }
 
-				case BaseChangeEntityResult.Exists:
-				{
-					TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
-					break;
-				}
+                case BaseChangeEntityResult.Exists:
+                    {
+                        TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Item Exists.")}";
+                        break;
+                    }
 
-			}
+            }
 
             #endregion
 
-            await GetViewDatas();
-			return View(update);
-		}
+            await GetViewDatas(update.EntityId);
+            return View(update);
+        }
 
-		#endregion
+        #endregion
 
         #region view datas
 
-        async Task GetViewDatas()
+        async Task GetViewDatas(int entityId, bool showNotUsedLanguagesInProject = false)
         {
-            await GetLanguagesViewData();
+
+            await GetLanguagesViewData(entityId, showNotUsedLanguagesInProject);
         }
 
-        async Task GetLanguagesViewData()
-        => ViewData["Languages"] = (await _siteService
-        .GetLanguagesAsCombo(new FilterLanguagesDto()))
+        async Task GetLanguagesViewData(int entityId, bool showNotUsedLanguagesInProject = false)
+        {
+            EntityListDto? entityInformation = await _entityService
+                .GetSingleEntityInformation(entityId);
+            if (entityInformation is null) return;
+            ViewData["Languages"] = (await _siteService
+        .GetLanguagesAsCombo(new FilterLanguagesDto()
+        {
+            ProjectId = entityInformation.ProjectId,
+            ExcludeEntityId = showNotUsedLanguagesInProject ? entityId : 0
+        }))
         .ToSelectListItem();
+        }
 
         #endregion
 
         #region delete
 
-		[HttpGet]
-		public async Task<IActionResult> Delete(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
             EntitySelectedLanguageListDto? entitySelectedLanguageInformation = await _entityService.GetSingleEntitySelectedLanguageInformation(id);
             if (entitySelectedLanguageInformation is null) return NotFound();
-			BaseChangeEntityResult result = await _entityService.DeleteEntitySelectedLanguage(id);
-			switch (result)
-			{
-				case BaseChangeEntityResult.Success:
-					{
-						TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedLanguage")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-					return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin",entityId=entitySelectedLanguageInformation.EntityId, });
-					}
-			}
-			return NotFound();
-		}
+            BaseChangeEntityResult result = await _entityService.DeleteEntitySelectedLanguage(id);
+            switch (result)
+            {
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedLanguage")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+                        return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin", entityId = entitySelectedLanguageInformation.EntityId, });
+                    }
+            }
+            return NotFound();
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> DeleteRange(List<int> ids)
-		{
-			if (!ids.Distinct().Any())
-			{
-				TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
-				return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin" });
-			}
-			await _entityService.DeleteEntitySelectedLanguage(ids);
-			TempData[SuccessMessage] =$"{_sharedEntitiesLocalizer.GetString("EntitySelectedLanguages")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-			return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin" });
-		}
+        [HttpGet]
+        public async Task<IActionResult> DeleteRange(List<int> ids)
+        {
+            if (!ids.Distinct().Any())
+            {
+                TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
+                return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin" });
+            }
+            await _entityService.DeleteEntitySelectedLanguage(ids);
+            TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("EntitySelectedLanguages")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+            return RedirectToAction("Index", "EntitySelectedLanguage", new { Area = "Admin" });
+        }
 
-		#endregion
+        #endregion
 
         #region export excel
 
@@ -247,17 +256,17 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
                 ws = excelExporter.AddHeaders(ws, title);
                 ws.Columns().AdjustToContents();
                 ws = excelExporter.AddColumn(ws, $"{_sharedLocalizer.GetString("Row")}", 1, 3);
-                ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("EntityPluralName")}", 2, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("EntityId")}", 3, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("LanguageName")}", 4, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("LanguageId")}", 5, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("SingularTitle")}", 6, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("PluralTitle")}", 7, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("EntityPluralName")}", 2, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("EntityId")}", 3, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("LanguageName")}", 4, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("LanguageId")}", 5, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("SingularTitle")}", 6, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("PluralTitle")}", 7, 3);
 
                 int rowIndex = 4;
                 foreach (var item in result)
                 {
-                    ws = excelExporter.AddColumn(ws,(rowIndex-3).ToString(), 1, rowIndex);
+                    ws = excelExporter.AddColumn(ws, (rowIndex - 3).ToString(), 1, rowIndex);
 
                     ws = excelExporter.AddColumn(ws, item.EntityPluralName, 2, rowIndex);
 
@@ -322,7 +331,7 @@ item.LanguageId.ToString("#,0"),
 
 item.SingularTitle,
 
-item.PluralTitle );
+item.PluralTitle);
                 index++;
             }
 

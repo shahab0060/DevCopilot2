@@ -32,7 +32,7 @@ namespace DevCopilot2.Core.Services.Classes
         public SiteService(
                            ICrudRepository<SiteSetting, long> siteSettingRepository,
                            ICrudRepository<Language, int> languageRepository,
-                           ICrudRepository<GeneralSetting, int> generalSettingRepository 
+                           ICrudRepository<GeneralSetting, int> generalSettingRepository
                                       )
         {
             this._siteSettingRepository = siteSettingRepository;
@@ -63,7 +63,7 @@ namespace DevCopilot2.Core.Services.Classes
 
             query = filter.SortProperty switch
             {
-                                SortSiteSettingType.SMSApiKey => query.OrderBy(a => a.SMSApiKey),
+                SortSiteSettingType.SMSApiKey => query.OrderBy(a => a.SMSApiKey),
                 SortSiteSettingType.SMSTemplateName => query.OrderBy(a => a.SMSTemplateName),
                 SortSiteSettingType.FavIconName => query.OrderBy(a => a.FavIconName),
                 SortSiteSettingType.SiteName => query.OrderBy(a => a.SiteName),
@@ -97,13 +97,13 @@ namespace DevCopilot2.Core.Services.Classes
 
         public async Task<FilterSiteSettingsDto> FilterSiteSettings(FilterSiteSettingsDto filter)
         {
-            IQueryable<SiteSetting> query = 
+            IQueryable<SiteSetting> query =
                 GetSiteSettingsWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.SiteSettings = await query
@@ -127,13 +127,13 @@ namespace DevCopilot2.Core.Services.Classes
             .FirstOrDefaultAsync();
 
         public async Task<UpdateSiteSettingDto?> GetSiteSettingInformation(long siteSettingId)
-        =>  await _siteSettingRepository
+        => await _siteSettingRepository
             .GetQueryable()
             .Where(a => a.Id == siteSettingId)
             .ToUpdateDto()
             .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateSiteSetting(UpdateSiteSettingDto update)
-        { 
+        public async Task<BaseChangeEntityResult> UpdateSiteSetting(UpdateSiteSettingDto update)
+        {
             SiteSetting? siteSetting = await _siteSettingRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -146,7 +146,7 @@ public async Task<BaseChangeEntityResult> UpdateSiteSetting(UpdateSiteSettingDto
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteSiteSetting(long siteSettingId)
+        public async Task<BaseChangeEntityResult> DeleteSiteSetting(long siteSettingId)
         {
             SiteSetting? siteSetting = await _siteSettingRepository.GetAsTracking(siteSettingId);
             if (siteSetting is null) return BaseChangeEntityResult.NotFound;
@@ -157,10 +157,10 @@ public async Task<BaseChangeEntityResult> DeleteSiteSetting(long siteSettingId)
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteSiteSetting(List<long> siteSettingIds)
+        public async Task DeleteSiteSetting(List<long> siteSettingIds)
         {
             foreach (long siteSettingId in siteSettingIds)
-            { 
+            {
                 SiteSetting? siteSetting = await _siteSettingRepository.GetAsTracking(siteSettingId);
                 if (siteSetting is not null)
                     _siteSettingRepository.SoftDelete(siteSetting);
@@ -192,8 +192,22 @@ public async Task DeleteSiteSetting(List<long> siteSettingIds)
 
 EF.Functions.Like(q.Culture, $"%{filter.Search}%") ||
 
-EF.Functions.Like(q.DefaultPluralSuffix, $"%{filter.Search}%")   
+EF.Functions.Like(q.DefaultPluralSuffix, $"%{filter.Search}%")
                                          );
+
+            if (filter.ProjectId > 0)
+            {
+                query = query.Where(q => q.ProjectSelectedLanguages.Any(d => d.ProjectId == filter.ProjectId));
+
+                if (filter.ExcludeEntityId > 0)
+                    query = query.Where(q => !q.EntitySelectedLanguages.Any(a => a.EntityId == filter.ExcludeEntityId && a.Entity.ProjectId == filter.ProjectId));
+
+                if (filter.ExcludePropertyId > 0)
+                    query = query.Where(q => !q.PropertySelectedLanguages.Any(a => a.PropertyId == filter.ExcludePropertyId && a.Property.Entity.ProjectId == filter.ProjectId));
+
+                if (filter.ExcludeProjectEnumPropertyId > 0)
+                    query = query.Where(q => !q.ProjectEnumPropertySelectedLanguages.Any(a => a.ProjectEnumPropertyId == filter.ExcludeProjectEnumPropertyId && a.ProjectEnumProperty.ProjectEnum.ProjectId == filter.ProjectId));
+            }
 
             #endregion
 
@@ -201,7 +215,7 @@ EF.Functions.Like(q.DefaultPluralSuffix, $"%{filter.Search}%")
 
             query = filter.SortProperty switch
             {
-                                SortLanguageType.Name => query.OrderBy(a => a.Name),
+                SortLanguageType.Name => query.OrderBy(a => a.Name),
                 SortLanguageType.Culture => query.OrderBy(a => a.Culture),
                 SortLanguageType.DefaultPluralSuffix => query.OrderBy(a => a.DefaultPluralSuffix),
                 _ => query
@@ -233,13 +247,13 @@ EF.Functions.Like(q.DefaultPluralSuffix, $"%{filter.Search}%")
 
         public async Task<FilterLanguagesDto> FilterLanguages(FilterLanguagesDto filter)
         {
-            IQueryable<Language> query = 
+            IQueryable<Language> query =
                 GetLanguagesWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.Languages = await query
@@ -263,7 +277,7 @@ EF.Functions.Like(q.DefaultPluralSuffix, $"%{filter.Search}%")
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateLanguage(CreateLanguageDto create)
-        { 
+        {
 
             #region validate unique properties
 
@@ -274,20 +288,20 @@ EF.Functions.Like(q.DefaultPluralSuffix, $"%{filter.Search}%")
 
             #endregion
 
-            Language language =  create.ToModel();
+            Language language = create.ToModel();
             await _languageRepository.Add(language);
             await _languageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateLanguageDto?> GetLanguageInformation(int languageId)
-        =>  await _languageRepository
-            .GetQueryable()
-            .Where(a => a.Id == languageId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateLanguage(UpdateLanguageDto update)
-        { 
+        public async Task<UpdateLanguageDto?> GetLanguageInformation(int languageId)
+                => await _languageRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == languageId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateLanguage(UpdateLanguageDto update)
+        {
             Language? language = await _languageRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -299,18 +313,18 @@ public async Task<BaseChangeEntityResult> UpdateLanguage(UpdateLanguageDto updat
             if (await _languageRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Name == update.Name.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return BaseChangeEntityResult.Exists;
 
             #endregion
 
-            language =  language.ToModel(update);
+            language = language.ToModel(update);
             _languageRepository.Update(language);
             await _languageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteLanguage(int languageId)
+        public async Task<BaseChangeEntityResult> DeleteLanguage(int languageId)
         {
             Language? language = await _languageRepository.GetAsTracking(languageId);
             if (language is null) return BaseChangeEntityResult.NotFound;
@@ -321,10 +335,10 @@ public async Task<BaseChangeEntityResult> DeleteLanguage(int languageId)
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteLanguage(List<int> languageIds)
+        public async Task DeleteLanguage(List<int> languageIds)
         {
             foreach (int languageId in languageIds)
-            { 
+            {
                 Language? language = await _languageRepository.GetAsTracking(languageId);
                 if (language is not null)
                     _languageRepository.SoftDelete(language);
@@ -358,7 +372,7 @@ EF.Functions.Like(q.DefaultSolutionLocation, $"%{filter.Search}%") ||
 
 EF.Functions.Like(q.DefaultReactJsSolutionName, $"%{filter.Search}%") ||
 
-EF.Functions.Like(q.DefaultReactSolutionLocation, $"%{filter.Search}%")   
+EF.Functions.Like(q.DefaultReactSolutionLocation, $"%{filter.Search}%")
                                          );
 
             #endregion
@@ -367,7 +381,7 @@ EF.Functions.Like(q.DefaultReactSolutionLocation, $"%{filter.Search}%")
 
             query = filter.SortProperty switch
             {
-                                SortGeneralSettingType.DefaultSolutionName => query.OrderBy(a => a.DefaultSolutionName),
+                SortGeneralSettingType.DefaultSolutionName => query.OrderBy(a => a.DefaultSolutionName),
                 SortGeneralSettingType.DefaultSolutionLocation => query.OrderBy(a => a.DefaultSolutionLocation),
                 SortGeneralSettingType.DefaultReactJsSolutionName => query.OrderBy(a => a.DefaultReactJsSolutionName),
                 SortGeneralSettingType.DefaultReactSolutionLocation => query.OrderBy(a => a.DefaultReactSolutionLocation),
@@ -400,13 +414,13 @@ EF.Functions.Like(q.DefaultReactSolutionLocation, $"%{filter.Search}%")
 
         public async Task<FilterGeneralSettingsDto> FilterGeneralSettings(FilterGeneralSettingsDto filter)
         {
-            IQueryable<GeneralSetting> query = 
+            IQueryable<GeneralSetting> query =
                 GetGeneralSettingsWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.GeneralSettings = await query
@@ -430,26 +444,26 @@ EF.Functions.Like(q.DefaultReactSolutionLocation, $"%{filter.Search}%")
             .FirstOrDefaultAsync();
 
         public async Task<UpdateGeneralSettingDto?> GetGeneralSettingInformation(int generalSettingId)
-        =>  await _generalSettingRepository
+        => await _generalSettingRepository
             .GetQueryable()
             .Where(a => a.Id == generalSettingId)
             .ToUpdateDto()
             .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateGeneralSetting(UpdateGeneralSettingDto update)
-        { 
+        public async Task<BaseChangeEntityResult> UpdateGeneralSetting(UpdateGeneralSettingDto update)
+        {
             GeneralSetting? generalSetting = await _generalSettingRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
                 .FirstOrDefaultAsync();
             if (generalSetting is null) return BaseChangeEntityResult.NotFound;
 
-            generalSetting =  generalSetting.ToModel(update);
+            generalSetting = generalSetting.ToModel(update);
             _generalSettingRepository.Update(generalSetting);
             await _generalSettingRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteGeneralSetting(int generalSettingId)
+        public async Task<BaseChangeEntityResult> DeleteGeneralSetting(int generalSettingId)
         {
             GeneralSetting? generalSetting = await _generalSettingRepository.GetAsTracking(generalSettingId);
             if (generalSetting is null) return BaseChangeEntityResult.NotFound;
@@ -460,10 +474,10 @@ public async Task<BaseChangeEntityResult> DeleteGeneralSetting(int generalSettin
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteGeneralSetting(List<int> generalSettingIds)
+        public async Task DeleteGeneralSetting(List<int> generalSettingIds)
         {
             foreach (int generalSettingId in generalSettingIds)
-            { 
+            {
                 GeneralSetting? generalSetting = await _generalSettingRepository.GetAsTracking(generalSettingId);
                 if (generalSetting is not null)
                     _generalSettingRepository.SoftDelete(generalSetting);

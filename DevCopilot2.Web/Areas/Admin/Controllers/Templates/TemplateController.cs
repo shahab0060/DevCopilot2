@@ -1,23 +1,20 @@
-using System;
-using System.Text;
-using DevCopilot2.Core.Extensions.BasicExtensions;
+using ClosedXML.Excel;
+using DevCopilot2.Core.Exporters;
 using DevCopilot2.Core.Services.Interfaces;
+using DevCopilot2.Domain.DTOs.Projects;
+using DevCopilot2.Domain.DTOs.Templates;
 using DevCopilot2.Domain.Enums.Common;
 using DevCopilot2.Web.PresentationExtensions;
 using DevCopilot2.Web.PresentationMappers;
-using DevCopilot2.Domain.Enums.Templates;
-using DevCopilot2.Domain.DTOs.Templates;
-using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using System.Text;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
-using ClosedXML.Excel;
-using DevCopilot2.Core.Exporters;
-using DevCopilot2.Domain.DTOs.Projects;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Templates
 {
-	//[PermissionChecker("TemplateManagement")]
+    [PermissionChecker("TemplateManagement")]
     public class TemplateController : BaseAdminController<TemplateListDto>
     {
 

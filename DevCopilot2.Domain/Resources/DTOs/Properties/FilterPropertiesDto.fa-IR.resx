@@ -125,8 +125,4 @@
   <data name="EntityId" xml:space="preserve">
     <value>Entity</value>
   </data>
-
-  <data name="AuthorId" xml:space="preserve">
-    <value>ساخته شده توسط</value>
-  </data>
 </root>

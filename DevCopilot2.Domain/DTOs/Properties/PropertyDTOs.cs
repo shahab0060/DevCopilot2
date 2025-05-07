@@ -23,8 +23,9 @@ namespace DevCopilot2.Domain.DTOs.Properties
         public int? ProjectEnumId { get; set; }
         [Display(Name = "EntityId")]
         public int? EntityId { get; set; }
-        [Display(Name = "AuthorId")]
-        public long? AuthorId { get; set; }
+
+        [Display(Name = "ProjectId")]
+        public int? ProjectId { get; set; }
 
         #endregion
 
@@ -112,17 +113,14 @@ namespace DevCopilot2.Domain.DTOs.Properties
         [Display(Name="EntityId")]
         public int EntityId { get; set; } 
 
-        [Display(Name="AuthorId")]
-        public string AuthorPhoneNumber { get; set; } = null!;
-
-        [Display(Name="AuthorId")]
-        public long AuthorId { get; set; } 
-
         [Display(Name="ForceMapperCode")]
         public string? ForceMapperCode { get; set; } = null!;
 
         [Display(Name="ExcludeFromListDto")]
-        public bool ExcludeFromListDto { get; set; } 
+        public bool ExcludeFromListDto { get; set; }
+
+        [Display(Name = "ProjectId")]
+        public int ProjectId { get; set; }
 
         [Display(Name="EntityRelationsList")]
         public List<EntityRelationListDto> EntityRelationsList { get; set; } = new List<EntityRelationListDto>();
@@ -209,11 +207,6 @@ namespace DevCopilot2.Domain.DTOs.Properties
 
         public int EntityId { get; set; } = 0;
 
-        [Display(Name = "AuthorId")]
-        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
-
-        public long AuthorId { get; set; } = 0;
-
         [Display(Name = "ForceMapperCode")]
 
         public string? ForceMapperCode { get; set; } = null!;
@@ -227,14 +220,14 @@ namespace DevCopilot2.Domain.DTOs.Properties
     public class CreatePropertyDto: BaseUpsertPropertyDto
     {
         [Display(Name = "EntityRelationsList")]
-        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
-        [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+       // [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+        //[NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
         public List<CreateEntityRelationDto> EntityRelationsList { get; set; } =new List<CreateEntityRelationDto>();
 
         [Display(Name = "PropertyImageResizeInformationList")]
-        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
-        [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+      //  [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+       // [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
         public List<CreatePropertyImageResizeInformationDto> PropertyImageResizeInformationList { get; set; } =new List<CreatePropertyImageResizeInformationDto>();
 
@@ -254,14 +247,14 @@ namespace DevCopilot2.Domain.DTOs.Properties
         public int Id { get; set; } = 0;
 
         [Display(Name = "EntityRelationsList")]
-        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
-        [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+       // [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+        //[NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
         public List<UpdateEntityRelationDto> EntityRelationsList { get; set; } =new List<UpdateEntityRelationDto>();
 
         [Display(Name = "PropertyImageResizeInformationList")]
-        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
-        [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+      //  [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
+        //[NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
         public List<UpdatePropertyImageResizeInformationDto> PropertyImageResizeInformationList { get; set; } =new List<UpdatePropertyImageResizeInformationDto>();
 

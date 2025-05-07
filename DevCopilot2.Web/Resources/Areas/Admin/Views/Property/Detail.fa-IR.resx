@@ -186,10 +186,6 @@
     <value>Entity</value>
   </data>
 
-  <data name="AuthorId" xml:space="preserve">
-    <value>ساخته شده توسط</value>
-  </data>
-
   <data name="ForceMapperCode" xml:space="preserve">
     <value>کد مپ اجباری</value>
   </data>
