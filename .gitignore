@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+wwwroot/media/
+/DevCopilot2.Web/wwwroot/medias/images/site-settings
