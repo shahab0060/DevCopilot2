@@ -69,6 +69,9 @@ namespace DevCopilot2.Domain.DTOs.Entities
         [Display(Name = "Value")]
         public string Value { get; set; } = null!;
 
+        [Display(Name = "EntitySelectedProjectAreaName")]
+        public string EntitySelectedProjectAreaName { get; set; } = null!;
+
     }
 
     public class BaseUpsertEntitySelectedProjectAreaSelectedFilterDto

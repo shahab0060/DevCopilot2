@@ -407,10 +407,10 @@ CreateEntitySelectedProjectAreaSelectedFilterDto createEntitySelectedProjectArea
                data-name="EntityRelationsList"
                data-prefix="EntityRelationsList"
                data-suffix="PrimaryPropertyName"
-               data-value="1"  asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].PrimaryPropertyName"  placeholder="" />
-        <label asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].PrimaryPropertyName"></label>
+                                                       data-value="1" asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].PrimaryPropertyTitle" placeholder="" />
+        <label asp-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].PrimaryPropertyTitle"></label>
     </div>
-    <span asp-validation-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].PrimaryPropertyName"></span>
+                                            <span asp-validation-for="@Model.PropertiesList[property].EntityRelationsList[entityRelation].PrimaryPropertyTitle"></span>
 </div>
 <div class="col-sm-12 col-md-6">
     <div class="form-floating">

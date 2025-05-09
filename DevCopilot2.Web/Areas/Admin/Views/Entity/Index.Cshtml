@@ -37,10 +37,21 @@
             </p>
         </li>
         <li>
-            <a class="btn btn-primary" id="addBtn"
-               asp-area="Admin" asp-controller="Entity" asp-action="SelectProject">
-                <span class="fas fa-plus me-2"></span>@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("Entity")
-            </a>
+            @if (Model.ProjectId > 0)
+            {
+                <a class="btn btn-primary" id="addBtn"
+                   asp-area="Admin" asp-controller="Entity" asp-action="Create"
+                   asp-route-projectId="@Model.ProjectId">
+                    <span class="fas fa-plus me-2"></span>@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("Entity")
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-primary" id="addBtn"
+                   asp-area="Admin" asp-controller="Entity" asp-action="SelectProject">
+                    <span class="fas fa-plus me-2"></span>@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("Entity")
+                </a>
+            }
         </li>
     </ul>
     <div id="products">
@@ -151,6 +162,8 @@
                         </td>
 
                         <td>
+                            <a asp-area="Admin" asp-controller="Generator" asp-action="GenerateEntity"
+                               asp-route-entityId="@entity.Id" class="btn btn-sm btn-primary me-1 mb-1 mb-md-0">@SharedLocalizer.GetString("Generate")</a>
                             <a asp-area="Admin" asp-controller="Entity" asp-action="Update"
                                asp-route-id="@entity.Id" class="btn btn-sm btn-info me-1 mb-1 mb-md-0 update-btn">@SharedLocalizer.GetString("Update")</a>
                             <a asp-area="Admin" asp-controller="Entity" asp-action="Detail"

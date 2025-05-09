@@ -34,6 +34,21 @@
             </p>
         </li>
         <li>
+            @if (Model.ProjectId > 0)
+            {
+                <a class="btn btn-primary" id="addBtn"
+                   asp-area="Admin" asp-controller="ProjectEnum" asp-action="Create"
+                   asp-route-projectId="@Model.ProjectId">
+                    <span class="fas fa-plus me-2"></span>@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("ProjectEnum")
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-primary" id="addBtn"
+                   asp-area="Admin" asp-controller="ProjectEnum" asp-action="SelectProject">
+                    <span class="fas fa-plus me-2"></span>@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("ProjectEnum")
+                </a>
+            }
             <a class="btn btn-primary" id="addBtn"
                asp-area="Admin" asp-controller="ProjectEnum" asp-action="SelectProject">
                 <span class="fas fa-plus me-2"></span>@SharedLocalizer.GetString("Create New") @SharedEntitiesLocalizer.GetString("ProjectEnum")

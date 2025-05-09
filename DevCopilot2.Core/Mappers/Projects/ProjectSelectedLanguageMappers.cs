@@ -1,10 +1,6 @@
-using System;
-using DevCopilot2.Domain.Entities.Projects;
-using DevCopilot2.Domain.DTOs.Projects;
 using DevCopilot2.Domain.DTOs.Common;
-using DevCopilot2.Core.Extensions.BasicExtensions;
-using DevCopilot2.Core.Utils;
-using DevCopilot2.Core.Security;
+using DevCopilot2.Domain.DTOs.Projects;
+using DevCopilot2.Domain.Entities.Projects;
 
 namespace DevCopilot2.Core.Mappers.Projects
 {
@@ -25,7 +21,7 @@ namespace DevCopilot2.Core.Mappers.Projects
                         ProjectId = projectSelectedLanguage.ProjectId,
                         LanguageName = projectSelectedLanguage.Language.Name,
                         LanguageId = projectSelectedLanguage.LanguageId,
-
+                        LanguageCulture = projectSelectedLanguage.Language.Culture
                     });
 
         #endregion

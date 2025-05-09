@@ -18,6 +18,7 @@ using DevCopilot2.Domain.Entities.Entities;
 using DevCopilot2.Domain.DTOs.Entities;
 using DevCopilot2.Domain.Entities.Projects;
 using DevCopilot2.Domain.Entities.Users;
+using DevCopilot2.Domain.Enums.Projects;
 
 namespace DevCopilot2.Core.Services.Classes
 {
@@ -51,7 +52,7 @@ namespace DevCopilot2.Core.Services.Classes
                            ICrudRepository<EntitySelectedLanguage, int> entitySelectedLanguageRepository,
                            ICrudRepository<EntitySelectedProjectAreaSelectedFilter, int> entitySelectedProjectAreaSelectedFilterRepository,
                            ICrudRepository<PropertyImageResizeInformation, int> propertyImageResizeInformationRepository,
-                           ICrudRepository<EntityRelation, int> entityRelationRepository 
+                           ICrudRepository<EntityRelation, int> entityRelationRepository
                                       )
         {
             this._propertyRepository = propertyRepository;
@@ -87,10 +88,10 @@ namespace DevCopilot2.Core.Services.Classes
                 query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());
 
             if (!string.IsNullOrEmpty(filter.Search))
-                query = query.Where(q => EF.Functions.Like(q.Title, $"%{filter.Search}%")   
+                query = query.Where(q => EF.Functions.Like(q.Title, $"%{filter.Search}%")
                                          );
 
-                        if (filter.PropertyId > 0)
+            if (filter.PropertyId > 0)
                 query = query.Where(q => q.PropertyId == filter.PropertyId);
 
             if (filter.LanguageId > 0)
@@ -102,7 +103,7 @@ namespace DevCopilot2.Core.Services.Classes
 
             query = filter.SortProperty switch
             {
-                                SortPropertySelectedLanguageType.PropertyName => query.OrderBy(a => a.Property.Name),
+                SortPropertySelectedLanguageType.PropertyName => query.OrderBy(a => a.Property.Name),
                 SortPropertySelectedLanguageType.PropertyId => query.OrderBy(a => a.PropertyId),
                 SortPropertySelectedLanguageType.LanguageName => query.OrderBy(a => a.Language.Name),
                 SortPropertySelectedLanguageType.LanguageId => query.OrderBy(a => a.LanguageId),
@@ -136,13 +137,13 @@ namespace DevCopilot2.Core.Services.Classes
 
         public async Task<FilterPropertySelectedLanguagesDto> FilterPropertySelectedLanguages(FilterPropertySelectedLanguagesDto filter)
         {
-            IQueryable<PropertySelectedLanguage> query = 
+            IQueryable<PropertySelectedLanguage> query =
                 GetPropertySelectedLanguagesWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.PropertySelectedLanguages = await query
@@ -166,7 +167,7 @@ namespace DevCopilot2.Core.Services.Classes
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreatePropertySelectedLanguage(CreatePropertySelectedLanguageDto create)
-        { 
+        {
 
             #region validate unique properties
 
@@ -191,20 +192,20 @@ namespace DevCopilot2.Core.Services.Classes
 
             #endregion
 
-            PropertySelectedLanguage propertySelectedLanguage =  create.ToModel();
+            PropertySelectedLanguage propertySelectedLanguage = create.ToModel();
             await _propertySelectedLanguageRepository.Add(propertySelectedLanguage);
             await _propertySelectedLanguageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdatePropertySelectedLanguageDto?> GetPropertySelectedLanguageInformation(int propertySelectedLanguageId)
-        =>  await _propertySelectedLanguageRepository
-            .GetQueryable()
-            .Where(a => a.Id == propertySelectedLanguageId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdatePropertySelectedLanguage(UpdatePropertySelectedLanguageDto update)
-        { 
+        public async Task<UpdatePropertySelectedLanguageDto?> GetPropertySelectedLanguageInformation(int propertySelectedLanguageId)
+                => await _propertySelectedLanguageRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == propertySelectedLanguageId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdatePropertySelectedLanguage(UpdatePropertySelectedLanguageDto update)
+        {
             PropertySelectedLanguage? propertySelectedLanguage = await _propertySelectedLanguageRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -216,7 +217,7 @@ public async Task<BaseChangeEntityResult> UpdatePropertySelectedLanguage(UpdateP
             if (await _propertySelectedLanguageRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Title == update.Title.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return BaseChangeEntityResult.Exists;
 
             #endregion
@@ -235,13 +236,13 @@ public async Task<BaseChangeEntityResult> UpdatePropertySelectedLanguage(UpdateP
 
             #endregion
 
-            propertySelectedLanguage =  propertySelectedLanguage.ToModel(update);
+            propertySelectedLanguage = propertySelectedLanguage.ToModel(update);
             _propertySelectedLanguageRepository.Update(propertySelectedLanguage);
             await _propertySelectedLanguageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeletePropertySelectedLanguage(int propertySelectedLanguageId)
+        public async Task<BaseChangeEntityResult> DeletePropertySelectedLanguage(int propertySelectedLanguageId)
         {
             PropertySelectedLanguage? propertySelectedLanguage = await _propertySelectedLanguageRepository.GetAsTracking(propertySelectedLanguageId);
             if (propertySelectedLanguage is null) return BaseChangeEntityResult.NotFound;
@@ -252,10 +253,10 @@ public async Task<BaseChangeEntityResult> DeletePropertySelectedLanguage(int pro
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeletePropertySelectedLanguage(List<int> propertySelectedLanguageIds)
+        public async Task DeletePropertySelectedLanguage(List<int> propertySelectedLanguageIds)
         {
             foreach (int propertySelectedLanguageId in propertySelectedLanguageIds)
-            { 
+            {
                 PropertySelectedLanguage? propertySelectedLanguage = await _propertySelectedLanguageRepository.GetAsTracking(propertySelectedLanguageId);
                 if (propertySelectedLanguage is not null)
                     _propertySelectedLanguageRepository.SoftDelete(propertySelectedLanguage);
@@ -279,10 +280,10 @@ public async Task DeletePropertySelectedLanguage(List<int> propertySelectedLangu
                 query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());
 
             if (!string.IsNullOrEmpty(filter.Search))
-                query = query.Where(q => EF.Functions.Like(q.Name, $"%{filter.Search}%")   
+                query = query.Where(q => EF.Functions.Like(q.Name, $"%{filter.Search}%")
                                          );
 
-                        if (filter.PropertyId > 0)
+            if (filter.PropertyId > 0)
                 query = query.Where(q => q.PropertyId == filter.PropertyId);
 
             #endregion
@@ -291,7 +292,7 @@ public async Task DeletePropertySelectedLanguage(List<int> propertySelectedLangu
 
             query = filter.SortProperty switch
             {
-                                SortPropertyImageResizeInformationType.PropertyName => query.OrderBy(a => a.Property.Name),
+                SortPropertyImageResizeInformationType.PropertyName => query.OrderBy(a => a.Property.Name),
                 SortPropertyImageResizeInformationType.PropertyId => query.OrderBy(a => a.PropertyId),
                 SortPropertyImageResizeInformationType.Name => query.OrderBy(a => a.Name),
                 SortPropertyImageResizeInformationType.Width => query.OrderBy(a => a.Width),
@@ -325,13 +326,13 @@ public async Task DeletePropertySelectedLanguage(List<int> propertySelectedLangu
 
         public async Task<FilterPropertyImageResizeInformationDto> FilterPropertyImageResizeInformation(FilterPropertyImageResizeInformationDto filter)
         {
-            IQueryable<PropertyImageResizeInformation> query = 
+            IQueryable<PropertyImageResizeInformation> query =
                 GetPropertyImageResizeInformationWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.PropertyImageResizeInformation = await query
@@ -355,7 +356,7 @@ public async Task DeletePropertySelectedLanguage(List<int> propertySelectedLangu
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreatePropertyImageResizeInformation(CreatePropertyImageResizeInformationDto create)
-        { 
+        {
 
             #region validate unique properties
 
@@ -375,20 +376,20 @@ public async Task DeletePropertySelectedLanguage(List<int> propertySelectedLangu
 
             #endregion
 
-            PropertyImageResizeInformation propertyImageResizeInformation =  create.ToModel();
+            PropertyImageResizeInformation propertyImageResizeInformation = create.ToModel();
             await _propertyImageResizeInformationRepository.Add(propertyImageResizeInformation);
             await _propertyImageResizeInformationRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdatePropertyImageResizeInformationDto?> GetPropertyImageResizeInformationInformation(int propertyImageResizeInformationId)
-        =>  await _propertyImageResizeInformationRepository
-            .GetQueryable()
-            .Where(a => a.Id == propertyImageResizeInformationId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdatePropertyImageResizeInformation(UpdatePropertyImageResizeInformationDto update)
-        { 
+        public async Task<UpdatePropertyImageResizeInformationDto?> GetPropertyImageResizeInformationInformation(int propertyImageResizeInformationId)
+                => await _propertyImageResizeInformationRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == propertyImageResizeInformationId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdatePropertyImageResizeInformation(UpdatePropertyImageResizeInformationDto update)
+        {
             PropertyImageResizeInformation? propertyImageResizeInformation = await _propertyImageResizeInformationRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -400,7 +401,7 @@ public async Task<BaseChangeEntityResult> UpdatePropertyImageResizeInformation(U
             if (await _propertyImageResizeInformationRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Name == update.Name.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id))
                 return BaseChangeEntityResult.Exists;
 
             #endregion
@@ -414,13 +415,13 @@ public async Task<BaseChangeEntityResult> UpdatePropertyImageResizeInformation(U
 
             #endregion
 
-            propertyImageResizeInformation =  propertyImageResizeInformation.ToModel(update);
+            propertyImageResizeInformation = propertyImageResizeInformation.ToModel(update);
             _propertyImageResizeInformationRepository.Update(propertyImageResizeInformation);
             await _propertyImageResizeInformationRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeletePropertyImageResizeInformation(int propertyImageResizeInformationId)
+        public async Task<BaseChangeEntityResult> DeletePropertyImageResizeInformation(int propertyImageResizeInformationId)
         {
             PropertyImageResizeInformation? propertyImageResizeInformation = await _propertyImageResizeInformationRepository.GetAsTracking(propertyImageResizeInformationId);
             if (propertyImageResizeInformation is null) return BaseChangeEntityResult.NotFound;
@@ -431,10 +432,10 @@ public async Task<BaseChangeEntityResult> DeletePropertyImageResizeInformation(i
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeletePropertyImageResizeInformation(List<int> propertyImageResizeInformationIds)
+        public async Task DeletePropertyImageResizeInformation(List<int> propertyImageResizeInformationIds)
         {
             foreach (int propertyImageResizeInformationId in propertyImageResizeInformationIds)
-            { 
+            {
                 PropertyImageResizeInformation? propertyImageResizeInformation = await _propertyImageResizeInformationRepository.GetAsTracking(propertyImageResizeInformationId);
                 if (propertyImageResizeInformation is not null)
                     _propertyImageResizeInformationRepository.SoftDelete(propertyImageResizeInformation);
@@ -460,10 +461,10 @@ public async Task DeletePropertyImageResizeInformation(List<int> propertyImageRe
             if (!string.IsNullOrEmpty(filter.Search))
                 query = query.Where(q => EF.Functions.Like(q.Name, $"%{filter.Search}%") ||
 
-EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")   
+EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")
                                          );
 
-                        if (filter.ProjectEnumId > 0)
+            if (filter.ProjectEnumId > 0)
                 query = query.Where(q => q.ProjectEnumId == filter.ProjectEnumId);
 
             if (filter.EntityId > 0)
@@ -478,7 +479,7 @@ EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")
 
             query = filter.SortProperty switch
             {
-                                SortPropertyType.Name => query.OrderBy(a => a.Name),
+                SortPropertyType.Name => query.OrderBy(a => a.Name),
                 SortPropertyType.DataType => query.OrderBy(a => a.DataType),
                 SortPropertyType.MaxLength => query.OrderBy(a => a.MaxLength),
                 SortPropertyType.MinLength => query.OrderBy(a => a.MinLength),
@@ -528,13 +529,13 @@ EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")
 
         public async Task<FilterPropertiesDto> FilterProperties(FilterPropertiesDto filter)
         {
-            IQueryable<Property> query = 
+            IQueryable<Property> query =
                 GetPropertiesWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.Properties = await query
@@ -558,15 +559,23 @@ EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateProperty(CreatePropertyDto create)
-        { 
+        {
+            #region validate unique properties
+
+            if (await _propertyRepository
+                .GetQueryable()
+                .AnyAsync(a => a.Name == create.Name.SanitizeText()! && a.EntityId == create.EntityId))
+                return BaseChangeEntityResult.Exists;
+
+            #endregion
 
             #region validate relation ids
 
-            if(create.ProjectEnumId>0)
-            if (!await _projectEnumRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == create.ProjectEnumId))
-                return BaseChangeEntityResult.NotFound;
+            if (create.ProjectEnumId > 0)
+                if (!await _projectEnumRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == create.ProjectEnumId))
+                    return BaseChangeEntityResult.NotFound;
 
             if (!await _entityRepository
                 .GetQueryable()
@@ -575,7 +584,7 @@ EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")
 
             #endregion
 
-            Property property =  create.ToModel();
+            Property property = create.ToModel();
             await _propertyRepository.Add(property);
             await _propertyRepository.SaveChanges();
 
@@ -627,27 +636,36 @@ EF.Functions.Like(q.ForceMapperCode, $"%{filter.Search}%")
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdatePropertyDto?> GetPropertyInformation(int propertyId)
-        =>  await _propertyRepository
-            .GetQueryable()
-            .Where(a => a.Id == propertyId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateProperty(UpdatePropertyDto update)
-        { 
+        public async Task<UpdatePropertyDto?> GetPropertyInformation(int propertyId)
+                => await _propertyRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == propertyId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateProperty(UpdatePropertyDto update)
+        {
             Property? property = await _propertyRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
                 .FirstOrDefaultAsync();
             if (property is null) return BaseChangeEntityResult.NotFound;
 
+            #region validate unique properties
+
+            if (await _propertyRepository
+                .GetQueryable()
+                .AnyAsync(a => a.Name == update.Name.SanitizeText()! && a.Id != update.Id && a.EntityId == update.EntityId))
+                return BaseChangeEntityResult.Exists;
+
+            #endregion
+
             #region validate relation ids
 
-            if(update.ProjectEnumId>0)
-            if (!await _projectEnumRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == update.ProjectEnumId))
-                return BaseChangeEntityResult.NotFound;
+            if (update.ProjectEnumId > 0)
+                if (!await _projectEnumRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == update.ProjectEnumId))
+                    return BaseChangeEntityResult.NotFound;
 
             if (!await _entityRepository
                 .GetQueryable()
@@ -656,7 +674,7 @@ public async Task<BaseChangeEntityResult> UpdateProperty(UpdatePropertyDto updat
 
             #endregion
 
-            property =  property.ToModel(update);
+            property = property.ToModel(update);
             _propertyRepository.Update(property);
             await _propertyRepository.SaveChanges();
 
@@ -819,7 +837,7 @@ public async Task<BaseChangeEntityResult> UpdateProperty(UpdatePropertyDto updat
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteProperty(int propertyId)
+        public async Task<BaseChangeEntityResult> DeleteProperty(int propertyId)
         {
             Property? property = await _propertyRepository.GetAsTracking(propertyId);
             if (property is null) return BaseChangeEntityResult.NotFound;
@@ -830,10 +848,10 @@ public async Task<BaseChangeEntityResult> DeleteProperty(int propertyId)
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteProperty(List<int> propertyIds)
+        public async Task DeleteProperty(List<int> propertyIds)
         {
             foreach (int propertyId in propertyIds)
-            { 
+            {
                 Property? property = await _propertyRepository.GetAsTracking(propertyId);
                 if (property is not null)
                     _propertyRepository.SoftDelete(property);
@@ -863,10 +881,10 @@ public async Task DeleteProperty(List<int> propertyIds)
             if (!string.IsNullOrEmpty(filter.Search))
                 query = query.Where(q => EF.Functions.Like(q.SingularTitle, $"%{filter.Search}%") ||
 
-EF.Functions.Like(q.PluralTitle, $"%{filter.Search}%")   
+EF.Functions.Like(q.PluralTitle, $"%{filter.Search}%")
                                          );
 
-                        if (filter.EntityId > 0)
+            if (filter.EntityId > 0)
                 query = query.Where(q => q.EntityId == filter.EntityId);
 
             if (filter.LanguageId > 0)
@@ -878,7 +896,7 @@ EF.Functions.Like(q.PluralTitle, $"%{filter.Search}%")
 
             query = filter.SortProperty switch
             {
-                                SortEntitySelectedLanguageType.EntityPluralName => query.OrderBy(a => a.Entity.PluralName),
+                SortEntitySelectedLanguageType.EntityPluralName => query.OrderBy(a => a.Entity.PluralName),
                 SortEntitySelectedLanguageType.EntityId => query.OrderBy(a => a.EntityId),
                 SortEntitySelectedLanguageType.LanguageName => query.OrderBy(a => a.Language.Name),
                 SortEntitySelectedLanguageType.LanguageId => query.OrderBy(a => a.LanguageId),
@@ -913,13 +931,13 @@ EF.Functions.Like(q.PluralTitle, $"%{filter.Search}%")
 
         public async Task<FilterEntitySelectedLanguagesDto> FilterEntitySelectedLanguages(FilterEntitySelectedLanguagesDto filter)
         {
-            IQueryable<EntitySelectedLanguage> query = 
+            IQueryable<EntitySelectedLanguage> query =
                 GetEntitySelectedLanguagesWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.EntitySelectedLanguages = await query
@@ -943,7 +961,7 @@ EF.Functions.Like(q.PluralTitle, $"%{filter.Search}%")
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateEntitySelectedLanguage(CreateEntitySelectedLanguageDto create)
-        { 
+        {
 
             #region validate relation ids
 
@@ -959,20 +977,20 @@ EF.Functions.Like(q.PluralTitle, $"%{filter.Search}%")
 
             #endregion
 
-            EntitySelectedLanguage entitySelectedLanguage =  create.ToModel();
+            EntitySelectedLanguage entitySelectedLanguage = create.ToModel();
             await _entitySelectedLanguageRepository.Add(entitySelectedLanguage);
             await _entitySelectedLanguageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateEntitySelectedLanguageDto?> GetEntitySelectedLanguageInformation(int entitySelectedLanguageId)
-        =>  await _entitySelectedLanguageRepository
-            .GetQueryable()
-            .Where(a => a.Id == entitySelectedLanguageId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateEntitySelectedLanguage(UpdateEntitySelectedLanguageDto update)
-        { 
+        public async Task<UpdateEntitySelectedLanguageDto?> GetEntitySelectedLanguageInformation(int entitySelectedLanguageId)
+                => await _entitySelectedLanguageRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == entitySelectedLanguageId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateEntitySelectedLanguage(UpdateEntitySelectedLanguageDto update)
+        {
             EntitySelectedLanguage? entitySelectedLanguage = await _entitySelectedLanguageRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -993,13 +1011,13 @@ public async Task<BaseChangeEntityResult> UpdateEntitySelectedLanguage(UpdateEnt
 
             #endregion
 
-            entitySelectedLanguage =  entitySelectedLanguage.ToModel(update);
+            entitySelectedLanguage = entitySelectedLanguage.ToModel(update);
             _entitySelectedLanguageRepository.Update(entitySelectedLanguage);
             await _entitySelectedLanguageRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteEntitySelectedLanguage(int entitySelectedLanguageId)
+        public async Task<BaseChangeEntityResult> DeleteEntitySelectedLanguage(int entitySelectedLanguageId)
         {
             EntitySelectedLanguage? entitySelectedLanguage = await _entitySelectedLanguageRepository.GetAsTracking(entitySelectedLanguageId);
             if (entitySelectedLanguage is null) return BaseChangeEntityResult.NotFound;
@@ -1010,10 +1028,10 @@ public async Task<BaseChangeEntityResult> DeleteEntitySelectedLanguage(int entit
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteEntitySelectedLanguage(List<int> entitySelectedLanguageIds)
+        public async Task DeleteEntitySelectedLanguage(List<int> entitySelectedLanguageIds)
         {
             foreach (int entitySelectedLanguageId in entitySelectedLanguageIds)
-            { 
+            {
                 EntitySelectedLanguage? entitySelectedLanguage = await _entitySelectedLanguageRepository.GetAsTracking(entitySelectedLanguageId);
                 if (entitySelectedLanguage is not null)
                     _entitySelectedLanguageRepository.SoftDelete(entitySelectedLanguage);
@@ -1037,10 +1055,10 @@ public async Task DeleteEntitySelectedLanguage(List<int> entitySelectedLanguageI
                 query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());
 
             if (!string.IsNullOrEmpty(filter.Search))
-                query = query.Where(q => EF.Functions.Like(q.Value, $"%{filter.Search}%")   
+                query = query.Where(q => EF.Functions.Like(q.Value, $"%{filter.Search}%")
                                          );
 
-                        if (filter.EntitySelectedProjectAreaId > 0)
+            if (filter.EntitySelectedProjectAreaId > 0)
                 query = query.Where(q => q.EntitySelectedProjectAreaId == filter.EntitySelectedProjectAreaId);
 
             if (filter.PropertyId > 0)
@@ -1052,7 +1070,7 @@ public async Task DeleteEntitySelectedLanguage(List<int> entitySelectedLanguageI
 
             query = filter.SortProperty switch
             {
-                                SortEntitySelectedProjectAreaSelectedFilterType.EntitySelectedProjectAreaHasWeb => query.OrderBy(a => a.EntitySelectedProjectArea.HasWeb),
+                SortEntitySelectedProjectAreaSelectedFilterType.EntitySelectedProjectAreaHasWeb => query.OrderBy(a => a.EntitySelectedProjectArea.HasWeb),
                 SortEntitySelectedProjectAreaSelectedFilterType.EntitySelectedProjectAreaId => query.OrderBy(a => a.EntitySelectedProjectAreaId),
                 SortEntitySelectedProjectAreaSelectedFilterType.PropertyName => query.OrderBy(a => a.Property.Name),
                 SortEntitySelectedProjectAreaSelectedFilterType.PropertyId => query.OrderBy(a => a.PropertyId),
@@ -1086,13 +1104,13 @@ public async Task DeleteEntitySelectedLanguage(List<int> entitySelectedLanguageI
 
         public async Task<FilterEntitySelectedProjectAreaSelectedFiltersDto> FilterEntitySelectedProjectAreaSelectedFilters(FilterEntitySelectedProjectAreaSelectedFiltersDto filter)
         {
-            IQueryable<EntitySelectedProjectAreaSelectedFilter> query = 
+            IQueryable<EntitySelectedProjectAreaSelectedFilter> query =
                 GetEntitySelectedProjectAreaSelectedFiltersWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.EntitySelectedProjectAreaSelectedFilters = await query
@@ -1116,7 +1134,7 @@ public async Task DeleteEntitySelectedLanguage(List<int> entitySelectedLanguageI
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateEntitySelectedProjectAreaSelectedFilter(CreateEntitySelectedProjectAreaSelectedFilterDto create)
-        { 
+        {
 
             #region validate relation ids
 
@@ -1132,20 +1150,20 @@ public async Task DeleteEntitySelectedLanguage(List<int> entitySelectedLanguageI
 
             #endregion
 
-            EntitySelectedProjectAreaSelectedFilter entitySelectedProjectAreaSelectedFilter =  create.ToModel();
+            EntitySelectedProjectAreaSelectedFilter entitySelectedProjectAreaSelectedFilter = create.ToModel();
             await _entitySelectedProjectAreaSelectedFilterRepository.Add(entitySelectedProjectAreaSelectedFilter);
             await _entitySelectedProjectAreaSelectedFilterRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateEntitySelectedProjectAreaSelectedFilterDto?> GetEntitySelectedProjectAreaSelectedFilterInformation(int entitySelectedProjectAreaSelectedFilterId)
-        =>  await _entitySelectedProjectAreaSelectedFilterRepository
-            .GetQueryable()
-            .Where(a => a.Id == entitySelectedProjectAreaSelectedFilterId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateEntitySelectedProjectAreaSelectedFilter(UpdateEntitySelectedProjectAreaSelectedFilterDto update)
-        { 
+        public async Task<UpdateEntitySelectedProjectAreaSelectedFilterDto?> GetEntitySelectedProjectAreaSelectedFilterInformation(int entitySelectedProjectAreaSelectedFilterId)
+                => await _entitySelectedProjectAreaSelectedFilterRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == entitySelectedProjectAreaSelectedFilterId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateEntitySelectedProjectAreaSelectedFilter(UpdateEntitySelectedProjectAreaSelectedFilterDto update)
+        {
             EntitySelectedProjectAreaSelectedFilter? entitySelectedProjectAreaSelectedFilter = await _entitySelectedProjectAreaSelectedFilterRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -1166,13 +1184,13 @@ public async Task<BaseChangeEntityResult> UpdateEntitySelectedProjectAreaSelecte
 
             #endregion
 
-            entitySelectedProjectAreaSelectedFilter =  entitySelectedProjectAreaSelectedFilter.ToModel(update);
+            entitySelectedProjectAreaSelectedFilter = entitySelectedProjectAreaSelectedFilter.ToModel(update);
             _entitySelectedProjectAreaSelectedFilterRepository.Update(entitySelectedProjectAreaSelectedFilter);
             await _entitySelectedProjectAreaSelectedFilterRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteEntitySelectedProjectAreaSelectedFilter(int entitySelectedProjectAreaSelectedFilterId)
+        public async Task<BaseChangeEntityResult> DeleteEntitySelectedProjectAreaSelectedFilter(int entitySelectedProjectAreaSelectedFilterId)
         {
             EntitySelectedProjectAreaSelectedFilter? entitySelectedProjectAreaSelectedFilter = await _entitySelectedProjectAreaSelectedFilterRepository.GetAsTracking(entitySelectedProjectAreaSelectedFilterId);
             if (entitySelectedProjectAreaSelectedFilter is null) return BaseChangeEntityResult.NotFound;
@@ -1183,10 +1201,10 @@ public async Task<BaseChangeEntityResult> DeleteEntitySelectedProjectAreaSelecte
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteEntitySelectedProjectAreaSelectedFilter(List<int> entitySelectedProjectAreaSelectedFilterIds)
+        public async Task DeleteEntitySelectedProjectAreaSelectedFilter(List<int> entitySelectedProjectAreaSelectedFilterIds)
         {
             foreach (int entitySelectedProjectAreaSelectedFilterId in entitySelectedProjectAreaSelectedFilterIds)
-            { 
+            {
                 EntitySelectedProjectAreaSelectedFilter? entitySelectedProjectAreaSelectedFilter = await _entitySelectedProjectAreaSelectedFilterRepository.GetAsTracking(entitySelectedProjectAreaSelectedFilterId);
                 if (entitySelectedProjectAreaSelectedFilter is not null)
                     _entitySelectedProjectAreaSelectedFilterRepository.SoftDelete(entitySelectedProjectAreaSelectedFilter);
@@ -1209,7 +1227,7 @@ public async Task DeleteEntitySelectedProjectAreaSelectedFilter(List<int> entity
             if (filter.ToDate!.ToMiladiDateTime() != null)
                 query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());
 
-                        if (filter.EntityId > 0)
+            if (filter.EntityId > 0)
                 query = query.Where(q => q.EntityId == filter.EntityId);
 
             if (filter.ProjectAreaId > 0)
@@ -1221,7 +1239,7 @@ public async Task DeleteEntitySelectedProjectAreaSelectedFilter(List<int> entity
 
             query = filter.SortProperty switch
             {
-                                SortEntitySelectedProjectAreaType.EntityPluralName => query.OrderBy(a => a.Entity.PluralName),
+                SortEntitySelectedProjectAreaType.EntityPluralName => query.OrderBy(a => a.Entity.PluralName),
                 SortEntitySelectedProjectAreaType.EntityId => query.OrderBy(a => a.EntityId),
                 SortEntitySelectedProjectAreaType.ProjectAreaTitle => query.OrderBy(a => a.ProjectArea.Title),
                 SortEntitySelectedProjectAreaType.ProjectAreaId => query.OrderBy(a => a.ProjectAreaId),
@@ -1260,13 +1278,13 @@ public async Task DeleteEntitySelectedProjectAreaSelectedFilter(List<int> entity
 
         public async Task<FilterEntitySelectedProjectAreasDto> FilterEntitySelectedProjectAreas(FilterEntitySelectedProjectAreasDto filter)
         {
-            IQueryable<EntitySelectedProjectArea> query = 
+            IQueryable<EntitySelectedProjectArea> query =
                 GetEntitySelectedProjectAreasWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.EntitySelectedProjectAreas = await query
@@ -1290,7 +1308,7 @@ public async Task DeleteEntitySelectedProjectAreaSelectedFilter(List<int> entity
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateEntitySelectedProjectArea(CreateEntitySelectedProjectAreaDto create)
-        { 
+        {
 
             #region validate relation ids
 
@@ -1306,7 +1324,7 @@ public async Task DeleteEntitySelectedProjectAreaSelectedFilter(List<int> entity
 
             #endregion
 
-            EntitySelectedProjectArea entitySelectedProjectArea =  create.ToModel();
+            EntitySelectedProjectArea entitySelectedProjectArea = create.ToModel();
             await _entitySelectedProjectAreaRepository.Add(entitySelectedProjectArea);
             await _entitySelectedProjectAreaRepository.SaveChanges();
 
@@ -1330,14 +1348,14 @@ public async Task DeleteEntitySelectedProjectAreaSelectedFilter(List<int> entity
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateEntitySelectedProjectAreaDto?> GetEntitySelectedProjectAreaInformation(int entitySelectedProjectAreaId)
-        =>  await _entitySelectedProjectAreaRepository
-            .GetQueryable()
-            .Where(a => a.Id == entitySelectedProjectAreaId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateEntitySelectedProjectArea(UpdateEntitySelectedProjectAreaDto update)
-        { 
+        public async Task<UpdateEntitySelectedProjectAreaDto?> GetEntitySelectedProjectAreaInformation(int entitySelectedProjectAreaId)
+                => await _entitySelectedProjectAreaRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == entitySelectedProjectAreaId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateEntitySelectedProjectArea(UpdateEntitySelectedProjectAreaDto update)
+        {
             EntitySelectedProjectArea? entitySelectedProjectArea = await _entitySelectedProjectAreaRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -1358,7 +1376,7 @@ public async Task<BaseChangeEntityResult> UpdateEntitySelectedProjectArea(Update
 
             #endregion
 
-            entitySelectedProjectArea =  entitySelectedProjectArea.ToModel(update);
+            entitySelectedProjectArea = entitySelectedProjectArea.ToModel(update);
             _entitySelectedProjectAreaRepository.Update(entitySelectedProjectArea);
             await _entitySelectedProjectAreaRepository.SaveChanges();
 
@@ -1419,7 +1437,7 @@ public async Task<BaseChangeEntityResult> UpdateEntitySelectedProjectArea(Update
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteEntitySelectedProjectArea(int entitySelectedProjectAreaId)
+        public async Task<BaseChangeEntityResult> DeleteEntitySelectedProjectArea(int entitySelectedProjectAreaId)
         {
             EntitySelectedProjectArea? entitySelectedProjectArea = await _entitySelectedProjectAreaRepository.GetAsTracking(entitySelectedProjectAreaId);
             if (entitySelectedProjectArea is null) return BaseChangeEntityResult.NotFound;
@@ -1430,10 +1448,10 @@ public async Task<BaseChangeEntityResult> DeleteEntitySelectedProjectArea(int en
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteEntitySelectedProjectArea(List<int> entitySelectedProjectAreaIds)
+        public async Task DeleteEntitySelectedProjectArea(List<int> entitySelectedProjectAreaIds)
         {
             foreach (int entitySelectedProjectAreaId in entitySelectedProjectAreaIds)
-            { 
+            {
                 EntitySelectedProjectArea? entitySelectedProjectArea = await _entitySelectedProjectAreaRepository.GetAsTracking(entitySelectedProjectAreaId);
                 if (entitySelectedProjectArea is not null)
                     _entitySelectedProjectAreaRepository.SoftDelete(entitySelectedProjectArea);
@@ -1457,10 +1475,10 @@ public async Task DeleteEntitySelectedProjectArea(List<int> entitySelectedProjec
                 query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());
 
             if (!string.IsNullOrEmpty(filter.Search))
-                query = query.Where(q => EF.Functions.Like(q.FillingCode, $"%{filter.Search}%")   
+                query = query.Where(q => EF.Functions.Like(q.FillingCode, $"%{filter.Search}%")
                                          );
 
-                        if (filter.PrimaryPropertyId > 0)
+            if (filter.PrimaryPropertyId > 0)
                 query = query.Where(q => q.PrimaryPropertyId == filter.PrimaryPropertyId);
 
             if (filter.SecondaryEntityId > 0)
@@ -1475,7 +1493,7 @@ public async Task DeleteEntitySelectedProjectArea(List<int> entitySelectedProjec
 
             query = filter.SortProperty switch
             {
-                                SortEntityRelationType.PrimaryPropertyName => query.OrderBy(a => a.PrimaryProperty.Name),
+                SortEntityRelationType.PrimaryPropertyName => query.OrderBy(a => a.PrimaryProperty.Name),
                 SortEntityRelationType.PrimaryPropertyId => query.OrderBy(a => a.PrimaryPropertyId),
                 SortEntityRelationType.SecondaryEntityPluralName => query.OrderBy(a => a.SecondaryEntity.PluralName),
                 SortEntityRelationType.SecondaryEntityId => query.OrderBy(a => a.SecondaryEntityId),
@@ -1514,13 +1532,13 @@ public async Task DeleteEntitySelectedProjectArea(List<int> entitySelectedProjec
 
         public async Task<FilterEntityRelationsDto> FilterEntityRelations(FilterEntityRelationsDto filter)
         {
-            IQueryable<EntityRelation> query = 
+            IQueryable<EntityRelation> query =
                 GetEntityRelationsWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.EntityRelations = await query
@@ -1544,7 +1562,7 @@ public async Task DeleteEntitySelectedProjectArea(List<int> entitySelectedProjec
             .FirstOrDefaultAsync();
 
         public async Task<BaseChangeEntityResult> CreateEntityRelation(CreateEntityRelationDto create)
-        { 
+        {
 
             #region validate relation ids
 
@@ -1558,28 +1576,28 @@ public async Task DeleteEntitySelectedProjectArea(List<int> entitySelectedProjec
                 .AnyAsync(a => a.Id == create.SecondaryEntityId))
                 return BaseChangeEntityResult.NotFound;
 
-            if(create.MiddleEntityId>0)
-            if (!await _entityRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == create.MiddleEntityId))
-                return BaseChangeEntityResult.NotFound;
+            if (create.MiddleEntityId > 0)
+                if (!await _entityRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == create.MiddleEntityId))
+                    return BaseChangeEntityResult.NotFound;
 
             #endregion
 
-            EntityRelation entityRelation =  create.ToModel();
+            EntityRelation entityRelation = create.ToModel();
             await _entityRelationRepository.Add(entityRelation);
             await _entityRelationRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<UpdateEntityRelationDto?> GetEntityRelationInformation(int entityRelationId)
-        =>  await _entityRelationRepository
-            .GetQueryable()
-            .Where(a => a.Id == entityRelationId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<BaseChangeEntityResult> UpdateEntityRelation(UpdateEntityRelationDto update)
-        { 
+        public async Task<UpdateEntityRelationDto?> GetEntityRelationInformation(int entityRelationId)
+                => await _entityRelationRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == entityRelationId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<BaseChangeEntityResult> UpdateEntityRelation(UpdateEntityRelationDto update)
+        {
             EntityRelation? entityRelation = await _entityRelationRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -1598,21 +1616,21 @@ public async Task<BaseChangeEntityResult> UpdateEntityRelation(UpdateEntityRelat
                 .AnyAsync(a => a.Id == update.SecondaryEntityId))
                 return BaseChangeEntityResult.NotFound;
 
-            if(update.MiddleEntityId>0)
-            if (!await _entityRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == update.MiddleEntityId))
-                return BaseChangeEntityResult.NotFound;
+            if (update.MiddleEntityId > 0)
+                if (!await _entityRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == update.MiddleEntityId))
+                    return BaseChangeEntityResult.NotFound;
 
             #endregion
 
-            entityRelation =  entityRelation.ToModel(update);
+            entityRelation = entityRelation.ToModel(update);
             _entityRelationRepository.Update(entityRelation);
             await _entityRelationRepository.SaveChanges();
 
             return BaseChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteEntityRelation(int entityRelationId)
+        public async Task<BaseChangeEntityResult> DeleteEntityRelation(int entityRelationId)
         {
             EntityRelation? entityRelation = await _entityRelationRepository.GetAsTracking(entityRelationId);
             if (entityRelation is null) return BaseChangeEntityResult.NotFound;
@@ -1623,10 +1641,10 @@ public async Task<BaseChangeEntityResult> DeleteEntityRelation(int entityRelatio
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteEntityRelation(List<int> entityRelationIds)
+        public async Task DeleteEntityRelation(List<int> entityRelationIds)
         {
             foreach (int entityRelationId in entityRelationIds)
-            { 
+            {
                 EntityRelation? entityRelation = await _entityRelationRepository.GetAsTracking(entityRelationId);
                 if (entityRelation is not null)
                     _entityRelationRepository.SoftDelete(entityRelation);
@@ -1656,12 +1674,12 @@ EF.Functions.Like(q.PluralName, $"%{filter.Search}%") ||
 
 EF.Functions.Like(q.FolderName, $"%{filter.Search}%") ||
 
-EF.Functions.Like(q.ServiceName, $"%{filter.Search}%")   
+EF.Functions.Like(q.ServiceName, $"%{filter.Search}%")
                                          );
-                        if (filter.IdType is not null)
+            if (filter.IdType is not null)
                 query = query.Where(q => q.IdType == filter.IdType);
 
-                        if (filter.InheritedEntityId > 0)
+            if (filter.InheritedEntityId > 0)
                 query = query.Where(q => q.InheritedEntityId == filter.InheritedEntityId);
 
             if (filter.AuthorId > 0)
@@ -1676,7 +1694,7 @@ EF.Functions.Like(q.ServiceName, $"%{filter.Search}%")
 
             query = filter.SortProperty switch
             {
-                                SortEntityType.SingularName => query.OrderBy(a => a.SingularName),
+                SortEntityType.SingularName => query.OrderBy(a => a.SingularName),
                 SortEntityType.PluralName => query.OrderBy(a => a.PluralName),
                 SortEntityType.FolderName => query.OrderBy(a => a.FolderName),
                 SortEntityType.InheritedEntityPluralName => query.OrderBy(a => a.InheritedEntity.PluralName),
@@ -1718,13 +1736,13 @@ EF.Functions.Like(q.ServiceName, $"%{filter.Search}%")
 
         public async Task<FilterEntitiesDto> FilterEntities(FilterEntitiesDto filter)
         {
-            IQueryable<Entity> query = 
+            IQueryable<Entity> query =
                 GetEntitiesWithFilterAndSort(filter);
 
             var pager = Pager.Build(
-                filter.PageId, 
+                filter.PageId,
                 await query.CountAsync(),
-                filter.TakeEntity, 
+                filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
 
             filter.Entities = await query
@@ -1748,35 +1766,35 @@ EF.Functions.Like(q.ServiceName, $"%{filter.Search}%")
             .FirstOrDefaultAsync();
 
         public async Task<ChangeEntityResult> CreateEntity(CreateEntityDto create)
-        { 
+        {
 
             #region validate unique properties
 
             if (await _entityRepository
                 .GetQueryable()
-                .AnyAsync(a => a.SingularName == create.SingularName.ToTitle()!))
+                .AnyAsync(a => a.SingularName == create.SingularName.ToTitle()! && a.ProjectId == create.ProjectId))
                 return ChangeEntityResult.SingularNameExists;
 
             if (await _entityRepository
                 .GetQueryable()
-                .AnyAsync(a => a.PluralName == create.PluralName.ToTitle()!))
+                .AnyAsync(a => a.PluralName == create.PluralName.ToTitle()! && a.ProjectId == create.ProjectId))
                 return ChangeEntityResult.PluralNameExists;
 
             #endregion
 
             #region validate relation ids
 
-            if(create.InheritedEntityId>0)
-            if (!await _entityRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == create.InheritedEntityId))
-                return ChangeEntityResult.NotFound;
+            if (create.InheritedEntityId > 0)
+                if (!await _entityRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == create.InheritedEntityId))
+                    return ChangeEntityResult.NotFound;
 
-            if(create.AuthorId>0)
-            if (!await _userRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == create.AuthorId))
-                return ChangeEntityResult.NotFound;
+            if (create.AuthorId > 0)
+                if (!await _userRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == create.AuthorId))
+                    return ChangeEntityResult.NotFound;
 
             if (!await _projectRepository
                 .GetQueryable()
@@ -1785,7 +1803,7 @@ EF.Functions.Like(q.ServiceName, $"%{filter.Search}%")
 
             #endregion
 
-            Entity entity =  create.ToModel();
+            Entity entity = create.ToModel();
             await _entityRepository.Add(entity);
             await _entityRepository.SaveChanges();
 
@@ -1837,14 +1855,14 @@ EF.Functions.Like(q.ServiceName, $"%{filter.Search}%")
 
             return ChangeEntityResult.Success;
         }
-public async Task<UpdateEntityDto?> GetEntityInformation(int entityId)
-        =>  await _entityRepository
-            .GetQueryable()
-            .Where(a => a.Id == entityId)
-            .ToUpdateDto()
-            .FirstOrDefaultAsync();
-public async Task<ChangeEntityResult> UpdateEntity(UpdateEntityDto update)
-        { 
+        public async Task<UpdateEntityDto?> GetEntityInformation(int entityId)
+                => await _entityRepository
+                    .GetQueryable()
+                    .Where(a => a.Id == entityId)
+                    .ToUpdateDto()
+                    .FirstOrDefaultAsync();
+        public async Task<ChangeEntityResult> UpdateEntity(UpdateEntityDto update)
+        {
             Entity? entity = await _entityRepository
                 .GetQueryable()
                 .Where(a => a.Id == update.Id)
@@ -1856,30 +1874,30 @@ public async Task<ChangeEntityResult> UpdateEntity(UpdateEntityDto update)
             if (await _entityRepository
                 .GetQueryable()
                 .AnyAsync(a => a.SingularName == update.SingularName.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id && a.ProjectId == update.ProjectId))
                 return ChangeEntityResult.SingularNameExists;
 
             if (await _entityRepository
                 .GetQueryable()
                 .AnyAsync(a => a.PluralName == update.PluralName.ToTitle()!
-                               && a.Id!=update.Id))
+                               && a.Id != update.Id && a.ProjectId == update.ProjectId))
                 return ChangeEntityResult.PluralNameExists;
 
             #endregion
 
             #region validate relation ids
 
-            if(update.InheritedEntityId>0)
-            if (!await _entityRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == update.InheritedEntityId))
-                return ChangeEntityResult.NotFound;
+            if (update.InheritedEntityId > 0)
+                if (!await _entityRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == update.InheritedEntityId))
+                    return ChangeEntityResult.NotFound;
 
-            if(update.AuthorId>0)
-            if (!await _userRepository
-                .GetQueryable()
-                .AnyAsync(a => a.Id == update.AuthorId))
-                return ChangeEntityResult.NotFound;
+            if (update.AuthorId > 0)
+                if (!await _userRepository
+                    .GetQueryable()
+                    .AnyAsync(a => a.Id == update.AuthorId))
+                    return ChangeEntityResult.NotFound;
 
             if (!await _projectRepository
                 .GetQueryable()
@@ -1888,7 +1906,7 @@ public async Task<ChangeEntityResult> UpdateEntity(UpdateEntityDto update)
 
             #endregion
 
-            entity =  entity.ToModel(update);
+            entity = entity.ToModel(update);
             _entityRepository.Update(entity);
             await _entityRepository.SaveChanges();
 
@@ -2051,7 +2069,7 @@ public async Task<ChangeEntityResult> UpdateEntity(UpdateEntityDto update)
 
             return ChangeEntityResult.Success;
         }
-public async Task<BaseChangeEntityResult> DeleteEntity(int entityId)
+        public async Task<BaseChangeEntityResult> DeleteEntity(int entityId)
         {
             Entity? entity = await _entityRepository.GetAsTracking(entityId);
             if (entity is null) return BaseChangeEntityResult.NotFound;
@@ -2062,10 +2080,10 @@ public async Task<BaseChangeEntityResult> DeleteEntity(int entityId)
 
             return BaseChangeEntityResult.Success;
         }
-public async Task DeleteEntity(List<int> entityIds)
+        public async Task DeleteEntity(List<int> entityIds)
         {
             foreach (int entityId in entityIds)
-            { 
+            {
                 Entity? entity = await _entityRepository.GetAsTracking(entityId);
                 if (entity is not null)
                     _entityRepository.SoftDelete(entity);

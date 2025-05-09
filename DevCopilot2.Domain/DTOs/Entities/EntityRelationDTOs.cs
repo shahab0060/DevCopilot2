@@ -1,11 +1,11 @@
-using System;
 using DevCopilot2.Domain.DTOs.Common;
+using DevCopilot2.Domain.DTOs.Paging;
+using DevCopilot2.Domain.DTOs.Properties;
+using DevCopilot2.Domain.Enums.DataTypes;
 using DevCopilot2.Domain.Enums.Entities;
-using DevCopilot2.Domain.Attributes;
+using DevCopilot2.Domain.Enums.Relations;
 using DevCopilot2.Domain.Resources.DTOs.Common;
 using System.ComponentModel.DataAnnotations;
-using DevCopilot2.Domain.DTOs.Paging;
-using DevCopilot2.Domain.Enums.Relations;
 
 namespace DevCopilot2.Domain.DTOs.Entities
 {
@@ -54,20 +54,37 @@ namespace DevCopilot2.Domain.DTOs.Entities
     public class EntityRelationListDto : BaseListDto<int>
     {
 
-        [Display(Name="PrimaryPropertyId")]
-        public string PrimaryPropertyName { get; set; } = null!;
+        [Display(Name = "PrimaryPropertyId")]
+        public long PrimaryPropertyId { get; set; }
 
-        [Display(Name="PrimaryPropertyId")]
-        public int PrimaryPropertyId { get; set; } 
+        [Display(Name = "PrimaryPropertyId")]
+        public string PrimaryPropertyTitle { get; set; } = null!;
+
+        [Display(Name = "PrimaryPropertyDataType")]
+        public DataTypeEnum PrimaryPropertyDataType { get; set; }
+
+        public string PrimaryPropertyEntityTitle { get; set; } = null!;
+        public string PrimaryPropertyEntityPluralTitle { get; set; } = null!;
+        public long PrimaryPropertyEntityId { get; set; }
+        public string PrimaryPropertyEntityFolderName { get; set; } = null!;
 
         [Display(Name="SecondaryEntityId")]
         public string SecondaryEntityPluralName { get; set; } = null!;
 
         [Display(Name="SecondaryEntityId")]
-        public int SecondaryEntityId { get; set; } 
+        public int SecondaryEntityId { get; set; }
+
+        [Display(Name = "MiddleEntityServiceName")]
+        public string MiddleEntityServiceName { get; set; } = null!;
 
         [Display(Name="MiddleEntityId")]
         public string MiddleEntityPluralName { get; set; } = null!;
+
+        [Display(Name = "MiddleEntityFolderName")]
+        public string MiddleEntityFolderName { get; set; } = null!;
+
+        [Display(Name = "MiddleEntitySingularTitle")]
+        public string MiddleEntityTitle { get; set; } = null!;
 
         [Display(Name="MiddleEntityId")]
         public int? MiddleEntityId { get; set; }
@@ -87,6 +104,10 @@ namespace DevCopilot2.Domain.DTOs.Entities
         [Display(Name="FillingCode")]
         public string? FillingCode { get; set; } = null!;
 
+        public EntityListDto SecondaryEntity { get; set; } = new EntityListDto();
+
+        [Display(Name = "SecondaryEntityTitleProperty")]
+        public PropertyListDto SecondaryEntityTitleProperty { get; set; } = new PropertyListDto();
     }
 
     public class BaseUpsertEntityRelationDto

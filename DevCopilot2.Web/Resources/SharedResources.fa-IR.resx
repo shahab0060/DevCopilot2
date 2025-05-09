@@ -204,4 +204,10 @@
     <data name="Collapse" xml:space="preserve">
     <value>نمای جمع شده</value>
 </data>
+    <data name="Generate" xml:space="preserve">
+    <value>ساخت فایل ها</value>
+</data>
+    <data name="Generate Solution" xml:space="preserve">
+    <value>ساخت Solution</value>
+</data>
 </root>

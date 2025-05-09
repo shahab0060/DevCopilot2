@@ -297,7 +297,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
                 {
                     ws = excelExporter.AddColumn(ws, (rowIndex - 3).ToString(), 1, rowIndex);
 
-                    ws = excelExporter.AddColumn(ws, item.PrimaryPropertyName, 2, rowIndex);
+                    ws = excelExporter.AddColumn(ws, item.PrimaryPropertyTitle, 2, rowIndex);
 
                     ws = excelExporter.AddColumn(ws, item.PrimaryPropertyId.ToString("#,0"), 3, rowIndex);
 
@@ -366,7 +366,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Entities
             foreach (var item in result)
             {
                 dataTable = dataTable.AddContentRow(index,
-item.PrimaryPropertyName,
+item.PrimaryPropertyTitle,
 
 item.PrimaryPropertyId.ToString("#,0"),
 

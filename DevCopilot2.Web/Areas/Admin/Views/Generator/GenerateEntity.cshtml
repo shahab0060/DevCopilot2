@@ -1,0 +1,174 @@
+﻿@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.DTOs.Generators
+@model GenerateEntityDto
+@{
+    ViewData["Title"] = $@"{SharedLocalizer.GetString("Generate")} {SharedEntitiesLocalizer.GetString("Entity")}";
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Home"
+               asp-action="Index"
+               title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Entity"
+               asp-action="Index"
+               asp-route-projectId="@Model.ProjectId"
+               title="@SharedEntitiesLocalizer.GetString("Entities")">
+                @SharedEntitiesLocalizer.GetString("Entities")
+            </a>
+        </li>
+
+        <li class="breadcrumb-item active">@SharedLocalizer.GetString("Generate") @SharedEntitiesLocalizer.GetString("Entity")</li>
+    </ol>
+</nav>
+<form class="mb-9" method="post"
+      asp-area="Admin" asp-controller="Generator" asp-action="GenerateEntity"
+      enctype="multipart/form-data">
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@SharedLocalizer.GetString("Generate") @SharedEntitiesLocalizer.GetString("Entity")</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                <button class="btn btn-primary px-5 w-100 text-nowrap">@SharedLocalizer.GetString("Generate") @SharedEntitiesLocalizer.GetString("Entity")</button>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+        <input type="hidden" asp-for="@Model.ProjectId" />
+        <input type="hidden" asp-for="@Model.EntityId" />
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="OverrideFiles" type="checkbox" />
+                <label asp-for="OverrideFiles" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateEntities" type="checkbox" />
+                <label asp-for="GenerateEntities" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateDtos" type="checkbox" />
+                <label asp-for="GenerateDtos" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateMediasInformation" type="checkbox" />
+                <label asp-for="GenerateMediasInformation" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateMappers" type="checkbox" />
+                <label asp-for="GenerateMappers" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateEnums" type="checkbox" />
+                <label asp-for="GenerateEnums" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateServices" type="checkbox" />
+                <label asp-for="GenerateServices" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateIServices" type="checkbox" />
+                <label asp-for="GenerateIServices" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateResources" type="checkbox" />
+                <label asp-for="GenerateResources" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="AddToDbContext" type="checkbox" />
+                <label asp-for="AddToDbContext" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateWebControllers" type="checkbox" />
+                <label asp-for="GenerateWebControllers" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateWebViews" type="checkbox" />
+                <label asp-for="GenerateWebViews" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateApiControllers" type="checkbox" />
+                <label asp-for="GenerateApiControllers" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateMenus" type="checkbox" />
+                <label asp-for="GenerateMenus" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateViewResources" type="checkbox" />
+                <label asp-for="GenerateViewResources" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" asp-for="GenerateControllerResources" type="checkbox" />
+                <label asp-for="GenerateControllerResources" class="form-check-label fw-bold"></label>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <script src="/Shared/JqueryValidation.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+            $('.EntitiesManagement').addClass('active');
+            $('.EntitiesManagement').addClass('show');
+        });
+    </script>
+}

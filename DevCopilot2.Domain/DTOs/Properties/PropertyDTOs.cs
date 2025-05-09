@@ -1,12 +1,12 @@
-using System;
-using DevCopilot2.Domain.DTOs.Common;
-using DevCopilot2.Domain.Enums.Properties;
 using DevCopilot2.Domain.Attributes;
+using DevCopilot2.Domain.DTOs.Common;
+using DevCopilot2.Domain.DTOs.Entities;
+using DevCopilot2.Domain.DTOs.Paging;
+using DevCopilot2.Domain.DTOs.Projects;
+using DevCopilot2.Domain.Enums.DataTypes;
+using DevCopilot2.Domain.Enums.Properties;
 using DevCopilot2.Domain.Resources.DTOs.Common;
 using System.ComponentModel.DataAnnotations;
-using DevCopilot2.Domain.DTOs.Paging;
-using DevCopilot2.Domain.Enums.DataTypes;
-using DevCopilot2.Domain.DTOs.Entities;
 
 namespace DevCopilot2.Domain.DTOs.Properties
 {
@@ -55,9 +55,17 @@ namespace DevCopilot2.Domain.DTOs.Properties
 
     public class PropertyListDto : BaseListDto<int>
     {
+        public string? ForceDataTypeCode { get; set; }
+
+        public string? InitializationCode { get; set; }
+
+        public ProjectEnumListDto? ProjectEnum { get; set; }
 
         [Display(Name="Name")]
         public string Name { get; set; } = null!;
+
+        [Display(Name = "NameInDb")]
+        public string NameInDb { get; set; } = null!;
 
         [Display(Name="DataType")]
         public DataTypeEnum DataType { get; set; } 
@@ -110,6 +118,12 @@ namespace DevCopilot2.Domain.DTOs.Properties
         [Display(Name="EntityId")]
         public string EntityPluralName { get; set; } = null!;
 
+        [Display(Name = "EntitySingularName")]
+        public string EntityTitle { get; set; } = null!;
+
+        [Display(Name = "AspFor")]
+        public string? AspFor { get; set; } = null!;
+
         [Display(Name="EntityId")]
         public int EntityId { get; set; } 
 
@@ -122,14 +136,23 @@ namespace DevCopilot2.Domain.DTOs.Properties
         [Display(Name = "ProjectId")]
         public int ProjectId { get; set; }
 
+        public string? ClassNames { get; set; }
+        public string? AdditionalAttributes { get; set; }
+
         [Display(Name="EntityRelationsList")]
         public List<EntityRelationListDto> EntityRelationsList { get; set; } = new List<EntityRelationListDto>();
+
+        [Display(Name = "FirstEntityRelation")]
+        public EntityRelationListDto? EntityRelation => EntityRelationsList.FirstOrDefault();
 
         [Display(Name="PropertyImageResizeInformationList")]
         public List<PropertyImageResizeInformationListDto> PropertyImageResizeInformationList { get; set; } = new List<PropertyImageResizeInformationListDto>();
 
         [Display(Name="PropertySelectedLanguagesList")]
         public List<PropertySelectedLanguageListDto> PropertySelectedLanguagesList { get; set; } = new List<PropertySelectedLanguageListDto>();
+
+        [Display(Name = "EntitySelectedProjectAreaSelectedFilters")]
+        public List<EntitySelectedProjectAreaSelectedFilterListDto> EntitySelectedProjectAreaSelectedFilters { get; set; } = new List<EntitySelectedProjectAreaSelectedFilterListDto>();
 
     }
 

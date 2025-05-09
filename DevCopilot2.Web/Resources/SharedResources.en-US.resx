@@ -200,5 +200,10 @@
 </data>
     <data name="Collapse" xml:space="preserve">
     <value>Collapse</value>
+</data>    <data name="Generate" xml:space="preserve">
+    <value>Generate</value>
+</data>
+    <data name="Generate Solution" xml:space="preserve">
+    <value>Generate Solution</value>
 </data>
 </root>

@@ -5,6 +5,7 @@ using DevCopilot2.Domain.Attributes;
 using DevCopilot2.Domain.Resources.DTOs.Common;
 using System.ComponentModel.DataAnnotations;
 using DevCopilot2.Domain.DTOs.Paging;
+using DevCopilot2.Domain.DTOs.Templates;
 
 namespace DevCopilot2.Domain.DTOs.Entities
 {
@@ -87,6 +88,7 @@ namespace DevCopilot2.Domain.DTOs.Entities
         [Display(Name="EntitySelectedProjectAreaSelectedFiltersList")]
         public List<EntitySelectedProjectAreaSelectedFilterListDto> EntitySelectedProjectAreaSelectedFiltersList { get; set; } = new List<EntitySelectedProjectAreaSelectedFilterListDto>();
 
+        public TemplateListDto Template { get; set; } = new TemplateListDto();
     }
 
     public class BaseUpsertEntitySelectedProjectAreaDto

@@ -50,6 +50,12 @@ namespace DevCopilot2.Domain.DTOs.Projects
     public class ProjectListDto : BaseListDto<int>
     {
 
+        [Display(Name = "UseResources")]
+        public bool UseResources { get; set; } = true;
+
+        [Display(Name = "UseFluent")]
+        public bool UseFluent { get; set; } = false;
+
         [Display(Name="EnglishName")]
         public string EnglishName { get; set; } = null!;
 

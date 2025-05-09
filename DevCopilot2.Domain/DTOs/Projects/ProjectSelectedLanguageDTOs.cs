@@ -1,10 +1,8 @@
-using System;
 using DevCopilot2.Domain.DTOs.Common;
+using DevCopilot2.Domain.DTOs.Paging;
 using DevCopilot2.Domain.Enums.Projects;
-using DevCopilot2.Domain.Attributes;
 using DevCopilot2.Domain.Resources.DTOs.Common;
 using System.ComponentModel.DataAnnotations;
-using DevCopilot2.Domain.DTOs.Paging;
 
 namespace DevCopilot2.Domain.DTOs.Projects
 {
@@ -59,6 +57,9 @@ namespace DevCopilot2.Domain.DTOs.Projects
 
         [Display(Name="LanguageId")]
         public string LanguageName { get; set; } = null!;
+
+        [Display(Name = "LanguageCulture")]
+        public string LanguageCulture { get; set; } = null!;
 
         [Display(Name="LanguageId")]
         public int LanguageId { get; set; } 

@@ -14,6 +14,7 @@ using DevCopilot2.Domain.DTOs.Projects;
 using DevCopilot2.Domain.Entities.Languages;
 using DevCopilot2.Domain.Entities.Templates;
 using DevCopilot2.Domain.Entities.Users;
+using DevCopilot2.Domain.Enums.Entities;
 
 namespace DevCopilot2.Core.Services.Classes
 {
@@ -327,12 +328,12 @@ EF.Functions.Like(q.Title, $"%{filter.Search}%")
 
             if (await _projectAreaRepository
                 .GetQueryable()
-                .AnyAsync(a => a.EnglishName == create.EnglishName.SanitizeText()!))
+                .AnyAsync(a => a.EnglishName == create.EnglishName.SanitizeText()! && a.ProjectId == create.ProjectId))
                 return ChangeProjectAreaResult.EnglishNameExists;
 
             if (await _projectAreaRepository
                 .GetQueryable()
-                .AnyAsync(a => a.Title == create.Title.ToTitle()!))
+                .AnyAsync(a => a.Title == create.Title.ToTitle()! && a.ProjectId == create.ProjectId))
                 return ChangeProjectAreaResult.TitleExists;
 
             #endregion
@@ -376,13 +377,13 @@ EF.Functions.Like(q.Title, $"%{filter.Search}%")
             if (await _projectAreaRepository
                 .GetQueryable()
                 .AnyAsync(a => a.EnglishName == update.EnglishName.SanitizeText()!
-                               && a.Id != update.Id))
+                               && a.Id != update.Id && a.ProjectId == update.ProjectId))
                 return ChangeProjectAreaResult.EnglishNameExists;
 
             if (await _projectAreaRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Title == update.Title.ToTitle()!
-                               && a.Id != update.Id))
+                               && a.Id != update.Id && a.ProjectId == update.ProjectId))
                 return ChangeProjectAreaResult.TitleExists;
 
             #endregion
@@ -522,6 +523,15 @@ EF.Functions.Like(q.Title, $"%{filter.Search}%")
         public async Task<BaseChangeEntityResult> CreateProjectEnumProperty(CreateProjectEnumPropertyDto create)
         {
 
+            #region validate unique properties
+
+            if (await _projectEnumPropertyRepository
+                .GetQueryable()
+                .AnyAsync(a => a.Name == create.Name.ToTitle()! && a.ProjectEnumId == create.ProjectEnumId))
+                return BaseChangeEntityResult.Exists;
+
+            #endregion
+
             #region validate relation ids
 
             if (!await _projectEnumRepository
@@ -568,6 +578,15 @@ EF.Functions.Like(q.Title, $"%{filter.Search}%")
                 .Where(a => a.Id == update.Id)
                 .FirstOrDefaultAsync();
             if (projectEnumProperty is null) return BaseChangeEntityResult.NotFound;
+
+            #region validate unique properties
+
+            if (await _projectEnumPropertyRepository
+                .GetQueryable()
+                .AnyAsync(a => a.Name == update.Name.ToTitle()! && a.Id != update.Id && a.ProjectEnumId == update.ProjectEnumId))
+                return BaseChangeEntityResult.Exists;
+
+            #endregion
 
             #region validate relation ids
 

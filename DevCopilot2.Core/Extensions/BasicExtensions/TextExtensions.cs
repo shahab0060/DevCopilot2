@@ -1,5 +1,6 @@
 using DevCopilot2.Core.Security;
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace DevCopilot2.Core.Extensions.BasicExtensions
@@ -22,7 +23,41 @@ namespace DevCopilot2.Core.Extensions.BasicExtensions
 
             return string.Join(" ", words, 0, n);
         }
+        public static string ToRegionName(this string text)
+       => text.AddSpacesBetweenCapitals('-').ToLower();
+        public static string CreateEmptyLines(this int count)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                stringBuilder.AppendLine("");
+            }
+            return stringBuilder.ToString();
+        }
+        public static string AddSpacesBetweenCapitals(this string input, char space = ' ')
+        {
+            if (string.IsNullOrEmpty(input))
+                return input;
 
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < input.Length; i++)
+            {
+                char currentChar = input[i];
+                if (char.IsUpper(currentChar))
+                {
+                    // Add a space before the uppercase character
+                    if (i > 0)
+                        result.Append(space);
+                    result.Append(currentChar);
+                }
+                else
+                {
+                    result.Append(currentChar);
+                }
+            }
+
+            return result.ToString();
+        }
         public static string? ToTitle(this string? title) => title.CapitalizeFirstCharacterOfEachWord().SanitizeText();
 
         public static string? ToText(this string? text) => text.SanitizeText();

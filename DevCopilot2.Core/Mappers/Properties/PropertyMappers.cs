@@ -1,13 +1,9 @@
-using System;
-using DevCopilot2.Domain.Entities.Properties;
-using DevCopilot2.Domain.DTOs.Properties;
-using DevCopilot2.Domain.DTOs.Common;
 using DevCopilot2.Core.Extensions.BasicExtensions;
-using DevCopilot2.Core.Utils;
 using DevCopilot2.Core.Security;
-using DevCopilot2.Domain.Enums.DataTypes;
-using DevCopilot2.Domain.Enums.Relations;
+using DevCopilot2.Domain.DTOs.Common;
 using DevCopilot2.Domain.DTOs.Entities;
+using DevCopilot2.Domain.DTOs.Properties;
+using DevCopilot2.Domain.Entities.Properties;
 
 namespace DevCopilot2.Core.Mappers.Properties
 {
@@ -55,7 +51,7 @@ namespace DevCopilot2.Core.Mappers.Properties
                             CreateDate = entityRelation.CreateDate,
                             EditCounts = entityRelation.EditCounts,
 
-                            PrimaryPropertyName = entityRelation.PrimaryProperty.Name,
+                            PrimaryPropertyTitle = entityRelation.PrimaryProperty.Name,
                             PrimaryPropertyId = entityRelation.PrimaryPropertyId,
                             SecondaryEntityPluralName = entityRelation.SecondaryEntity.PluralName,
                             SecondaryEntityId = entityRelation.SecondaryEntityId,

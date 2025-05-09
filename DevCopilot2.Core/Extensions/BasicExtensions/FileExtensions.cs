@@ -306,6 +306,53 @@ namespace DevCopilot2.Core.Extensions.BasicExtensions
             }
         }
 
+        public static void DeleteFile(this string fileFullPath)
+        {
+            if (File.Exists(fileFullPath))
+                File.Delete(fileFullPath);
+        }
+
+        public static void RenameFiles(this string directoryPath, string oldName, string newName)
+        {
+            foreach (var filePath in Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
+            {
+                string fileName = Path.GetFileName(filePath);
+                string newFileName = fileName.Replace(oldName, newName);
+                string newFilePath = filePath.Replace(fileName, newFileName);
+                if (filePath != newFilePath)
+                    if (!File.Exists(newFilePath))
+                    {
+                        //if (!Directory.Exists(newFilePath))
+                        //  Directory.CreateDirectory(newFilePath);
+                        File.Move(filePath, newFilePath);
+                    }
+            }
+        }
+
+        public static void RenameFolders(this string directoryPath, string oldName, string newName)
+        {
+            foreach (var path in Directory.GetDirectories(directoryPath, "*.*", SearchOption.AllDirectories))
+            {
+                string newPath = path.Replace(oldName, newName);
+                if (path != newPath)
+                    if (!Directory.Exists(newPath))
+                        Directory.Move(path, newPath);
+            }
+        }
+
+        public static void ReplaceTextInFiles(this string directoryPath, string oldText, string newText)
+        {
+            foreach (var filePath in Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
+            {
+                string fileContent = File.ReadAllText(filePath);
+                if (fileContent.Contains(oldText))
+                {
+                    fileContent = fileContent.Replace(oldText, newText);
+                    File.WriteAllText(filePath, fileContent);
+                }
+            }
+        }
+
     }
 
 }
