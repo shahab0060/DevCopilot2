@@ -316,7 +316,7 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.Generators
                 DataAnnotationsDataType.Email => $@"        [EmailAddress({isNotValidErrorMessage})]",
                 DataAnnotationsDataType.PersianDate => $@"        [PersianCalender]",
                 DataAnnotationsDataType.Password => $@"        [DataType(DataType.Password,{isNotValidErrorMessage})]",
-                DataAnnotationsDataType.NaitionalCode => $@"        [ValidNationalCode({isNotValidErrorMessage})]",
+                DataAnnotationsDataType.NationalCode => $@"        [ValidNationalCode({isNotValidErrorMessage})]",
                 DataAnnotationsDataType.PhoneNumber => $@"                [PersianPhoneNumber({isNotValidErrorMessage})]",
                 _ => ""
             };

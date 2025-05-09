@@ -1,13 +1,13 @@
 using DevCopilot2.Domain.Entities.Common;
-using DevCopilot2.Domain.Entities.Templates;
+using DevCopilot2.Domain.Entities.Entities;
 using DevCopilot2.Domain.Entities.GeneralSettings;
 using DevCopilot2.Domain.Entities.Languages;
-using DevCopilot2.Domain.Entities.Projects;
-using DevCopilot2.Domain.Entities.Entities;
-using DevCopilot2.Domain.Entities.Properties;
 using DevCopilot2.Domain.Entities.Permissions;
+using DevCopilot2.Domain.Entities.Projects;
+using DevCopilot2.Domain.Entities.Properties;
 using DevCopilot2.Domain.Entities.Roles;
 using DevCopilot2.Domain.Entities.SiteSettings;
+using DevCopilot2.Domain.Entities.Templates;
 using DevCopilot2.Domain.Entities.Users;
 using DevCopilot2.Domain.IRepository;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +23,12 @@ namespace DevCopilot2.DataLayer.Context
         }
 
         #region entities
+
+        #region site settings
+
+        public virtual DbSet<SiteSetting> SiteSettings { get; set; }        
+
+        #endregion
 
         #region templates
 
@@ -68,11 +74,6 @@ namespace DevCopilot2.DataLayer.Context
         public virtual DbSet<PropertyImageResizeInformation> PropertyImageResizeInformation { get; set; }
 
         public virtual DbSet<PropertySelectedLanguage> PropertySelectedLanguages { get; set; }
-
-        #endregion
-
-        #region site settings
-        public virtual DbSet<SiteSetting> SiteSettings { get; set; }
 
         #endregion
 

@@ -210,4 +210,13 @@
     <data name="Generate Solution" xml:space="preserve">
     <value>ساخت Solution</value>
 </data>
+    <data name="Select All" xml:space="preserve">
+    <value>انتخاب همه</value>
+</data>
+    <data name="File" xml:space="preserve">
+    <value>فایل</value>
+</data>
+    <data name="Files" xml:space="preserve">
+    <value>فایل</value>
+</data>
 </root>

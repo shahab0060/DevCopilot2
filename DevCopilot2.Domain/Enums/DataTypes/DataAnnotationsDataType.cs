@@ -26,7 +26,7 @@ namespace DevCopilot2.Domain.Enums.DataTypes
         PhoneNumber,
         [Display(ResourceType = typeof(DataAnnotationsDataTypeResources),
                     Name = nameof(DataAnnotationsDataTypeResources.NationalCode))]
-        NaitionalCode,
+        NationalCode,
         [Display(ResourceType = typeof(DataAnnotationsDataTypeResources),
                     Name = nameof(DataAnnotationsDataTypeResources.PersianDate))]
         PersianDate,

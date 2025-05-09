@@ -464,6 +464,47 @@ document.addEventListener('DOMContentLoaded', function () {
             $span.text(formattedPrice);
         });
     }
+    document.querySelectorAll(".singular-name-input").forEach(input => {
+        input.addEventListener("keyup", function () {
+            let value = input.value.trim();
+            console.log('value is ', value);
+            let name = input.getAttribute("name");
+
+            if (name.endsWith("SingularName")) {
+                let pluralName = name.replace("SingularName", "PluralName");
+                let pluralInput = document.querySelector(`[name='${pluralName}']`);
+                if (pluralInput) pluralInput.value = value + "s";
+
+                let folderName = name.replace("SingularName", "FolderName");
+                let folderInput = document.querySelector(`[name='${folderName}']`);
+                if (folderInput) folderInput.value = value + "s";
+
+                let serviceName = name.replace("SingularName", "ServiceName");
+                let serviceInput = document.querySelector(`[name='${serviceName}']`);
+                if (serviceInput) serviceInput.value = value + "Service";
+            }
+        });
+    });
+
+    document.querySelectorAll("[data-plural-suffix]").forEach(element => {
+        element.addEventListener("keyup", function () {
+            let value = element.value.trim();
+            let pluralSuffix = element.getAttribute("data-plural-suffix");
+            let name = element.getAttribute("name");
+
+            // Extract last part after "." or use the whole name if no "."
+            let baseName = name.includes(".") ? name.split(".").pop() : name;
+
+            // Construct the target input name
+            let pluralTitleName = name.replace(baseName, "PluralTitle");
+
+            // Find the corresponding input and update its value
+            let pluralTitleInput = document.querySelector(`[name='${pluralTitleName}']`);
+            if (pluralTitleInput) {
+                pluralTitleInput.value = value + pluralSuffix;
+            }
+        });
+    });
 
 });
 

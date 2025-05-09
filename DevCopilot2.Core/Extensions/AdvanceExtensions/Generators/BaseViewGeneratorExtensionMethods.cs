@@ -840,7 +840,7 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.Generators
             }
             if (property.DataType == DataTypeEnum.Int || property.DataType == DataTypeEnum.Long ||
                 property.DataAnnotationDataType == DataAnnotationsDataType.PhoneNumber ||
-                property.DataAnnotationDataType == DataAnnotationsDataType.NaitionalCode)
+                property.DataAnnotationDataType == DataAnnotationsDataType.NationalCode)
                 inputHtml = template.IntegerInputHtml;
             if (property.DataType == DataTypeEnum.Bool)
                 inputHtml = template.CheckBoxInputCode;

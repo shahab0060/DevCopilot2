@@ -101,8 +101,9 @@ namespace DevCopilot2.Core.Extensions.BasicExtensions
         public static string? CapitalizeFirstCharacterOfEachWord(this string? text)
         {
             if (text is null) return null;
-            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-            return textInfo.ToTitleCase(text);
+            //TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            //return textInfo.ToTitleCase(text);
+            return text;
         }
 
         public static bool IsValidUrl(this string url)

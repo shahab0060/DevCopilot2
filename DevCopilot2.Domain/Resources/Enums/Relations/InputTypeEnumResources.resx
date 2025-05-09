@@ -118,7 +118,23 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
 
-  <data name="InputType" xml:space="preserve">
-    <value>نوع فیلد</value>
+  <data name="Select" xml:space="preserve">
+    <value>انتخابی (Select)</value>
+  </data>
+
+  <data name="SecondaryEntitySelect" xml:space="preserve">
+    <value>انتخاب چند گزینه ای در صفحه رابطه</value>
+  </data>
+
+  <data name="Hidden" xml:space="preserve">
+    <value>مخفی</value>
+  </data>
+
+  <data name="NoInput" xml:space="preserve">
+    <value>بدون فیلد</value>
+  </data>
+
+  <data name="FieldsInRelationEntityPage" xml:space="preserve">
+    <value>فیلد ها در صفحه رابطه</value>
   </data>
 </root>

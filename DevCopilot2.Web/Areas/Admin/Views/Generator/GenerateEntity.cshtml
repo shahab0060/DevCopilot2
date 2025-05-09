@@ -48,6 +48,12 @@
     <div class="row g-5">
         <input type="hidden" asp-for="@Model.ProjectId" />
         <input type="hidden" asp-for="@Model.EntityId" />
+        <div class="col-sm-12">
+            <div class="form-check">
+                <input class="form-check-input check-all-input" id="check-all" type="checkbox" checked />
+                <label class="form-check-label fw-bold" for="check-all">@SharedLocalizer.GetString("Select All")</label>
+            </div>
+        </div>
         <div class="col-sm-4">
             <div class="form-check">
                 <input class="form-check-input" asp-for="OverrideFiles" type="checkbox" />

@@ -206,4 +206,13 @@
     <data name="Generate Solution" xml:space="preserve">
     <value>Generate Solution</value>
 </data>
+    <data name="Select All" xml:space="preserve">
+    <value>Select All</value>
+</data>
+    <data name="File" xml:space="preserve">
+    <value>Fiel</value>
+</data>
+    <data name="Files" xml:space="preserve">
+    <value>Files</value>
+</data>
 </root>

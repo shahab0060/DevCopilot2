@@ -142,8 +142,8 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Generators
         public async Task<IActionResult> GenerateProjectFiles(GenerateProjectDto generate)
         {
             List<GenerateCleanArchitectureResultDto> result = await _generatorService.GenerateCleanArchitecture(generate);
-            TempData["SuccessMessage"] = $"{result.Sum(a => a.EntityResult.CreatedCount)} " +
-                $"{(result.Sum(a => a.EntityResult.CreatedCount) > 1 ? _sharedEntitiesLocalizer.GetString("Entities").Value : _sharedEntitiesLocalizer.GetString("Entity").Value)} " +
+            TempData["SuccessMessage"] = $"{result.Sum(a => a.GetAllResults().CreatedCount)} " +
+                $"{(result.Sum(a => a.GetAllResults().CreatedCount) > 1 ? _sharedEntitiesLocalizer.GetString("Files").Value : _sharedEntitiesLocalizer.GetString("File").Value)} " +
                 $"{_sharedLocalizer.GetString("Created Successfully").Value}";
             return RedirectToAction("Index", "Project", new { area = "Admin" });
 

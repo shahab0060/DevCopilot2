@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DevCopilot2.Domain.Resources.Enums.DataTypes {
+namespace DevCopilot2.Domain.Resources.Enums.Order {
     using System;
 
     /// <summary>
@@ -21,14 +21,14 @@ namespace DevCopilot2.Domain.Resources.Enums.DataTypes {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class IdTypeEnumResources {
+    public class OrderStatusEnumResources {
 
         private static global::System.Resources.ResourceManager resourceMan;
 
         private static global::System.Globalization.CultureInfo resourceCulture;
 
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal IdTypeEnumResources() {
+        internal OrderStatusEnumResources() {
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace DevCopilot2.Domain.Resources.Enums.DataTypes {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DevCopilot2.Domain.Resources.Enums.DataTypes.IdTypeEnumResources", typeof(IdTypeEnumResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DevCopilot2.Domain.Resources.Enums.Order.OrderStatusEnumResources", typeof(OrderStatusEnumResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,44 +60,38 @@ namespace DevCopilot2.Domain.Resources.Enums.DataTypes {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Long
+        ///   Looks up a localized string similar to WaitingForPayment
         /// </summary>
-        public static string Long {
+        public static string WaitingForPayment {
             get {
-                return ResourceManager.GetString("Long", resourceCulture);
+                return ResourceManager.GetString("WaitingForPayment", resourceCulture);
             }
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Int
+        ///   Looks up a localized string similar to PaymentFailed
         /// </summary>
-        public static string Int
-        {
-            get
-            {
-                return ResourceManager.GetString("Int", resourceCulture);
+        public static string PaymentFailed {
+            get {
+                return ResourceManager.GetString("PaymentFailed", resourceCulture);
             }
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Byte
+        ///   Looks up a localized string similar to Preparing
         /// </summary>
-        public static string Byte
-        {
-            get
-            {
-                return ResourceManager.GetString("Byte", resourceCulture);
+        public static string Preparing {
+            get {
+                return ResourceManager.GetString("Preparing", resourceCulture);
             }
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Guid
+        ///   Looks up a localized string similar to GivenToPost
         /// </summary>
-        public static string Guid
-        {
-            get
-            {
-                return ResourceManager.GetString("Guid", resourceCulture);
+        public static string GivenToPost {
+            get {
+                return ResourceManager.GetString("GivenToPost", resourceCulture);
             }
         }
     }

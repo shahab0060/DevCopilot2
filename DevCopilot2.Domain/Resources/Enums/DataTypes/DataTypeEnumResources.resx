@@ -118,7 +118,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
 
-  <data name="DataType" xml:space="preserve">
-    <value>نوع</value>
+  <data name="String" xml:space="preserve">
+    <value>String</value>
+  </data>
+
+  <data name="Int" xml:space="preserve">
+    <value>Int</value>
+  </data>
+
+  <data name="Long" xml:space="preserve">
+    <value>Long</value>
+  </data>
+
+  <data name="Bool" xml:space="preserve">
+    <value>Bool</value>
+  </data>
+
+  <data name="Guid" xml:space="preserve">
+    <value>Guid</value>
+  </data>
+
+  <data name="Enum" xml:space="preserve">
+    <value>Enum</value>
+  </data>
+
+  <data name="DateTime" xml:space="preserve">
+    <value>DateTime</value>
+  </data>
+
+  <data name="Decimal" xml:space="preserve">
+    <value>Decimal</value>
+  </data>
+
+  <data name="Double" xml:space="preserve">
+    <value>Double</value>
+  </data>
+
+  <data name="Byte" xml:space="preserve">
+    <value>Byte</value>
   </data>
 </root>

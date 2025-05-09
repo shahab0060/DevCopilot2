@@ -65,13 +65,13 @@ namespace {GetNameSpace(project, projectEnum)}
         => string.Join("\n",
             projectEnum
             .ProjectEnumPropertiesList
-            .ConvertAll(a => GetSingleEnumPropertyCode(a, projectEnum)));
+            .Select((a, index) => GetSingleEnumPropertyCode(a, projectEnum, index)));
 
-        private string GetSingleEnumPropertyCode(ProjectEnumPropertyListDto property, ProjectEnumListDto projectEnum)
+        private string GetSingleEnumPropertyCode(ProjectEnumPropertyListDto property, ProjectEnumListDto projectEnum, int index)
         //    => $@"
         //[Display(Name = ""{property.Title}"")]
         //{property.Name} = {property.Order},";
          => $@"        [Display(ResourceType = typeof({projectEnum.GetResourceName()}), Name = nameof({projectEnum.GetResourceName()}.{property.Name}))]
-        {property.Name} = {property.Order},";
+        {property.Name} = {index},";
     }
 }
