@@ -466,8 +466,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     document.querySelectorAll(".singular-name-input").forEach(input => {
         input.addEventListener("keyup", function () {
-            let value = input.value.trim();
-            console.log('value is ', value);
             let name = input.getAttribute("name");
 
             if (name.endsWith("SingularName")) {
@@ -484,6 +482,70 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (serviceInput) serviceInput.value = value + "Service";
             }
         });
+    });
+
+    document.addEventListener("change", function (event) {
+        if (event.target.matches(".data-type-select")) {
+            let name = event.target.getAttribute("name");
+            if (name.endsWith("DataType")) {
+                HandlePropertyDataTypeChange(event.target);
+            }
+        }
+    });
+
+    document.querySelectorAll(".data-type-select").forEach(input => {
+        let name = input.getAttribute("name");
+        if (name.endsWith("DataType")) {
+            HandlePropertyDataTypeChange(input);
+        }
+    });
+
+    document.addEventListener("change", function (event) {
+        if (event.target.matches(".data-annotation-type-select")) {
+            let name = event.target.getAttribute("name");
+            if (name.endsWith("DataAnnotationDataType")) {
+                HandlePropertyDataAnnotationTypeChange(event.target);
+            }
+        }
+    });
+
+    document.querySelectorAll(".data-annotation-type-select").forEach(input => {
+        let name = input.getAttribute("name");
+        if (name.endsWith("DataAnnotationDataType")) {
+            HandlePropertyDataAnnotationTypeChange(input);
+        }
+    });
+
+    document.addEventListener("change", function (event) {
+        if (event.target.matches(".relation-input-type-select")) {
+            let name = event.target.getAttribute("name");
+            if (name.endsWith("InputType")) {
+                HandleRelationInputTypeChange(event.target);
+            }
+        }
+    });
+
+    document.querySelectorAll(".relation-input-type-select").forEach(input => {
+        let name = input.getAttribute("name");
+        if (name.endsWith("InputType")) {
+            HandleRelationInputTypeChange(input);
+        }
+    });
+
+    document.addEventListener("change", function (event) {
+        if (event.target.matches(".filling-type-select")) {
+            let name = event.target.getAttribute("name");
+            if (name.endsWith("FillingType")) {
+                HandleRelationFillingTypeChange(event.target);
+            }
+        }
+    });
+
+    document.querySelectorAll(".filling-type-select").forEach(input => {
+        let name = input.getAttribute("name");
+        if (name.endsWith("FillingType")) {
+            HandleRelationFillingTypeChange(input);
+        }
     });
 
     document.querySelectorAll("[data-plural-suffix]").forEach(element => {
@@ -507,6 +569,103 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+function HandlePropertyDataTypeChange(input) {
+    var value = $(input).val();
+    let name = $(input).attr('name');
+    let minLengthName = name.replace("DataType", "MinLength");
+    let maxLengthName = name.replace("DataType", "MaxLength");
+    let rangeFromName = name.replace("DataType", "RangeFrom");
+    let rangeToName = name.replace("DataType", "RangeTo");
+    let enumInputName = name.replace("DataType", "ProjectEnumId");
+    let useEditorName = name.replace("DataType", "UseEditor");
+    let filterContainName = name.replace("DataType", "IsFilterContain");
+    if (value === "String") {
+        $(`[name='${minLengthName}']`).parent().parent().removeClass('d-none');
+        $(`[name='${maxLengthName}']`).parent().parent().removeClass('d-none');
+        $(`[name='${useEditorName}']`).parent().parent().removeClass('d-none');
+        $(`[name='${filterContainName}']`).parent().parent().removeClass('d-none');
+    }
+    else {
+        $(`[name='${minLengthName}']`).parent().parent().addClass('d-none');
+        $(`[name='${maxLengthName}']`).parent().parent().addClass('d-none');
+        $(`[name='${useEditorName}']`).parent().parent().addClass('d-none');
+        $(`[name='${filterContainName}']`).parent().parent().addClass('d-none');
+        $(`[name='${minLengthName}']`).val(null);
+        $(`[name='${maxLengthName}']`).val(null);
+        $(`[name='${useEditorName}']`).val(false);
+        $(`[name='${filterContainName}']`).val(false);
+    }
+    if (value === "Int" || value === "Long" || value === "Decimal" || value === "Double") {
+        $(`[name='${rangeFromName}']`).parent().parent().removeClass('d-none');
+        $(`[name='${rangeToName}']`).parent().parent().removeClass('d-none');
+    }
+    else {
+        $(`[name='${rangeFromName}']`).val(null);
+        $(`[name='${rangeToName}']`).val(null);
+        $(`[name='${rangeFromName}']`).parent().parent().addClass('d-none');
+        $(`[name='${rangeToName}']`).parent().parent().addClass('d-none');
+    }
+    if (value === "Enum") {
+        $(`[name='${enumInputName}']`).parent().parent().removeClass('d-none');
+    }
+    else {
+        $(`[name='${enumInputName}']`).parent().parent().addClass('d-none');
+        $(`[name='${enumInputName}']`).val(null);
+    }
+}
+
+function HandlePropertyDataAnnotationTypeChange(input) {
+    var value = $(input).val();
+    let name = $(input).attr('name');
+    let imageResizesContainerName = name.replace("DataAnnotationDataType", "PropertyImageResizeInformationList");
+
+    if (value === "Image") {
+        $(`[data-name='${imageResizesContainerName}']`).removeClass('d-none');
+    }
+    else {
+        $(`[data-name='${imageResizesContainerName}']`).addClass('d-none');
+        $(`.single-sub-form[data-name='${imageResizesContainerName}']`).remove();
+    }
+}
+
+function HandleRelationInputTypeChange(input) {
+    var value = $(input).val();
+    let name = $(input).attr('name');
+    let fillingCodeName = name.replace("InputType", "FillingCode");
+    let fillingTypeName = name.replace("InputType", "FillingType");
+    let middleEntityName = name.replace("InputType", "MiddleEntityId");
+    if (value === "Hidden" || value == "NoInput") {
+        $(`[name="${fillingTypeName}"]`).parent().parent().removeClass('d-none');
+    }
+    else {
+        $(`[name="${fillingTypeName}"]`).parent().parent().addClass('d-none');
+        $(`[name="${fillingCodeName}"]`).parent().parent().addClass('d-none');
+        $(`[name="${fillingCodeName}"]`).val(null);
+        $(`[name="${fillingTypeName}"]`).val("Input");
+    }
+    if (value === "SecondaryEntitySelect") {
+        $(`[name="${middleEntityName}"]`).parent().parent().removeClass('d-none');
+    }
+    else {
+        $(`[name="${middleEntityName}"]`).parent().parent().addClass('d-none');
+        $(`[name="${middleEntityName}"]`).val(null);
+    }
+}
+
+function HandleRelationFillingTypeChange(input) {
+    var value = $(input).val();
+    let name = $(input).attr('name');
+    let fillingCodeName = name.replace("FillingType", "FillingCode");
+    if (value === "Custom") {
+        $(`[name="${fillingCodeName}"]`).parent().parent().removeClass('d-none');
+    }
+    else {
+        $(`[name="${fillingCodeName}"]`).parent().parent().addClass('d-none');
+        $(`[name="${fillingCodeName}"]`).val(null);
+    }
+}
+
 
 function IsUserAuthenticated() {
     return $('#is-user-authenticated').val();

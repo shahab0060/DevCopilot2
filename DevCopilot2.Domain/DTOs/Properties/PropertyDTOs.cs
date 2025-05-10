@@ -199,11 +199,11 @@ namespace DevCopilot2.Domain.DTOs.Properties
 
         [Display(Name = "IsUnique")]
 
-        public bool IsUnique { get; set; } 
+        public bool IsUnique { get; set; }
 
         [Display(Name = "IsUpdatable")]
 
-        public bool IsUpdatable { get; set; } 
+        public bool IsUpdatable { get; set; } = true;
 
         [Display(Name = "ShowInList")]
 

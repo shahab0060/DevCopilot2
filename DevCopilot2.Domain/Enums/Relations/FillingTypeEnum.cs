@@ -7,12 +7,10 @@ namespace DevCopilot2.Domain.Enums.Relations
     public enum FillingTypeEnum
     {
         [Display(ResourceType = typeof(FillingTypeEnumResources), Name = nameof(FillingTypeEnumResources.Input))]
-        Input,
-
+        Input = 0,
         [Display(ResourceType = typeof(FillingTypeEnumResources), Name = nameof(FillingTypeEnumResources.Routing))]
-        Routing,
-
+        Routing = 1,
         [Display(ResourceType = typeof(FillingTypeEnumResources), Name = nameof(FillingTypeEnumResources.Custom))]
-        Custom
+        Custom = 2,
     }
 }

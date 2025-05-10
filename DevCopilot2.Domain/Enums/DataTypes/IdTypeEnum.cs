@@ -7,10 +7,12 @@ namespace DevCopilot2.Domain.Enums.DataTypes
     public enum IdTypeEnum
     {
         [Display(ResourceType = typeof(IdTypeEnumResources), Name = nameof(IdTypeEnumResources.Long))]
-        Long,
+        Long = 0,
         [Display(ResourceType = typeof(IdTypeEnumResources), Name = nameof(IdTypeEnumResources.Int))]
-        Int,
+        Int = 1,
         [Display(ResourceType = typeof(IdTypeEnumResources), Name = nameof(IdTypeEnumResources.Byte))]
-        Byte
+        Byte = 2,
+        [Display(ResourceType = typeof(IdTypeEnumResources), Name = nameof(IdTypeEnumResources.Guid))]
+        Guid = 3,
     }
 }

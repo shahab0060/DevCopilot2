@@ -121,19 +121,20 @@
                             <h3>@SharedEntitiesLocalizer.GetString("ProjectEnumPropertySelectedLanguages")</h3>
                             @if (Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList is not null)
                             {
+                                var remainingLanguages = languages
+                                .Where(a => !Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList.Any(b => b.LanguageId == int.Parse(a.Value)))
+                                .ToList();
+                                foreach (var remainingLanguage in remainingLanguages)
+                                {
+                                    Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList.Add(new UpdateProjectEnumPropertySelectedLanguageDto()
+                            {
+                                LanguageId = int.Parse(remainingLanguage.Value),
+                                ProjectEnumPropertyId = Model.ProjectEnumPropertiesList[projectEnumProperty].Id
+                            });
+                                }
                                 for (int projectEnumPropertySelectedLanguage = 0; projectEnumPropertySelectedLanguage < languages.Count; projectEnumPropertySelectedLanguage++)
                                 {
-                                    var remainingLanguages = languages
-                                    .Where(a => !Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList.Any(b => b.LanguageId == int.Parse(a.Value)))
-                                    .ToList();
-                                    foreach (var remainingLanguage in remainingLanguages)
-                                    {
-                                        Model.ProjectEnumPropertiesList[projectEnumProperty].ProjectEnumPropertySelectedLanguagesList.Add(new UpdateProjectEnumPropertySelectedLanguageDto()
-                                {
-                                    LanguageId = int.Parse(remainingLanguage.Value),
-                                    ProjectEnumPropertyId = Model.ProjectEnumPropertiesList[projectEnumProperty].Id
-                                });
-                                    }
+
                                     string projectEnumPropertySelectedLanguageDataName = "ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]" + "." + "ProjectEnumPropertySelectedLanguagesList" + "[" + projectEnumPropertySelectedLanguage + "]";
 
                                     <div class="single-sub-form row g-5" data-name="@("ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]" + "." + "ProjectEnumPropertySelectedLanguagesList")">
@@ -236,13 +237,65 @@
                 </div>
                 <span asp-validation-for="@updateProjectEnumProperty.Order"></span>
             </div>
+            @if (languages is not null)
+            {
+                updateProjectEnumProperty = new UpdateProjectEnumPropertyDto();
+                foreach (var remainingLanguage in languages)
+                {
+                    updateProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList.Add(new UpdateProjectEnumPropertySelectedLanguageDto()
+                    {
+                        LanguageId = int.Parse(remainingLanguage.Value),
+                        ProjectEnumPropertyId = 0
+                    });
+                }
+                int projectEnumProperty = 0;
+                for (int projectEnumPropertySelectedLanguage = 0; projectEnumPropertySelectedLanguage < languages.Count; projectEnumPropertySelectedLanguage++)
+                {
+
+                    string projectEnumPropertySelectedLanguageDataName = "ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]" + "." + "ProjectEnumPropertySelectedLanguagesList" + "[" + projectEnumPropertySelectedLanguage + "]";
+
+                    <div class="single-sub-form row g-5" data-name="@("ProjectEnumPropertiesList" + "[" + projectEnumProperty + "]" + "." + "ProjectEnumPropertySelectedLanguagesList")">
+                        <input type="hidden" asp-for="@updateProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Id" class="sub-form-input"
+                               data-name="ProjectEnumPropertySelectedLanguagesList"
+                               data-prefix="ProjectEnumPropertySelectedLanguagesList"
+                               data-suffix="Id" />
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select"
+                                        data-name="ProjectEnumPropertySelectedLanguagesList"
+                                        data-prefix="ProjectEnumPropertySelectedLanguagesList"
+                                        data-suffix="LanguageId"
+                                        asp-for="@updateProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].LanguageId" asp-items="languages">
+                                </select>
+                                <label asp-for="@updateProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].LanguageId"></label>
+                            </div>
+                            <span asp-validation-for="@updateProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].LanguageId"></span>
+                        </div>
+                        <input type="hidden" asp-for="@updateProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].ProjectEnumPropertyId" class="sub-form-input"
+                               data-name="ProjectEnumPropertySelectedLanguagesList"
+                               data-prefix="ProjectEnumPropertySelectedLanguagesList"
+                               data-suffix="ProjectEnumPropertyId"
+                               data-value="1" />
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input class="form-control sub-form-input Title-input"
+                                       data-name="ProjectEnumPropertySelectedLanguagesList"
+                                       data-prefix="ProjectEnumPropertySelectedLanguagesList"
+                                       data-suffix="Title"
+                                       asp-for="@updateProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Title" placeholder="" />
+                                <label asp-for="@updateProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Title"></label>
+                            </div>
+                            <span asp-validation-for="@updateProjectEnumProperty.ProjectEnumPropertySelectedLanguagesList[projectEnumPropertySelectedLanguage].Title"></span>
+                        </div>
+
+                        <div class="buttons-container" data-name="@projectEnumPropertySelectedLanguageDataName">
+                        </div>
+                    </div>
+
+                }
+            }
             <div class="buttons-container is-template" data-name="ProjectEnumPropertiesList[0]">
 
-                <div class="d-flex justify-content-end mt-3">
-                    <p class="btn btn-success next-btn mb-0 add-sub-item-btn"
-                       onclick="AddSubItem('@($"ProjectEnumPropertiesList[0].ProjectEnumPropertySelectedLanguagesList")')"
-                       data-name="ProjectEnumPropertySelectedLanguagesList">@SharedLocalizer.GetString("Add") @SharedEntitiesLocalizer.GetString("ProjectEnumPropertySelectedLanguage")</p>
-                </div>
                 <div class="d-flex justify-content-end mt-3">
                     <p class="btn btn-danger next-btn mb-0 remove-sub-item-btn"
                        data-name="ProjectEnumPropertiesList"

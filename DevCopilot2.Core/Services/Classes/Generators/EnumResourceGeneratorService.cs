@@ -65,7 +65,7 @@ namespace DevCopilot2.Core.Services.Classes.Generators
             {
                 Override = true,
                 Path = GetPath(projectEnum, project),
-                FileNameWithExtension = $"{projectEnum.EnglishName}Resources.resx",
+                FileNameWithExtension = $"{projectEnum.EnglishName}Resources.{language.LanguageCulture}.resx",
                 Code = GetSingleFileCode(projectEnum, language)
             };
         }

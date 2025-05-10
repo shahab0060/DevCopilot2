@@ -67,7 +67,7 @@
         </div>
         <div class="col-sm-12 col-md-6">
             <div class="form-floating">
-                <select class="form-select" asp-for="@Model.DataType" name="DataType">
+                <select class="form-select data-type-select" asp-for="@Model.DataType">
 
                     @foreach (DataTypeEnum dataTypeEnum in (DataTypeEnum[])Enum.GetValues(typeof(DataTypeEnum)))
                     {
@@ -116,7 +116,7 @@
         </div>
         <div class="col-sm-12 col-md-6">
             <div class="form-floating">
-                <select class="form-select" asp-for="@Model.DataAnnotationDataType" name="DataAnnotationDataType">
+                <select class="form-select data-annotation-type-select" asp-for="@Model.DataAnnotationDataType">
 
                     @foreach (DataAnnotationsDataType dataAnnotationsDataType in (DataAnnotationsDataType[])Enum.GetValues(typeof(DataAnnotationsDataType)))
                     {
@@ -218,25 +218,14 @@
                             </div>
                             <span asp-validation-for="@Model.EntityRelationsList[entityRelation].SecondaryEntityId"></span>
                         </div>
-                        <div class="col-sm-12 col-md-6">
-                            <div class="form-floating">
-                                <select class="form-select"
-                                        data-name="EntityRelationsList"
-                                        data-prefix="EntityRelationsList"
-                                        data-suffix="MiddleEntityId"
-                                        asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId" asp-items="middleEntities">
-                                </select>
-                                <label asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId"></label>
-                            </div>
-                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId"></span>
-                        </div>
+                        
                         <div class="col-sm-12 col-md-6">
                             <div class="form-floating">
                                 <select class="form-select"
                                         data-name="EntityRelationsList"
                                         data-prefix="EntityRelationsList"
                                         data-suffix="RelationType"
-                                        asp-for="@Model.EntityRelationsList[entityRelation].RelationType" name="RelationType">
+                                        asp-for="@Model.EntityRelationsList[entityRelation].RelationType">
 
                                     @foreach (RelationTypeEnum relationTypeEnum in (RelationTypeEnum[])Enum.GetValues(typeof(RelationTypeEnum)))
                                     {
@@ -249,11 +238,11 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="form-floating">
-                                <select class="form-select"
+                                <select class="form-select relation-input-type-select"
                                         data-name="EntityRelationsList"
                                         data-prefix="EntityRelationsList"
                                         data-suffix="InputType"
-                                        asp-for="@Model.EntityRelationsList[entityRelation].InputType" name="InputType">
+                                        asp-for="@Model.EntityRelationsList[entityRelation].InputType">
 
                                     @foreach (InputTypeEnum inputTypeEnum in (InputTypeEnum[])Enum.GetValues(typeof(InputTypeEnum)))
                                     {
@@ -266,11 +255,11 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="form-floating">
-                                <select class="form-select"
+                                <select class="form-select filling-type-select"
                                         data-name="EntityRelationsList"
                                         data-prefix="EntityRelationsList"
                                         data-suffix="FillingType"
-                                        asp-for="@Model.EntityRelationsList[entityRelation].FillingType" name="FillingType">
+                                        asp-for="@Model.EntityRelationsList[entityRelation].FillingType">
 
                                     @foreach (FillingTypeEnum fillingTypeEnum in (FillingTypeEnum[])Enum.GetValues(typeof(FillingTypeEnum)))
                                     {
@@ -280,6 +269,17 @@
                                 <label asp-for="@Model.EntityRelationsList[entityRelation].FillingType"></label>
                             </div>
                             <span asp-validation-for="@Model.EntityRelationsList[entityRelation].FillingType"></span>
+                        </div><div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select"
+                                        data-name="EntityRelationsList"
+                                        data-prefix="EntityRelationsList"
+                                        data-suffix="MiddleEntityId"
+                                        asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId" asp-items="middleEntities">
+                                </select>
+                                <label asp-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId"></label>
+                            </div>
+                            <span asp-validation-for="@Model.EntityRelationsList[entityRelation].MiddleEntityId"></span>
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="form-floating">
@@ -376,7 +376,7 @@
             }
         </div>
 
-        <div class="d-flex justify-content-end mt-3">
+        <div class="d-flex justify-content-end mt-3" data-name="PropertyImageResizeInformationList">
             <p class="btn btn-success next-btn mb-0 add-sub-item-btn"
                onclick="AddSubItem('PropertyImageResizeInformationList')"
                data-name="PropertyImageResizeInformationList">@SharedLocalizer.GetString("Add") @SharedEntitiesLocalizer.GetString("PropertyImageResizeInformation")</p>
@@ -465,25 +465,14 @@
                 </div>
                 <span asp-validation-for="@createEntityRelation.SecondaryEntityId"></span>
             </div>
-            <div class="col-sm-12 col-md-6">
-                <div class="form-floating">
-                    <select class="form-select"
-                            data-name="EntityRelationsList"
-                            data-prefix="EntityRelationsList"
-                            data-suffix="MiddleEntityId"
-                            asp-for="@createEntityRelation.MiddleEntityId" asp-items="middleEntities">
-                    </select>
-                    <label asp-for="@createEntityRelation.MiddleEntityId"></label>
-                </div>
-                <span asp-validation-for="@createEntityRelation.MiddleEntityId"></span>
-            </div>
+           
             <div class="col-sm-12 col-md-6">
                 <div class="form-floating">
                     <select class="form-select"
                             data-name="EntityRelationsList"
                             data-prefix="EntityRelationsList"
                             data-suffix="RelationType"
-                            asp-for="@createEntityRelation.RelationType" name="RelationType">
+                            asp-for="@createEntityRelation.RelationType">
 
                         @foreach (RelationTypeEnum relationTypeEnum in (RelationTypeEnum[])Enum.GetValues(typeof(RelationTypeEnum)))
                         {
@@ -496,11 +485,11 @@
             </div>
             <div class="col-sm-12 col-md-6">
                 <div class="form-floating">
-                    <select class="form-select"
+                    <select class="form-select relation-input-type-select"
                             data-name="EntityRelationsList"
                             data-prefix="EntityRelationsList"
                             data-suffix="InputType"
-                            asp-for="@createEntityRelation.InputType" name="InputType">
+                            asp-for="@createEntityRelation.InputType">
 
                         @foreach (InputTypeEnum inputTypeEnum in (InputTypeEnum[])Enum.GetValues(typeof(InputTypeEnum)))
                         {
@@ -513,11 +502,11 @@
             </div>
             <div class="col-sm-12 col-md-6">
                 <div class="form-floating">
-                    <select class="form-select"
+                    <select class="form-select filling-type-select"
                             data-name="EntityRelationsList"
                             data-prefix="EntityRelationsList"
                             data-suffix="FillingType"
-                            asp-for="@createEntityRelation.FillingType" name="FillingType">
+                            asp-for="@createEntityRelation.FillingType">
 
                         @foreach (FillingTypeEnum fillingTypeEnum in (FillingTypeEnum[])Enum.GetValues(typeof(FillingTypeEnum)))
                         {
@@ -527,6 +516,17 @@
                     <label asp-for="@createEntityRelation.FillingType"></label>
                 </div>
                 <span asp-validation-for="@createEntityRelation.FillingType"></span>
+            </div> <div class="col-sm-12 col-md-6">
+                <div class="form-floating">
+                    <select class="form-select"
+                            data-name="EntityRelationsList"
+                            data-prefix="EntityRelationsList"
+                            data-suffix="MiddleEntityId"
+                            asp-for="@createEntityRelation.MiddleEntityId" asp-items="middleEntities">
+                    </select>
+                    <label asp-for="@createEntityRelation.MiddleEntityId"></label>
+                </div>
+                <span asp-validation-for="@createEntityRelation.MiddleEntityId"></span>
             </div>
             <div class="col-sm-12 col-md-6">
                 <div class="form-floating">

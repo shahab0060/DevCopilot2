@@ -60,14 +60,7 @@
             </div>
             <span asp-validation-for="@Model.SecondaryEntityId"></span>
         </div>
-        <div class="col-sm-12 col-md-6">
-            <div class="form-floating">
-                <select class="form-select" asp-for="@Model.MiddleEntityId" asp-items="middleEntities">
-                </select>
-                <label asp-for="@Model.MiddleEntityId"></label>
-            </div>
-            <span asp-validation-for="@Model.MiddleEntityId"></span>
-        </div>
+
         <div class="col-sm-12 col-md-6">
             <div class="form-floating">
                 <select class="form-select" asp-for="@Model.RelationType" name="RelationType">
@@ -83,7 +76,7 @@
         </div>
         <div class="col-sm-12 col-md-6">
             <div class="form-floating">
-                <select class="form-select" asp-for="@Model.InputType" name="InputType">
+                <select class="form-select relation-input-type-select" asp-for="@Model.InputType" name="InputType">
 
                     @foreach (InputTypeEnum inputTypeEnum in (InputTypeEnum[])Enum.GetValues(typeof(InputTypeEnum)))
                     {
@@ -96,7 +89,7 @@
         </div>
         <div class="col-sm-12 col-md-6">
             <div class="form-floating">
-                <select class="form-select" asp-for="@Model.FillingType" name="FillingType">
+                <select class="form-select filling-type-select" asp-for="@Model.FillingType" name="FillingType">
 
                     @foreach (FillingTypeEnum fillingTypeEnum in (FillingTypeEnum[])Enum.GetValues(typeof(FillingTypeEnum)))
                     {
@@ -106,6 +99,13 @@
                 <label asp-for="@Model.FillingType"></label>
             </div>
             <span asp-validation-for="@Model.FillingType"></span>
+        </div><div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <select class="form-select" asp-for="@Model.MiddleEntityId" asp-items="middleEntities">
+                </select>
+                <label asp-for="@Model.MiddleEntityId"></label>
+            </div>
+            <span asp-validation-for="@Model.MiddleEntityId"></span>
         </div>
         <div class="col-sm-12 col-md-6">
             <div class="form-floating">

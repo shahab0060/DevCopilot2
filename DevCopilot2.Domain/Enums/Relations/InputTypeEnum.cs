@@ -7,14 +7,14 @@ namespace DevCopilot2.Domain.Enums.Relations
     public enum InputTypeEnum
     {
         [Display(ResourceType = typeof(InputTypeEnumResources), Name = nameof(InputTypeEnumResources.Select))]
-        Select,
+        Select = 0,
         [Display(ResourceType = typeof(InputTypeEnumResources), Name = nameof(InputTypeEnumResources.SecondaryEntitySelect))]
-        SecondaryEntitySelect,
+        SecondaryEntitySelect = 1,
         [Display(ResourceType = typeof(InputTypeEnumResources), Name = nameof(InputTypeEnumResources.Hidden))]
-        Hidden,
+        Hidden = 2,
         [Display(ResourceType = typeof(InputTypeEnumResources), Name = nameof(InputTypeEnumResources.NoInput))]
-        NoInput,
+        NoInput = 3,
         [Display(ResourceType = typeof(InputTypeEnumResources), Name = nameof(InputTypeEnumResources.FieldsInRelationEntityPage))]
-        FieldsInRelationEntityPage
+        FieldsInRelationEntityPage = 4,
     }
 }
