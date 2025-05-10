@@ -47,13 +47,13 @@ namespace DevCopilot2.Core.Services.Classes.Generators
         List<GenerateFileDto> GetFiles(ProjectEnumListDto projectEnum, ProjectListDto project)
         {
             List<GenerateFileDto> files = new List<GenerateFileDto>();
-            foreach (var language in project.ProjectSelectedLanguagesList)
-            {
-                string enumResourceName = $"{projectEnum.EnglishName}Resources";
-                files.Add(enumResourceName.GetDesignerFile(GetNameSpace(projectEnum, project), GetPath(projectEnum, project), projectEnum
+            string enumResourceName = $"{projectEnum.EnglishName}Resources";
+            files.Add(enumResourceName.GetDesignerFile(GetNameSpace(projectEnum, project), GetPath(projectEnum, project), projectEnum
                     .ProjectEnumPropertiesList
                     .Select(a => a.Name)
                     .ToList()));
+            foreach (var language in project.ProjectSelectedLanguagesList)
+            {
                 files.Add(GetSingleFile(projectEnum, project, language));
             }
             return files;

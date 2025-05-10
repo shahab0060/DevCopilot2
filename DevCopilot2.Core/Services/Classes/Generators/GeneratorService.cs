@@ -113,7 +113,7 @@ namespace DevCopilot2.Core.Services.Classes.Generators
             if (generate.GenerateEnums)
             {
                 GenerateCleanArchitectureResultDto result = new GenerateCleanArchitectureResultDto();
-                result.EnumsResult.AddRange((await GenerateProjectEnums(generate.ProjectId, generate.GenerateResources)));
+                result.EnumsResult.AddRange((await GenerateProjectEnums(generate.ProjectId, generate.GenerateResources || generate.GenerateEnumsResources)));
             }
             if (generate.GenerateMenus)
                 GenerateAdminMenus(generateEntityDto, entities);

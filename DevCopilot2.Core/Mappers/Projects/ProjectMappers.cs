@@ -45,7 +45,7 @@ namespace DevCopilot2.Core.Mappers.Projects
                         Title = projectArea.Title,
                         TemplateTitle = projectArea.Template.Title,
                         TemplateId = projectArea.TemplateId,
-
+                        
                         })
                         .ToList(),
                         ProjectSelectedLanguagesList = project.ProjectSelectedLanguages
@@ -61,7 +61,7 @@ namespace DevCopilot2.Core.Mappers.Projects
                         ProjectId = projectSelectedLanguage.ProjectId,
                         LanguageName = projectSelectedLanguage.Language.Name,
                         LanguageId = projectSelectedLanguage.LanguageId,
-
+                        LanguageCulture = projectSelectedLanguage.Language.Culture
                         })
                         .ToList(),
                     });
