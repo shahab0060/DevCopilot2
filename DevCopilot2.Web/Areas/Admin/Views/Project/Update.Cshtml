@@ -1,6 +1,7 @@
 @inject IViewLocalizer Localizer
 @inject IHtmlLocalizer<SharedResources> SharedLocalizer
 @inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@inject IWebHostEnvironment environment
 @using System
 @using System.ComponentModel.DataAnnotations
 @using DevCopilot2.Domain.Enums.Project
@@ -62,7 +63,7 @@ UpdateProjectSelectedLanguageDto updateProjectSelectedLanguage = new UpdateProje
     </div>
     <span asp-validation-for="@Model.Title"></span>
 </div>
-<div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6 @(environment.IsProduction()?"d-none":"")">
     <div class="form-floating">
         <input class="form-control Others-input"  asp-for="@Model.Location"  placeholder="" />
         <label asp-for="@Model.Location"></label>

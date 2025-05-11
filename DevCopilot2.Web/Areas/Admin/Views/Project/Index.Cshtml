@@ -117,8 +117,8 @@
                 <tr>
                     <th class="" scope="col">@Localizer.GetString("EnglishName")</th>
                     <th class="" scope="col">@Localizer.GetString("Title")</th>
-                    <th class="" scope="col">@Localizer.GetString("Location")</th>
-                    <th class="" scope="col">@Localizer.GetString("Architecture")</th>
+@*                     <th class="" scope="col">@Localizer.GetString("Location")</th>
+ *@                    <th class="" scope="col">@Localizer.GetString("Architecture")</th>
                     <th class="" scope="col">@SharedLocalizer.GetString("CreateDate")</th>
                     <th class="" scope="col">@SharedLocalizer.GetString("LatestEditDate")</th>
                     <th class="" scope="col">@SharedLocalizer.GetString("EditCounts")</th>
@@ -140,9 +140,9 @@
                         <td class="product align-middle ps-4">
                             <span class="fw-semibold line-clamp-3 mb-0">@project.Title</span>
                         </td>
-                        <td class="product align-middle ps-4">
+                        @* <td class="product align-middle ps-4">
                             <span class="fw-semibold line-clamp-3 mb-0">@project.Location</span>
-                        </td>
+                        </td> *@
                         <td class="product align-middle ps-4">
                             <span class="fw-semibold line-clamp-3 mb-0">@project.Architecture.GetEnumName()</span>
                         </td>

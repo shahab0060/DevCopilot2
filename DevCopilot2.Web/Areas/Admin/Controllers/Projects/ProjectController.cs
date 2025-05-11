@@ -2,6 +2,7 @@ using ClosedXML.Excel;
 using DevCopilot2.Core.Exporters;
 using DevCopilot2.Core.Extensions.BasicExtensions;
 using DevCopilot2.Core.Services.Interfaces;
+using DevCopilot2.Core.Utils;
 using DevCopilot2.Domain.DTOs.Languages;
 using DevCopilot2.Domain.DTOs.Projects;
 using DevCopilot2.Domain.DTOs.Templates;
@@ -12,6 +13,7 @@ using DevCopilot2.Web.PresentationMappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
@@ -29,13 +31,15 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
         private readonly IProjectService _projectService;
         private readonly ITemplateService _templateService;
         private readonly ISiteService _siteService;
+        private readonly IWebHostEnvironment _environment;
         public ProjectController(
                            IStringLocalizer<SharedResources> sharedLocalizer,
                            IStringLocalizer<EntitiesSharedResources> sharedEntitiesLocalizer,
                            IStringLocalizer<ProjectController> localizer,
                            IProjectService projectService,
                            ITemplateService templateService,
-                           ISiteService siteService 
+                           ISiteService siteService,
+                           IWebHostEnvironment environment
                                       )
         {
             this._sharedLocalizer = sharedLocalizer;
@@ -44,6 +48,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
             this._projectService = projectService;
             this._templateService = templateService;
             this._siteService = siteService;
+            this._environment = environment;
         }
 
         #endregion
@@ -61,26 +66,26 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
 
         #region detail
 
-		[HttpGet]
-		public async Task<IActionResult>Detail(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Detail(int id)
+        {
 
             ProjectListDto? projectInformation = await _projectService.GetSingleProjectInformation(id);
-			if (
-            projectInformation is null)return NotFound();
+            if (
+            projectInformation is null) return NotFound();
 
             await GetViewDatas();
             return View(
-            projectInformation);	
-		}
+            projectInformation);
+        }
 
-		#endregion
+        #endregion
 
         #region create
 
-		[HttpGet]
-		public async Task<IActionResult> Create()
-		{
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
             await GetViewDatas();
             CreateProjectDto create = new CreateProjectDto()
             {
@@ -89,132 +94,136 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
             return View(create);
         }
 
-		[HttpPost]
-		public async Task<IActionResult> Create(CreateProjectDto create)
-		{
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateProjectDto create)
+        {
+            if (_environment.IsProduction())
+                create.Location = $"{PathExtension.BaseSetPath}/files/{create.EnglishName}";
 
             create.AuthorId = User.GetCurrentUserId();
 
-			if (!ModelState.IsValid)
-			{
+            if (!ModelState.IsValid)
+            {
                 await GetViewDatas();
                 return View(create);
             }
-			ChangeProjectResult result = await _projectService.CreateProject(create);
+            ChangeProjectResult result = await _projectService.CreateProject(create);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case ChangeProjectResult.Success:
+                case ChangeProjectResult.Success:
                     {
                         TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Created Successfully")}";
                         return RedirectToAction("Index", "Project", new { Area = "Admin", });
                     }
 
-				case ChangeProjectResult.NotFound:
+                case ChangeProjectResult.NotFound:
                     {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
                     }
 
-				case ChangeProjectResult.EnglishNameExists:
-                {
+                case ChangeProjectResult.EnglishNameExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("EnglishName")} {create.EnglishName}";
                         break;
-                }
+                    }
 
-				case ChangeProjectResult.TitleExists:
-                {
+                case ChangeProjectResult.TitleExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("Title")} {create.Title}";
                         break;
-                }
+                    }
 
-				case ChangeProjectResult.LocationExists:
-                {
+                case ChangeProjectResult.LocationExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("Location")} {create.Location}";
                         break;
-                }
+                    }
 
-			}
+            }
 
             #endregion
 
             await GetViewDatas();
-			return View(create);
-		}
+            return View(create);
+        }
 
-		#endregion
+        #endregion
 
         #region update
 
-		[HttpGet]
-		public async Task<IActionResult> Update(int id)
-		{
-			UpdateProjectDto? projectInformation = await _projectService.GetProjectInformation(id);
-			if (projectInformation is null) return NotFound();
-			await GetViewDatas();
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+
+            UpdateProjectDto? projectInformation = await _projectService.GetProjectInformation(id);
+            if (projectInformation is null) return NotFound();
+            await GetViewDatas();
             return View(projectInformation);
-		}
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Update(UpdateProjectDto update)
-		{
-
+        [HttpPost]
+        public async Task<IActionResult> Update(UpdateProjectDto update)
+        {
+            if (_environment.IsProduction())
+                update.Location = $"{PathExtension.BaseSetPath}/files/{update.EnglishName}";
             update.AuthorId = User.GetCurrentUserId();
 
-			if (!ModelState.IsValid)
-			{
+            if (!ModelState.IsValid)
+            {
                 await GetViewDatas();
                 return View(update);
             }
-			ChangeProjectResult result = await _projectService.UpdateProject(update);
+            ChangeProjectResult result = await _projectService.UpdateProject(update);
 
             #region handling different types
 
             switch (result)
-			{
+            {
 
-				case ChangeProjectResult.Success:
+                case ChangeProjectResult.Success:
                     {
                         TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Updated Successfully.")}";
                         return RedirectToAction("Index", "Project", new { Area = "Admin", });
                     }
 
-				case ChangeProjectResult.NotFound:
+                case ChangeProjectResult.NotFound:
                     {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Invalid Request.")}";
                         return NotFound();
                     }
 
-				case ChangeProjectResult.EnglishNameExists:
-                {
+                case ChangeProjectResult.EnglishNameExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("EnglishName")} {update.EnglishName}";
                         break;
-                }
+                    }
 
-				case ChangeProjectResult.TitleExists:
-                {
+                case ChangeProjectResult.TitleExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("Title")} {update.Title}";
                         break;
-                }
+                    }
 
-				case ChangeProjectResult.LocationExists:
-                {
+                case ChangeProjectResult.LocationExists:
+                    {
                         TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("A")} {_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Exists With This")} {_localizer.GetString("Location")} {update.Location}";
                         break;
-                }
+                    }
 
-			}
+            }
 
             #endregion
 
             await GetViewDatas();
-			return View(update);
-		}
+            return View(update);
+        }
 
-		#endregion
+        #endregion
 
         #region view datas
 
@@ -238,37 +247,37 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
 
         #region delete
 
-		[HttpGet]
-		public async Task<IActionResult> Delete(int id)
-		{
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
             ProjectListDto? projectInformation = await _projectService.GetSingleProjectInformation(id);
             if (projectInformation is null) return NotFound();
-			BaseChangeEntityResult result = await _projectService.DeleteProject(id);
-			switch (result)
-			{
-				case BaseChangeEntityResult.Success:
-					{
-						TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-					return RedirectToAction("Index", "Project", new { Area = "Admin", });
-					}
-			}
-			return NotFound();
-		}
+            BaseChangeEntityResult result = await _projectService.DeleteProject(id);
+            switch (result)
+            {
+                case BaseChangeEntityResult.Success:
+                    {
+                        TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Project")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+                        return RedirectToAction("Index", "Project", new { Area = "Admin", });
+                    }
+            }
+            return NotFound();
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> DeleteRange(List<int> ids)
-		{
-			if (!ids.Distinct().Any())
-			{
-				TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
-				return RedirectToAction("Index", "Project", new { Area = "Admin" });
-			}
-			await _projectService.DeleteProject(ids);
-			TempData[SuccessMessage] =$"{_sharedEntitiesLocalizer.GetString("Projects")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
-			return RedirectToAction("Index", "Project", new { Area = "Admin" });
-		}
+        [HttpGet]
+        public async Task<IActionResult> DeleteRange(List<int> ids)
+        {
+            if (!ids.Distinct().Any())
+            {
+                TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("Please AtLeast Choose One Item.")}";
+                return RedirectToAction("Index", "Project", new { Area = "Admin" });
+            }
+            await _projectService.DeleteProject(ids);
+            TempData[SuccessMessage] = $"{_sharedEntitiesLocalizer.GetString("Projects")} {_sharedLocalizer.GetString("Deleted Successfully.")}";
+            return RedirectToAction("Index", "Project", new { Area = "Admin" });
+        }
 
-		#endregion
+        #endregion
 
         #region export excel
 
@@ -284,18 +293,18 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
                 ws = excelExporter.AddHeaders(ws, title);
                 ws.Columns().AdjustToContents();
                 ws = excelExporter.AddColumn(ws, $"{_sharedLocalizer.GetString("Row")}", 1, 3);
-                ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("EnglishName")}", 2, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("Title")}", 3, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("Location")}", 4, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("Architecture")}", 5, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("AuthorPhoneNumber")}", 6, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("AuthorId")}", 7, 3);
-ws = excelExporter.AddColumn(ws,$"{_localizer.GetString("ReactProjectLocation")}", 8, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("EnglishName")}", 2, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("Title")}", 3, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("Location")}", 4, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("Architecture")}", 5, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("AuthorPhoneNumber")}", 6, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("AuthorId")}", 7, 3);
+                ws = excelExporter.AddColumn(ws, $"{_localizer.GetString("ReactProjectLocation")}", 8, 3);
 
                 int rowIndex = 4;
                 foreach (var item in result)
                 {
-                    ws = excelExporter.AddColumn(ws,(rowIndex-3).ToString(), 1, rowIndex);
+                    ws = excelExporter.AddColumn(ws, (rowIndex - 3).ToString(), 1, rowIndex);
 
                     ws = excelExporter.AddColumn(ws, item.EnglishName, 2, rowIndex);
 
@@ -366,7 +375,7 @@ item.AuthorPhoneNumber,
 
 item.AuthorId.ToString(),
 
-item.ReactProjectLocation?.ToString() );
+item.ReactProjectLocation?.ToString());
                 index++;
             }
 

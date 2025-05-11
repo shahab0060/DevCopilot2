@@ -14,37 +14,37 @@ namespace DevCopilot2.Domain.DTOs.Projects
     {
         #region properties
 
-		public List<ProjectListDto> Projects { get; set; } = new List<ProjectListDto>();
+        public List<ProjectListDto> Projects { get; set; } = new List<ProjectListDto>();
 
         public SortProjectType? SortProperty { get; set; }
 
-                [Display(Name = "AuthorId")]
+        [Display(Name = "AuthorId")]
         public long? AuthorId { get; set; }
 
         #endregion
 
         #region methods
 
-        public FilterProjectsDto  SetProjects(List<ProjectListDto> projects)
-		{
-			this.Projects = projects;
-			return this;
-		}
+        public FilterProjectsDto SetProjects(List<ProjectListDto> projects)
+        {
+            this.Projects = projects;
+            return this;
+        }
 
-		public FilterProjectsDto  SetPaging(BasePaging paging)
-		{
-			PageId = paging.PageId;
-			AllEntitiesCount = paging.AllEntitiesCount;
-			StartPage = paging.StartPage;
-			EndPage = paging.EndPage;
-			HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
-			TakeEntity = paging.TakeEntity;
-			SkipEntity = paging.SkipEntity;
-			PageCount = paging.PageCount;
-			return this;
-		}
+        public FilterProjectsDto SetPaging(BasePaging paging)
+        {
+            PageId = paging.PageId;
+            AllEntitiesCount = paging.AllEntitiesCount;
+            StartPage = paging.StartPage;
+            EndPage = paging.EndPage;
+            HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
+            TakeEntity = paging.TakeEntity;
+            SkipEntity = paging.SkipEntity;
+            PageCount = paging.PageCount;
+            return this;
+        }
 
-		#endregion
+        #endregion
     }
 
     public class ProjectListDto : BaseListDto<int>
@@ -56,31 +56,31 @@ namespace DevCopilot2.Domain.DTOs.Projects
         [Display(Name = "UseFluent")]
         public bool UseFluent { get; set; } = false;
 
-        [Display(Name="EnglishName")]
+        [Display(Name = "EnglishName")]
         public string EnglishName { get; set; } = null!;
 
-        [Display(Name="Title")]
+        [Display(Name = "Title")]
         public string Title { get; set; } = null!;
 
-        [Display(Name="Location")]
+        [Display(Name = "Location")]
         public string Location { get; set; } = null!;
 
-        [Display(Name="Architecture")]
-        public ArchitectureType Architecture { get; set; } 
+        [Display(Name = "Architecture")]
+        public ArchitectureType Architecture { get; set; }
 
-        [Display(Name="AuthorId")]
+        [Display(Name = "AuthorId")]
         public string AuthorPhoneNumber { get; set; } = null!;
 
-        [Display(Name="AuthorId")]
-        public long AuthorId { get; set; } 
+        [Display(Name = "AuthorId")]
+        public long AuthorId { get; set; }
 
-        [Display(Name="ReactProjectLocation")]
+        [Display(Name = "ReactProjectLocation")]
         public string? ReactProjectLocation { get; set; } = null!;
 
-        [Display(Name="ProjectAreasList")]
+        [Display(Name = "ProjectAreasList")]
         public List<ProjectAreaListDto> ProjectAreasList { get; set; } = new List<ProjectAreaListDto>();
 
-        [Display(Name="ProjectSelectedLanguagesList")]
+        [Display(Name = "ProjectSelectedLanguagesList")]
         public List<ProjectSelectedLanguageListDto> ProjectSelectedLanguagesList { get; set; } = new List<ProjectSelectedLanguageListDto>();
 
     }
@@ -101,12 +101,12 @@ namespace DevCopilot2.Domain.DTOs.Projects
         [Display(Name = "Location")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public string Location { get; set; } = null!;
+        public string Location { get; set; } = "some location";
 
         [Display(Name = "Architecture")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public ArchitectureType Architecture { get; set; } 
+        public ArchitectureType Architecture { get; set; }
 
         [Display(Name = "AuthorId")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
@@ -119,23 +119,23 @@ namespace DevCopilot2.Domain.DTOs.Projects
 
     }
 
-    public class CreateProjectDto: BaseUpsertProjectDto
+    public class CreateProjectDto : BaseUpsertProjectDto
     {
         [Display(Name = "ProjectAreasList")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public List<CreateProjectAreaDto> ProjectAreasList { get; set; } =new List<CreateProjectAreaDto>();
+        public List<CreateProjectAreaDto> ProjectAreasList { get; set; } = new List<CreateProjectAreaDto>();
 
         [Display(Name = "ProjectSelectedLanguagesList")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public List<CreateProjectSelectedLanguageDto> ProjectSelectedLanguagesList { get; set; } =new List<CreateProjectSelectedLanguageDto>();
+        public List<CreateProjectSelectedLanguageDto> ProjectSelectedLanguagesList { get; set; } = new List<CreateProjectSelectedLanguageDto>();
 
     }
 
-    public class UpdateProjectDto: BaseUpsertProjectDto
+    public class UpdateProjectDto : BaseUpsertProjectDto
     {
         [Display(Name = "Id")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
@@ -146,13 +146,13 @@ namespace DevCopilot2.Domain.DTOs.Projects
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public List<UpdateProjectAreaDto> ProjectAreasList { get; set; } =new List<UpdateProjectAreaDto>();
+        public List<UpdateProjectAreaDto> ProjectAreasList { get; set; } = new List<UpdateProjectAreaDto>();
 
         [Display(Name = "ProjectSelectedLanguagesList")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public List<UpdateProjectSelectedLanguageDto> ProjectSelectedLanguagesList { get; set; } =new List<UpdateProjectSelectedLanguageDto>();
+        public List<UpdateProjectSelectedLanguageDto> ProjectSelectedLanguagesList { get; set; } = new List<UpdateProjectSelectedLanguageDto>();
 
     }
 
