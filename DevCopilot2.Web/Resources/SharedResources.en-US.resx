@@ -162,6 +162,9 @@
     <data name="Detail" xml:space="preserve">
     <value>Detail</value>
 </data>
+    <data name="Download" xml:space="preserve">
+    <value>Download</value>
+</data>
     <data name="CreateDate" xml:space="preserve">
     <value>Create Date</value>
 </data>
@@ -214,5 +217,10 @@
 </data>
     <data name="Files" xml:space="preserve">
     <value>Files</value>
+</data>
+    <data name="File Not Found.Please First Generate Files" xml:space="preserve">
+    <value>File Not Found.Please First Click On Generate Solution And Generate Files</value>
+</data>    <data name="Download Started Succesfully" xml:space="preserve">
+    <value>Download Started Successfully!</value>
 </data>
 </root>

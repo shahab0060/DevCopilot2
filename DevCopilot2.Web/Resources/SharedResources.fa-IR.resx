@@ -162,6 +162,9 @@
     <data name="Operation" xml:space="preserve">
     <value>عملیات</value>
     </data>
+    <data name="Download" xml:space="preserve">
+    <value>دانلود</value>
+ </data>
     <data name="Detail" xml:space="preserve">
     <value>جزئیات</value>
     </data>
@@ -216,7 +219,13 @@
     <data name="File" xml:space="preserve">
     <value>فایل</value>
 </data>
+    <data name="File Not Found.Please First Generate Files" xml:space="preserve">
+    <value>فایل یافت نشد. لطفا اول روی ساخت پروژه و فایل ها کلیک کنید</value>
+</data>
     <data name="Files" xml:space="preserve">
     <value>فایل</value>
+</data>
+    <data name="Download Started Succesfully" xml:space="preserve">
+    <value>دانلود با موفقیت شروع شد!</value>
 </data>
 </root>

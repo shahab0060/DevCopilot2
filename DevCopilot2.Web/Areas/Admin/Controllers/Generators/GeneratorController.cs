@@ -2,10 +2,13 @@
 using DevCopilot2.Core.Services.Interfaces.Generators;
 using DevCopilot2.Domain.DTOs.Entities;
 using DevCopilot2.Domain.DTOs.Generators;
+using DevCopilot2.Domain.DTOs.Projects;
 using DevCopilot2.Domain.DTOs.Users;
 using DevCopilot2.Domain.Enums.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using System.Diagnostics;
+using System.IO.Compression;
 
 namespace DevCopilot2.Web.Areas.Admin.Controllers.Generators
 {
@@ -37,7 +40,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Generators
 
         #endregion
 
-        #region generate clean architecutre
+        #region generate entity
 
         [HttpGet]
         public async Task<IActionResult> GenerateEntity(int entityId)
@@ -68,7 +71,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Generators
             }
             GenerateCleanArchitectureResultDto result = await _generatorService.GenerateCleanArchitecture(generate);
 
-            TempData[SuccessMessage] = $"{result.EntityResult.CreatedCount} {(result.EntityResult.CreatedCount > 1 ? _sharedEntitiesLocalizer.GetString("Entities") : _sharedEntitiesLocalizer.GetString("Entity"))} {_sharedLocalizer.GetString("Created Successfully")}";
+            TempData[SuccessMessage] = $"{result.GetAllResults().CreatedCount} {(result.EntityResult.CreatedCount > 1 ? _sharedLocalizer.GetString("Files") : _sharedLocalizer.GetString("File"))} {_sharedLocalizer.GetString("Created Successfully")}";
             return RedirectToAction("Index", "Entity", new { projectId = entityInformation.ProjectId });
 
 
@@ -143,10 +146,61 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Generators
         {
             List<GenerateCleanArchitectureResultDto> result = await _generatorService.GenerateCleanArchitecture(generate);
             TempData["SuccessMessage"] = $"{result.Sum(a => a.GetAllResults().CreatedCount)} " +
-                $"{(result.Sum(a => a.GetAllResults().CreatedCount) > 1 ? _sharedEntitiesLocalizer.GetString("Files").Value : _sharedEntitiesLocalizer.GetString("File").Value)} " +
+                $"{(result.Sum(a => a.GetAllResults().CreatedCount) > 1 ? _sharedLocalizer.GetString("Files").Value : _sharedLocalizer.GetString("File").Value)} " +
                 $"{_sharedLocalizer.GetString("Created Successfully").Value}";
             return RedirectToAction("Index", "Project", new { area = "Admin" });
 
+        }
+
+        #endregion
+
+        #region download zip
+
+        [HttpGet("download-zip")]
+        public async Task<IActionResult> DownloadProjectAsZip(int projectId)
+        {
+            ProjectListDto? projectInformation = await _projectService
+                .GetSingleProjectInformation(projectId);
+
+            if (projectInformation is null) return NotFound();
+
+            if (!Directory.Exists(projectInformation.Location))
+            {
+                TempData[ErrorMessage] = $"{_sharedLocalizer.GetString("File Not Found. Please First Generate Files")}";
+                return NotFound();
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    AddFilesToZip(archive, projectInformation.Location, "");
+                }
+
+                memoryStream.Position = 0; // Reset stream position for download
+                TempData[SuccessMessage] = $"{_sharedLocalizer.GetString("Download Started Successfully")}";
+                return File(memoryStream.ToArray(), "application/zip", $"{projectInformation.EnglishName}.zip");
+            }
+        }
+
+        private void AddFilesToZip(ZipArchive archive, string sourceDir, string entryNamePrefix)
+        {
+            foreach (var filePath in Directory.GetFiles(sourceDir))
+            {
+                var entryName = Path.Combine(entryNamePrefix, Path.GetFileName(filePath));
+                var entry = archive.CreateEntry(entryName, CompressionLevel.Fastest);
+                using (var entryStream = entry.Open())
+                using (var fileStream = System.IO.File.OpenRead(filePath))
+                {
+                    fileStream.CopyTo(entryStream);
+                }
+            }
+
+            foreach (var subDir in Directory.GetDirectories(sourceDir))
+            {
+                var subDirName = Path.Combine(entryNamePrefix, Path.GetFileName(subDir));
+                AddFilesToZip(archive, subDir, subDirName);
+            }
         }
 
         #endregion

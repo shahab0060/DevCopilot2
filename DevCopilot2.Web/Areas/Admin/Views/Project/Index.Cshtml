@@ -160,7 +160,9 @@
                             <a asp-area="Admin" asp-controller="Generator" asp-action="GenerateProjectFiles"
                                asp-route-projectId="@project.Id" class="btn btn-sm btn-primary me-1 mb-1 mb-md-0">@SharedLocalizer.GetString("Generate")</a>
                             <a asp-area="Admin" asp-controller="Generator" asp-action="GenerateCleanArchitectureSolution"
-                               asp-route-projectId="@project.Id" class="btn btn-sm btn-primary me-1 mb-1 mb-md-0">@SharedLocalizer.GetString("Generate Solution")</a>
+                               asp-route-projectId="@project.Id" class="btn btn-sm btn-secondary me-1 mb-1 mb-md-0">@SharedLocalizer.GetString("Generate Solution")</a>
+                            <a asp-area="Admin" asp-controller="Generator" asp-action="DownloadProjectAsZip"
+                               asp-route-projectId="@project.Id" class="btn btn-sm btn-primary me-1 mb-1 mb-md-0">@SharedLocalizer.GetString("Download")</a>
                             <a asp-area="Admin" asp-controller="Project" asp-action="Update"
                                asp-route-id="@project.Id" class="btn btn-sm btn-info me-1 mb-1 mb-md-0 update-btn">@SharedLocalizer.GetString("Update")</a>
                             <a asp-area="Admin" asp-controller="Project" asp-action="Detail"
