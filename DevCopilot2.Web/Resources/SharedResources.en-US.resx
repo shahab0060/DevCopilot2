@@ -213,7 +213,7 @@
     <value>Select All</value>
 </data>
     <data name="File" xml:space="preserve">
-    <value>Fiel</value>
+    <value>File</value>
 </data>
     <data name="Files" xml:space="preserve">
     <value>Files</value>
@@ -222,5 +222,18 @@
     <value>File Not Found.Please First Click On Generate Solution And Generate Files</value>
 </data>    <data name="Download Started Succesfully" xml:space="preserve">
     <value>Download Started Successfully!</value>
+</data>
+    <data name="Import Data" xml:space="preserve">
+    <value>Import Data</value>
+</data>
+    <data name="Import Enums From Physical Location" xml:space="preserve">
+    <value>Import Enums From Folder</value>
+</data>
+    <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+</data>      <data name="Save" xml:space="preserve">
+    <value>Save</value>
+</data>    <data name="Modify And Review Enums" xml:space="preserve">
+    <value>Modify And Review Enums</value>
 </data>
 </root>

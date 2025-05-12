@@ -1,11 +1,9 @@
-using System;
 using DevCopilot2.Domain.Entities.Common;
+using DevCopilot2.Domain.Entities.Properties;
+using DevCopilot2.Domain.Entities.Users;
 using DevCopilot2.Domain.Resources.DTOs.Common;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using DevCopilot2.Domain.Entities.Properties;
 using System.ComponentModel.DataAnnotations.Schema;
-using DevCopilot2.Domain.Entities.Users;
 
 namespace DevCopilot2.Domain.Entities.Projects
 {

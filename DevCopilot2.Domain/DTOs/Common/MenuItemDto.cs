@@ -27,6 +27,8 @@ namespace DevCopilot2.Domain.DTOs.Common
 
         public bool Enabled { get; set; }
 
+        public bool UseSharedLocalizer { get; set; }
+
         public List<MenuItemDto>? InnerItems { get; set; } = null;
 
         public Dictionary<string, string> RouteData { get; set; }

@@ -33,6 +33,11 @@
         margin-top: 10px;
         border-radius: 10px;
     }
+    .collapsible-container
+    {
+        margin-top:30px;
+        margin-bottom:30px;
+    }
 
     .sub-form-container {
         border: 2px solid black;
@@ -41,20 +46,20 @@
         margin-top: 30px;
     }
 
-        .sub-form-container h3 {
+        .sub-form-container h3, .collapsible-container{
             cursor: pointer; /* Indicates interactivity */
             position: relative;
             padding-right: 40px; /* Space for the icon */
         }
 
-            .sub-form-container h3::after {
+            .sub-form-container h3::after, .collapsible-container::after {
                 content: " ▼"; /* Down arrow */
                 position: absolute;
                 right: 5px;
                 transition: transform 0.3s ease;
             }
 
-            .sub-form-container h3.collapsed::after {
+            .sub-form-container h3.collapsed::after, .collapsible-container.collapsed::after {
                 transform: rotate(-90deg); /* Rotates when collapsed */
             }
 </style>

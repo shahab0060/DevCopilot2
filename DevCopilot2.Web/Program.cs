@@ -15,6 +15,7 @@ using DevCopilot2.Web.MiddleWares;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,17 +65,27 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 
 builder.Services.AddMvc()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-    .AddDataAnnotationsLocalization();
+    .AddDataAnnotationsLocalization()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.MaxDepth = 10000;
+    });
 
 builder.Services.AddControllersWithViews()
      .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-    .AddDataAnnotationsLocalization();
+    .AddDataAnnotationsLocalization()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.MaxDepth = 10000;
+    });
 
 #endregion
 
-builder.Services.AddMvc();
-
-builder.Services.AddControllersWithViews();
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.ValueCountLimit = int.MaxValue; // Increase the number of form values
+    options.MultipartBodyLengthLimit = long.MaxValue; // Increase the file upload limit
+});
 
 builder.Services.AddResponseCompression(options =>
 {
@@ -85,6 +96,13 @@ builder.Services.AddResponseCompression(options =>
 builder.Services.Configure<IISServerOptions>(options =>
 {
     options.AllowSynchronousIO = true;
+});
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20); // Adjust timeout as needed
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 RegisterServices(builder.Services);
@@ -145,19 +163,16 @@ else
 //The default HSTS value is 30 days.You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 app.UseHsts();
 app.UseHttpsRedirection();
-StaticFileOptions options = new StaticFileOptions
+app.UseSession();
+app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = ctx =>
     {
         // Cache static files for 30 days
         ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=2592000");
         ctx.Context.Response.Headers.Append("Expires", DateTime.UtcNow.AddDays(30).ToString("R", CultureInfo.InvariantCulture));
-    },
-    ContentTypeProvider = new FileExtensionContentTypeProvider()
-};
-((FileExtensionContentTypeProvider)options.ContentTypeProvider).Mappings.Add(new KeyValuePair<string, string>(".glb", "model/gltf-buffer"));
-
-app.UseStaticFiles(options);
+    }
+});
 app.UseMiddleware<SynchronousIOMiddleware>();
 app.UseResponseCompression();
 app.UseRouting();

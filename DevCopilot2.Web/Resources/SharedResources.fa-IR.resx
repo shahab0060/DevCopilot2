@@ -224,8 +224,19 @@
 </data>
     <data name="Files" xml:space="preserve">
     <value>فایل</value>
+</data>    <data name="Import Data" xml:space="preserve">
+    <value>وارد کردن دیتا</value>
 </data>
     <data name="Download Started Succesfully" xml:space="preserve">
     <value>دانلود با موفقیت شروع شد!</value>
+</data>    <data name="Import Enums From Physical Location" xml:space="preserve">
+    <value>وارد کردن Enum ها از فولدر</value>
+</data>
+    <data name="Continue" xml:space="preserve">
+    <value>ادامه</value>
+</data>      <data name="Save" xml:space="preserve">
+    <value>ذخیره</value>
+</data>    <data name="Modify And Review Enums" xml:space="preserve">
+    <value>ویرایش و مرور Enum ها</value>
 </data>
 </root>

@@ -107,28 +107,28 @@ namespace DevCopilot2.Core.Mappers.Templates
 				{
                     Title = create.Title.ToTitle()!,
                     ProjectId = create.ProjectId > 0 ? create.ProjectId: null,
-                    ListViewHtml = create.ListViewHtml.SanitizeText()!,
-                    ListFirstThCode = create.ListFirstThCode.SanitizeText()!,
-                    ListOtherThCodes = create.ListOtherThCodes.SanitizeText()!,
-                    ListBoolTdHtml = create.ListBoolTdHtml.SanitizeText()!,
-                    ListTextTdHtml = create.ListTextTdHtml.SanitizeText()!,
-                    ListImageTdHtml = create.ListImageTdHtml.SanitizeText()!,
-                    ListPriceTdHtml = create.ListPriceTdHtml.SanitizeText()!,
-                    ListDefaultTdCode = create.ListDefaultTdCode.SanitizeText()!,
-                    ListViewCardHtml = create.ListViewCardHtml.SanitizeText()!,
-                    CreatePageHtml = create.CreatePageHtml.SanitizeText()!,
-                    CheckBoxInputCode = create.CheckBoxInputCode.SanitizeText()!,
-                    FileInputCode = create.FileInputCode.SanitizeText()!,
-                    TextInputHtml = create.TextInputHtml.SanitizeText()!,
-                    TextEditorInputHtml = create.TextEditorInputHtml.SanitizeText()!,
-                    IntegerInputHtml = create.IntegerInputHtml.SanitizeText()!,
-                    SelectInputHtml = create.SelectInputHtml.SanitizeText()!,
+                    ListViewHtml = create.ListViewHtml,
+                    ListFirstThCode = create.ListFirstThCode,
+                    ListOtherThCodes = create.ListOtherThCodes,
+                    ListBoolTdHtml = create.ListBoolTdHtml,
+                    ListTextTdHtml = create.ListTextTdHtml,
+                    ListImageTdHtml = create.ListImageTdHtml,
+                    ListPriceTdHtml = create.ListPriceTdHtml,
+                    ListDefaultTdCode = create.ListDefaultTdCode,
+                    ListViewCardHtml = create.ListViewCardHtml,
+                    CreatePageHtml = create.CreatePageHtml,
+                    CheckBoxInputCode = create.CheckBoxInputCode,
+                    FileInputCode = create.FileInputCode,
+                    TextInputHtml = create.TextInputHtml,
+                    TextEditorInputHtml = create.TextEditorInputHtml,
+                    IntegerInputHtml = create.IntegerInputHtml,
+                    SelectInputHtml = create.SelectInputHtml,
                     AuthorId = create.AuthorId,
-                    SingleImageHtml = create.SingleImageHtml.SanitizeText()!,
-                    ColorPickerInputCode = create.ColorPickerInputCode.SanitizeText()!,
-                    BreadCrumbCode = create.BreadCrumbCode.SanitizeText()!,
-                    AnchorTagCode = create.AnchorTagCode.SanitizeText()!,
-                    SubmitBtnCode = create.SubmitBtnCode.SanitizeText()!,
+                    SingleImageHtml = create.SingleImageHtml,
+                    ColorPickerInputCode = create.ColorPickerInputCode,
+                    BreadCrumbCode = create.BreadCrumbCode,
+                    AnchorTagCode = create.AnchorTagCode,
+                    SubmitBtnCode = create.SubmitBtnCode,
 				};
 
         #endregion
@@ -139,28 +139,28 @@ namespace DevCopilot2.Core.Mappers.Templates
         {
             template.Title = update.Title.ToTitle()!;
             template.ProjectId = update.ProjectId > 0 ? update.ProjectId: null;
-            template.ListViewHtml = update.ListViewHtml.SanitizeText()!;
-            template.ListFirstThCode = update.ListFirstThCode.SanitizeText()!;
-            template.ListOtherThCodes = update.ListOtherThCodes.SanitizeText()!;
-            template.ListBoolTdHtml = update.ListBoolTdHtml.SanitizeText()!;
-            template.ListTextTdHtml = update.ListTextTdHtml.SanitizeText()!;
-            template.ListImageTdHtml = update.ListImageTdHtml.SanitizeText()!;
-            template.ListPriceTdHtml = update.ListPriceTdHtml.SanitizeText()!;
-            template.ListDefaultTdCode = update.ListDefaultTdCode.SanitizeText()!;
-            template.ListViewCardHtml = update.ListViewCardHtml.SanitizeText()!;
-            template.CreatePageHtml = update.CreatePageHtml.SanitizeText()!;
-            template.CheckBoxInputCode = update.CheckBoxInputCode.SanitizeText()!;
-            template.FileInputCode = update.FileInputCode.SanitizeText()!;
-            template.TextInputHtml = update.TextInputHtml.SanitizeText()!;
-            template.TextEditorInputHtml = update.TextEditorInputHtml.SanitizeText()!;
-            template.IntegerInputHtml = update.IntegerInputHtml.SanitizeText()!;
-            template.SelectInputHtml = update.SelectInputHtml.SanitizeText()!;
+            template.ListViewHtml = update.ListViewHtml;
+            template.ListFirstThCode = update.ListFirstThCode;
+            template.ListOtherThCodes = update.ListOtherThCodes;
+            template.ListBoolTdHtml = update.ListBoolTdHtml;
+            template.ListTextTdHtml = update.ListTextTdHtml;
+            template.ListImageTdHtml = update.ListImageTdHtml;
+            template.ListPriceTdHtml = update.ListPriceTdHtml;
+            template.ListDefaultTdCode = update.ListDefaultTdCode;
+            template.ListViewCardHtml = update.ListViewCardHtml;
+            template.CreatePageHtml = update.CreatePageHtml;
+            template.CheckBoxInputCode = update.CheckBoxInputCode;
+            template.FileInputCode = update.FileInputCode;
+            template.TextInputHtml = update.TextInputHtml;
+            template.TextEditorInputHtml = update.TextEditorInputHtml;
+            template.IntegerInputHtml = update.IntegerInputHtml;
+            template.SelectInputHtml = update.SelectInputHtml;
             template.AuthorId = update.AuthorId;
-            template.SingleImageHtml = update.SingleImageHtml.SanitizeText()!;
-            template.ColorPickerInputCode = update.ColorPickerInputCode.SanitizeText()!;
-            template.BreadCrumbCode = update.BreadCrumbCode.SanitizeText()!;
-            template.AnchorTagCode = update.AnchorTagCode.SanitizeText()!;
-            template.SubmitBtnCode = update.SubmitBtnCode.SanitizeText()!;
+            template.SingleImageHtml = update.SingleImageHtml;
+            template.ColorPickerInputCode = update.ColorPickerInputCode;
+            template.BreadCrumbCode = update.BreadCrumbCode;
+            template.AnchorTagCode = update.AnchorTagCode;
+            template.SubmitBtnCode = update.SubmitBtnCode;
             return template;
         }
 

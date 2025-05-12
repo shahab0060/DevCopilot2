@@ -75,6 +75,31 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.AdminMenuItemsData
                     UserHasPermission = userPermissions.Any(a=>a.KeyName=="TemplatesManagement"),
 
                 },
+                new MenuItemDto()
+                {
+                    Title = "Import Data",
+                    IconName = "project",
+                    VerticalIconName = "project",
+                    PluralTitle = "Import Data",
+                    FolderName = "Import",
+                    UserHasPermission = userPermissions.Any(a=>a.KeyName=="Import"),
+                    UseSharedLocalizer = true,
+                    InnerItems = new List<MenuItemDto>()
+                    {
+                        new MenuItemDto()
+                        {
+                            Title = "Import Enums",
+                            IconName = "project",
+                            VerticalIconName = "project",
+                            PluralTitle = "Import Enums From Physical Location",
+                            FolderName = "ImportProjectEnums",
+                            ControllerName = "ProjectEnumImport",
+                            ActionName = "Index",
+                            UseSharedLocalizer = true,
+                            UserHasPermission = userPermissions.Any(a=>a.KeyName=="Import") && userPermissions.Any(a=>a.KeyName=="ProjectEnumsManagement"),
+                        }
+                    }
+                },
 
                 new MenuItemDto()
                 {
@@ -102,6 +127,5 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.AdminMenuItemsData
                     RouteData = new Dictionary<string, string>{{"id","1"}}
                 },
             };
-
     }
 }

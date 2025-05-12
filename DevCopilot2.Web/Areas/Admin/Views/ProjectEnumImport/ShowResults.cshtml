@@ -1,0 +1,66 @@
+﻿@model List<BaseChangeEntityResult>
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@{
+    string title = SharedLocalizer.GetString("Show Results");
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Home"
+               asp-action="Index"
+               title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Project"
+               asp-action="Index"
+               title="@SharedEntitiesLocalizer.GetString("ProjectEnums")">@SharedEntitiesLocalizer.GetString("ProjectEnums")</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Project"
+               asp-action="Index"
+               title="@SharedLocalizer.GetString("Import Enums")">@SharedLocalizer.GetString("Import Enums")</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Project"
+               asp-action="Index"
+               title="@SharedLocalizer.GetString("Modify Enums")">@SharedLocalizer.GetString("Modify Enums")</a>
+        </li>
+
+        <li class="breadcrumb-item active">@title</li>
+    </ol>
+</nav>
+<form class="mb-9" method="post"
+      asp-area="Admin" asp-controller="ProjectEnumImport" asp-action="Index"
+      enctype="multipart/form-data">
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@title</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                <button class="btn btn-primary px-5 w-100 text-nowrap">@SharedLocalizer.GetString("Import")</button>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+    </div>
+</form>
+
+@section Scripts
+{
+    <script src="/Shared/JqueryValidation.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+            $('.ImportProjectEnums').addClass('active');
+            $('.ImportProjectEnums').addClass('show');
+        });
+    </script>
+}

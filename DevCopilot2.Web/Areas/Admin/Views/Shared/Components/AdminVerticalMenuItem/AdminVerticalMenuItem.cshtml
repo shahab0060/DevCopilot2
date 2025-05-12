@@ -2,6 +2,7 @@
 @using DevCopilot2.Domain.DTOs.Common;
 @using System.Text
 @inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
 
 @model MenuItemDto
 @{
@@ -31,12 +32,29 @@
                 <div class="d-flex align-items-center">
                     <div class="dropdown-indicator-icon-wrapper"><span class="fas fa-caret-right dropdown-indicator-icon"></span></div><span class="nav-link-icon">
                         <span data-feather="@Model.VerticalIconName"></span>
-                    </span><span class="nav-link-text">@SharedEntitiesLocalizer.GetString(Model.PluralTitle)</span>
+                    </span><span class="nav-link-text">
+                        @if (Model.UseSharedLocalizer)
+                            @SharedLocalizer.GetString(Model.PluralTitle)
+                        else
+                            @SharedEntitiesLocalizer.GetString(Model.PluralTitle)
+
+
+
+
+                    </span>
                 </div>
             </a>
             <div class="parent-wrapper label-1">
                 <ul class="nav collapse parent @innerItemsClasses.ToString()" data-bs-parent="#navbarVerticalCollapse" id="@id">
-                    <li class="collapsed-nav-item-title d-none">@SharedEntitiesLocalizer.GetString(Model.PluralTitle)</li>
+                    <li class="collapsed-nav-item-title d-none">
+                        @if (Model.UseSharedLocalizer)
+                            @SharedLocalizer.GetString(Model.PluralTitle)
+                        else
+                            @SharedEntitiesLocalizer.GetString(Model.PluralTitle)
+
+
+
+                    </li>
                     @if (Model.InnerItems is not null)
                     {
                         foreach (var item in Model.InnerItems)
@@ -47,7 +65,17 @@
                                 <a class="nav-link @($"{item.FolderName}") @(!item.Enabled?"disabled":"")"
                                    asp-area="Admin" asp-controller="@item.ControllerName"
                                    asp-action="@item.ActionName" asp-all-route-data="@item.RouteData">
-                                    <div class="d-flex align-items-center"><span class="nav-link-text">@SharedEntitiesLocalizer.GetString(item.PluralTitle)</span></div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="nav-link-text">
+                                            @if (Model.UseSharedLocalizer)
+                                                @SharedLocalizer.GetString(item.PluralTitle)
+                                            else
+                                                @SharedEntitiesLocalizer.GetString(item.PluralTitle)
+
+
+
+                                        </span>
+                                    </div>
                                 </a>
                             </li>
                         }
@@ -63,7 +91,17 @@ else
     <div class="nav-item-wrapper">
         <a class="nav-link label-1 @($"{Model.FolderName}") @(!Model.Enabled?"disabled":"")" asp-area="Admin" asp-controller="@Model.ControllerName"
            asp-action="@Model.ActionName" asp-all-route-data="@Model.RouteData" role="button" data-bs-toggle="" aria-expanded="false">
-            <div class="d-flex align-items-center"><span class="nav-link-icon"><span data-feather="@Model.VerticalIconName"></span></span><span class="nav-link-text-wrapper"><span class="nav-link-text">@SharedEntitiesLocalizer.GetString(Model.PluralTitle)</span></span></div>
+            <div class="d-flex align-items-center">
+                <span class="nav-link-icon"><span data-feather="@Model.VerticalIconName"></span></span><span class="nav-link-text-wrapper">
+                    <span class="nav-link-text">
+                        @if (Model.UseSharedLocalizer)
+                            @SharedLocalizer.GetString(Model.PluralTitle)
+                        else
+                            @SharedEntitiesLocalizer.GetString(Model.PluralTitle)
+
+                    </span>
+                </span>
+            </div>
         </a>
     </div>
 }

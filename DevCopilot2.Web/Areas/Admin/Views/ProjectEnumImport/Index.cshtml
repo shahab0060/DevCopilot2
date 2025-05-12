@@ -1,0 +1,81 @@
+﻿@using DevCopilot2.Domain.DTOs.Imports
+@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@model ImportProjectEnumsFromLocationDto
+@{
+    string title = $"{SharedLocalizer.GetString("Import Enums From Physical Location")}";
+    ViewData["Title"] = title;
+    List<SelectListItem> projects = ViewData["Projects"] as List<SelectListItem>;
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Home"
+               asp-action="Index"
+               title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="ProjectEnum"
+               asp-action="Index"
+               title="@SharedEntitiesLocalizer.GetString("ProjectEnums")">@SharedEntitiesLocalizer.GetString("ProjectEnums")</a>
+        </li>
+
+        <li class="breadcrumb-item active">@title</li>
+    </ol>
+</nav>
+<form class="mb-9" method="post"
+      asp-area="Admin" asp-controller="ProjectEnumImport" asp-action="Index"
+      enctype="multipart/form-data">
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@title</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                <button class="btn btn-primary px-5 w-100 text-nowrap">@SharedLocalizer.GetString("Continue")</button>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <select class="form-select" asp-for="@Model.ProjectId" asp-items="projects">
+                </select>
+                <label asp-for="@Model.ProjectId"></label>
+            </div>
+            <span asp-validation-for="@Model.ProjectId"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input class="form-control Title-input" asp-for="@Model.PhysicalLocation" placeholder="" />
+                <label asp-for="@Model.PhysicalLocation"></label>
+            </div>
+            <span asp-validation-for="@Model.PhysicalLocation"></span>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input Others-input" asp-for="@Model.AddDefaultLanguageValues" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.AddDefaultLanguageValues"></label>
+            </div>
+        </div>
+        <input type="hidden" asp-for="@Model.AuthorId" />
+    </div>
+</form>
+
+@section Scripts
+{
+    <script src="/Shared/JqueryValidation.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+            $('.ImportProjectEnums').addClass('active');
+            $('.ImportProjectEnums').addClass('show');
+        });
+    </script>
+}

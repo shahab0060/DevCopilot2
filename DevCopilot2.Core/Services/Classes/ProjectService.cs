@@ -15,6 +15,8 @@ using DevCopilot2.Domain.Entities.Languages;
 using DevCopilot2.Domain.Entities.Templates;
 using DevCopilot2.Domain.Entities.Users;
 using DevCopilot2.Domain.Enums.Entities;
+using System.Text.RegularExpressions;
+using DevCopilot2.Domain.DTOs.Imports;
 
 namespace DevCopilot2.Core.Services.Classes
 {
@@ -833,6 +835,74 @@ EF.Functions.Like(q.FolderName, $"%{filter.Search}%")
 
             return BaseChangeEntityResult.Success;
         }
+
+
+        public async Task<List<CreateProjectEnumDto>> GetCreateProjectEnumsFromLocation(ImportProjectEnumsFromLocationDto import)
+        {
+            try
+            {
+                var allEnums = new List<CreateProjectEnumDto>();
+                string[] allFiles = Directory.GetFiles(import.PhysicalLocation, "*", SearchOption.AllDirectories);
+
+                foreach (string fileFullName in allFiles)
+                {
+                    string content = await File.ReadAllTextAsync(fileFullName);
+                    var enums = new List<CreateProjectEnumDto>();
+                    string pattern = @"enum\s+(\w+)\s*\{([^}]+)\}";
+                    var matches = Regex.Matches(content, pattern, RegexOptions.Multiline);
+                    string directory = Path.GetDirectoryName(fileFullName)!;
+
+                    foreach (Match match in matches)
+                    {
+                        CreateProjectEnumDto currentEnum = new CreateProjectEnumDto()
+                        {
+                            EnglishName = match.Groups[1].Value,
+                            FolderName = new DirectoryInfo(directory.TrimEnd(Path.DirectorySeparatorChar)).Name,
+                            ProjectId = import.ProjectId,
+                            ProjectEnumPropertiesList = new List<CreateProjectEnumPropertyDto>(),
+                            AuthorId = import.AuthorId
+                        };
+                        string itemsBlock = match.Groups[2].Value;
+                        var items = new List<string>();
+
+                        string itemPattern = @"^\s*(\w+)(?:\s*=\s*\d+)?\s*,?\s*$";
+                        var itemMatches = Regex.Matches(itemsBlock, itemPattern, RegexOptions.Multiline);
+
+                        int itemOrder = 1;
+                        foreach (Match itemMatch in itemMatches)
+                        {
+                            string itemName = itemMatch.Groups[1].Success ? itemMatch.Groups[1].Value : itemMatch.Groups[2].Success ? itemMatch.Groups[2].Value : itemMatch.Groups[3].Value;
+                            currentEnum.ProjectEnumPropertiesList.Add(new CreateProjectEnumPropertyDto()
+                            {
+                                Name = itemName,
+                                Order = itemOrder
+                            });
+                            itemOrder++;
+                        }
+                        enums.Add(currentEnum);
+                    }
+                    allEnums.AddRange(enums);
+                }
+                return allEnums;
+            }
+            catch
+            {
+                return new List<CreateProjectEnumDto>();
+            }
+        }
+
+
+        public async Task<List<BaseChangeEntityResult>> ImportProjectEnumsFromLocation(ImportProjectEnumsFromLocationDto import)
+        {
+            List<BaseChangeEntityResult> results = new List<BaseChangeEntityResult>();
+            foreach (CreateProjectEnumDto create in import.ProjectEnumsList)
+            {
+                BaseChangeEntityResult result = await CreateProjectEnum(create);
+                results.Add(result);
+            }
+            return results;
+        }
+
         public async Task<UpdateProjectEnumDto?> GetProjectEnumInformation(int projectEnumId)
                 => await _projectEnumRepository
                     .GetQueryable()

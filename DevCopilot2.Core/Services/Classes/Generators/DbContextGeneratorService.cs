@@ -30,6 +30,7 @@ namespace DevCopilot2.Core.Services.Classes.Generators
 
         public void AddPermissionsSeedData(List<EntityFullInformationDto> entities)
         {
+            return;
             EntityFullInformationDto? firstEntity = entities.FirstOrDefault();
             if (firstEntity is null) return;
             string location = $@"{firstEntity.Project.EnglishName}.DataLayer\Context";

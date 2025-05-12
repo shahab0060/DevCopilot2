@@ -103,9 +103,14 @@ $(document).ready(function () {
         }
     });
 });
-$(document).on("click", ".sub-form-container h3", function () {
+$(document).on("click", ".sub-form-container h3:first-child", function () {
     $(this).siblings(".single-sub-form").slideToggle();
     $(this).toggleClass("collapsed"); // Rotates the icon
+});
+
+$(document).on("click", ".collapsible-container", function () {
+    $(this).toggleClass("collapsed"); // Rotates the icon
+    $(this).siblings(".single-sub-form").first().slideToggle(); // Toggles the nearest single-sub-form
 });
 $(document).on("change", ".Image-input, .image-input", function () {
 
