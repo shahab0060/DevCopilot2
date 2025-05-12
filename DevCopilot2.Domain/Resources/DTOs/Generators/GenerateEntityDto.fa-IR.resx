@@ -149,4 +149,7 @@
 	<data name="GenerateControllerResources" xml:space="preserve">
 	<value>تولید Resource های کنترلر</value>
 </data>
+	<data name="GeneratePermissionsSeedData" xml:space="preserve">
+	<value>تولید دیتا برای دسترسی ها</value>
+</data>
 </root>

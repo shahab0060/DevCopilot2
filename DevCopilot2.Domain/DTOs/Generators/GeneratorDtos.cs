@@ -56,6 +56,9 @@ namespace DevCopilot2.Domain.DTOs.Generators
 
         [Display(Name = "GenerateControllerResources")]
         public bool GenerateControllerResources { get; set; }
+
+        [Display(Name = "GeneratePermissionsSeedData")]
+        public bool GeneratePermissionsSeedData { get; set; }
     }
 
     public class GenerateEntityDto : BaseGeneratorDto
@@ -84,6 +87,7 @@ namespace DevCopilot2.Domain.DTOs.Generators
                 GenerateMenus = true,
                 GenerateResources = true,
                 OverrideFiles = true,
+                GeneratePermissionsSeedData = true
             };
         }
     }
@@ -118,6 +122,7 @@ namespace DevCopilot2.Domain.DTOs.Generators
                 GenerateResources = true,
                 GenerateSharedResources = true,
                 OverrideFiles = true,
+                GeneratePermissionsSeedData = true
             };
         }
     }

@@ -1,9 +1,7 @@
-﻿using AngleSharp.Dom;
-using DevCopilot2.Core.Extensions.AdvanceExtensions.Generators;
+﻿using DevCopilot2.Core.Extensions.AdvanceExtensions.Generators;
 using DevCopilot2.Core.Extensions.BasicExtensions;
 using DevCopilot2.Core.Services.Interfaces.Generators;
 using DevCopilot2.Domain.DTOs.Entities;
-using DevCopilot2.Domain.DTOs.Generators;
 using DevCopilot2.Domain.DTOs.Generators;
 using DevCopilot2.Domain.DTOs.Properties;
 using DevCopilot2.Domain.Enums.DataTypes;

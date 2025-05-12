@@ -12,7 +12,7 @@ namespace DevCopilot2.Core.Mappers.Languages
     {
         #region to dto
 
-        public static IQueryable<LanguageListDto>ToDto(this IQueryable<Language> query)
+        public static IQueryable<LanguageListDto> ToDto(this IQueryable<Language> query)
                     => query.Select(language => new LanguageListDto()
                     {
 
@@ -31,7 +31,7 @@ namespace DevCopilot2.Core.Mappers.Languages
 
         #region to update dto
 
-        public static IQueryable<UpdateLanguageDto>ToUpdateDto(this IQueryable<Language> query)
+        public static IQueryable<UpdateLanguageDto> ToUpdateDto(this IQueryable<Language> query)
                     => query.Select(language => new UpdateLanguageDto()
                     {
 
@@ -48,23 +48,23 @@ namespace DevCopilot2.Core.Mappers.Languages
         #region to combo
 
         public static IQueryable<ComboDto> ToCombo(this IQueryable<Language> query)
-			    => query.Select(language => new ComboDto()
-			{
-            Title = language.Name,
-            Value = language.Id.ToString()
-            });
+                => query.Select(language => new ComboDto()
+                {
+                    Title = language.Name,
+                    Value = language.Id.ToString()
+                });
 
         #endregion
 
         #region to create model
 
         public static Language ToModel(this CreateLanguageDto create)
-				=> new Language()
-				{
+                => new Language()
+                {
                     Name = create.Name.ToTitle()!,
                     Culture = create.Culture.SanitizeText()!,
-                    DefaultPluralSuffix = create.DefaultPluralSuffix.SanitizeText()!,
-				};
+                    DefaultPluralSuffix = create.DefaultPluralSuffix,
+                };
 
         #endregion
 
@@ -74,7 +74,7 @@ namespace DevCopilot2.Core.Mappers.Languages
         {
             language.Name = update.Name.ToTitle()!;
             language.Culture = update.Culture.SanitizeText()!;
-            language.DefaultPluralSuffix = update.DefaultPluralSuffix.SanitizeText()!;
+            language.DefaultPluralSuffix = update.DefaultPluralSuffix;
             return language;
         }
 

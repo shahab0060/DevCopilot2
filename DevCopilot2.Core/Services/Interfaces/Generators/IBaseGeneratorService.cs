@@ -11,7 +11,7 @@ namespace DevCopilot2.Core.Services.Interfaces.Generators
         CreateFileResultDto GenerateFile(GenerateFileDto generate);
         List<string> GetBaseUsings();
         void FormatFile(string fileLocation);
-        BaseChangeEntityResult AddRegionAndCode(string fileLocation, string regionName, string code);
+        BaseChangeEntityResult AddRegionAndCode(string fileLocation, string regionName, string code,string regionNameToFind);
         BaseChangeEntityResult AppendUsing(string fileLocation, string newUsing);
     }
 }

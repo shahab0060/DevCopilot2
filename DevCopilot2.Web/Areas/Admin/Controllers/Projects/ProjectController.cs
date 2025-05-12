@@ -98,7 +98,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
         public async Task<IActionResult> Create(CreateProjectDto create)
         {
             if (_environment.IsProduction())
-                create.Location = $"{PathExtension.BaseSetPath}/files/{create.EnglishName}";
+                create.Location = $"{PathExtension.BaseSetPath}files/{create.EnglishName}";
 
             create.AuthorId = User.GetCurrentUserId();
 
@@ -170,7 +170,7 @@ namespace DevCopilot2.Web.Areas.Admin.Controllers.Projects
         public async Task<IActionResult> Update(UpdateProjectDto update)
         {
             if (_environment.IsProduction())
-                update.Location = $"{PathExtension.BaseSetPath}/files/{update.EnglishName}";
+                update.Location = $"{PathExtension.BaseSetPath}files/{update.EnglishName}";
             update.AuthorId = User.GetCurrentUserId();
 
             if (!ModelState.IsValid)

@@ -7,6 +7,8 @@ using DevCopilot2.Domain.DTOs.Generators;
 using DevCopilot2.Domain.DTOs.Generators;
 using DevCopilot2.Domain.DTOs.Projects;
 using DevCopilot2.Domain.Enums.Common;
+using DocumentFormat.OpenXml.Spreadsheet;
+using iText.StyledXmlParser.Jsoup.Nodes;
 using System.IO.Compression;
 
 namespace DevCopilot2.Core.Services.Classes.Generators
@@ -133,6 +135,8 @@ namespace DevCopilot2.Core.Services.Classes.Generators
                     results.Add(generateServicesResult);
                 }
             }
+            if (generate.GeneratePermissionsSeedData)
+                _dbContextGeneratorService.AddPermissionsSeedData(entities);
             if (generate.GenerateSharedResources)
             {
                 GenerateCleanArchitectureResultDto result = new GenerateCleanArchitectureResultDto();
@@ -184,9 +188,20 @@ namespace DevCopilot2.Core.Services.Classes.Generators
                 generateCleanArchitectureResult.MediaInformationResult = _mediaInformationGeneratorService.Generate(generate, entityFullInformation);
             if (generate.GenerateMappers)
                 generateCleanArchitectureResult.MapperResult = _mapperGeneratorService.Generate(generate, entityFullInformation);
-            if (generate.GenerateIServices || generate.GenerateServices)
+            if (generate.GenerateIServices || generate.GenerateServices || generate.GeneratePermissionsSeedData)
             {
-                List<EntityFullInformationDto> allEntitiesInThisService = await _baseGeneratorService.GetEntitiesFullInformation(entityFullInformation.Entity.ServiceName, entityFullInformation.Entity.ProjectId);
+                List<EntityFullInformationDto> allEntitiesInThisService = new List<EntityFullInformationDto>();
+                if (generate.GeneratePermissionsSeedData)
+                {
+                    List<EntityFullInformationDto> allEntities = await _baseGeneratorService.GetEntitiesFullInformation(entityFullInformation.Project.Id);
+                    allEntitiesInThisService = allEntities
+                        .Where(a => a.Entity.ServiceName == entityFullInformation.Entity.ServiceName)
+                        .ToList();
+                    _dbContextGeneratorService.AddPermissionsSeedData(allEntities);
+                }
+                else
+                    if (generate.GenerateIServices || generate.GenerateServices)
+                    allEntitiesInThisService = await _baseGeneratorService.GetEntitiesFullInformation(entityFullInformation.Entity.ServiceName, entityFullInformation.Entity.ProjectId);
                 if (generate.GenerateIServices)
                 {
                     generateCleanArchitectureResult.IServiceResult = _serviceInterfaceGeneratorService.Generate(generate, allEntitiesInThisService);

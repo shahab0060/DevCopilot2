@@ -170,17 +170,17 @@ namespace DevCopilot2.Core.Services.Classes.Generators
             }
         }
 
-        public BaseChangeEntityResult AddRegionAndCode(string fileLocation, string regionName, string code)
+        public BaseChangeEntityResult AddRegionAndCode(string fileLocation, string regionName, string code,string regionNameToFind)
         {
             try
             {
                 // Read all lines from the file
                 string[] lines = File.ReadAllLines(fileLocation);
                 if (lines.Any(a => a.Trim() == code.Trim())) return BaseChangeEntityResult.Invalid;
-                // Find the first occurrence of "#region entities"
+                // Find the first occurrence of "#region region name"
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (lines[i].Trim() == "#region entities")
+                    if (lines[i].Trim() == $"#region {regionNameToFind}")
                     {
                         for (int j = i + 1; j < lines.Length; j++)
                         {

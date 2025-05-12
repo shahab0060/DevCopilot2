@@ -156,4 +156,7 @@
 	<data name="GenerateEnumsResources" xml:space="preserve">
 	<value>Generate Enums Resources</value>
 </data>
+	<data name="GeneratePermissionsSeedData" xml:space="preserve">
+	<value>Generate Permissions Seed Data</value>
+</data>
 </root>

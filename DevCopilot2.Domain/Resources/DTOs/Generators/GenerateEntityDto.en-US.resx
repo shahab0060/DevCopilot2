@@ -148,5 +148,7 @@
 </data>
     <data name="GenerateControllerResources" xml:space="preserve">
     <value>Generate Controller Resources</value>
+</data>    <data name="GeneratePermissionsSeedData" xml:space="preserve">
+    <value>Generate Permissions Seed Data</value>
 </data>
 </root>

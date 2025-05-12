@@ -101,7 +101,7 @@ namespace DevCopilot2.Domain.DTOs.Projects
         [Display(Name = "Location")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
 
-        public string Location { get; set; } = "some location";
+        public string Location { get; set; } = "C:\\projects";
 
         [Display(Name = "Architecture")]
         [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]

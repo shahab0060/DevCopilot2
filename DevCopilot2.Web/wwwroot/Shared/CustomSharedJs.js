@@ -467,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll(".singular-name-input").forEach(input => {
         input.addEventListener("keyup", function () {
             let name = input.getAttribute("name");
-
+            let value = $(input).val();
             if (name.endsWith("SingularName")) {
                 let pluralName = name.replace("SingularName", "PluralName");
                 let pluralInput = document.querySelector(`[name='${pluralName}']`);
