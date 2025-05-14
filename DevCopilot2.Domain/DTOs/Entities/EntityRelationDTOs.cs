@@ -149,7 +149,9 @@ namespace DevCopilot2.Domain.DTOs.Entities
 
     public class CreateEntityRelationDto : BaseUpsertEntityRelationDto
     {
-
+        [Display(Name = "SecondaryEntityName")]
+        //this is only used for importing from db
+        public string? SecondaryEntityName { get; set; } = null!;
     }
 
     public class UpdateEntityRelationDto : BaseUpsertEntityRelationDto

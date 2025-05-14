@@ -97,6 +97,18 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.AdminMenuItemsData
                             ActionName = "Index",
                             UseSharedLocalizer = true,
                             UserHasPermission = userPermissions.Any(a=>a.KeyName=="Import") && userPermissions.Any(a=>a.KeyName=="ProjectEnumsManagement"),
+                        },
+                         new MenuItemDto()
+                        {
+                            Title = "Import Entities",
+                            IconName = "project",
+                            VerticalIconName = "project",
+                            PluralTitle = "Import Entities From Db",
+                            FolderName = "ImportEntitiesFromDb",
+                            ControllerName = "EntityDbImport",
+                            ActionName = "SelectProject",
+                            UseSharedLocalizer = true,
+                            UserHasPermission = userPermissions.Any(a=>a.KeyName=="Import") && userPermissions.Any(a=>a.KeyName=="EntitiesManagement"),
                         }
                     }
                 },

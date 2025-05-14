@@ -233,7 +233,27 @@
     <value>Continue</value>
 </data>      <data name="Save" xml:space="preserve">
     <value>Save</value>
-</data>    <data name="Modify And Review Enums" xml:space="preserve">
+</data>   <data name="Import Entities From Db" xml:space="preserve">
+    <value>Import Entities From Db</value>
+</data>    <data name="Modify And Review Entities" xml:space="preserve">
+    <value>Modify And Review Entities</value>
+</data>
+    <data name="Modify And Review Enums" xml:space="preserve">
     <value>Modify And Review Enums</value>
 </data>
+    <data name="Failed To Connect To The DataBase!" xml:space="preserve">
+    <value>Failed To Connect To The Data Base!</value>
+</data>
+    <data name="DefaultAreas" xml:space="preserve">
+    <value>Default Areas</value>
+</data>
+    <data name="DefaultArea" xml:space="preserve">
+    <value>Default Area</value>
+</data>  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+</data>
+    <data name="ExcludePropertiesNames" xml:space="preserve">
+    <value>Properties To Exclude From All Entities</value>
+</data>
+
 </root>

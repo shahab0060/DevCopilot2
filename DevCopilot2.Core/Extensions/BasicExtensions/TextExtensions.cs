@@ -23,6 +23,17 @@ namespace DevCopilot2.Core.Extensions.BasicExtensions
 
             return string.Join(" ", words, 0, n);
         }
+
+        public static string MakeSingular(this string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            if (input.EndsWith("s", StringComparison.OrdinalIgnoreCase))
+                return input.Substring(0, input.Length - 1);
+
+            return input;
+
+        }
         public static string ToRegionName(this string text)
        => text.AddSpacesBetweenCapitals('-').ToLower();
         public static string CreateEmptyLines(this int count)

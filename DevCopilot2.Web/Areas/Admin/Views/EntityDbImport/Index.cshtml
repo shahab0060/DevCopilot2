@@ -1,0 +1,370 @@
+﻿@inject IViewLocalizer Localizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
+@inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@using System
+@using System.ComponentModel.DataAnnotations
+@using DevCopilot2.Domain.DTOs.Entities
+@using DevCopilot2.Domain.DTOs.Imports
+@using DevCopilot2.Domain.DTOs.Languages
+@model ImportEntitiesFromDbDto
+@{
+    string title = $"{SharedLocalizer.GetString("Import Entities From Db")}";
+    ViewData["Title"] = title;
+    CreateEntitySelectedProjectAreaDto createDefaultArea = new CreateEntitySelectedProjectAreaDto();
+    List<SelectListItem> projectAreas = ViewData["ProjectAreas"] as List<SelectListItem>;
+    string createExcludePropertiesName = "";
+}
+
+<nav class="mb-3" aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="Home"
+               asp-action="Index"
+               title="@SharedLocalizer.GetString("Admin")">@SharedLocalizer.GetString("Admin")</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a asp-area="Admin"
+               asp-controller="EntityDbImport"
+               asp-action="SelectProject"
+               title="@SharedLocalizer.GetString("SelectProject")">@SharedLocalizer.GetString("SelectProject")</a>
+        </li>
+        <li class="breadcrumb-item active">@title</li>
+    </ol>
+</nav>
+<form class="mb-9" method="post"
+      asp-area="Admin" asp-controller="EntityDbImport" asp-action="Index"
+      enctype="multipart/form-data">
+
+    <div class="row justify-content-between align-items-end g-3 mb-5">
+        <div class="col-12 col-sm-auto col-xl-8">
+            <h2 class="mb-0">@title</h2>
+        </div>
+        <div class="col-12 col-sm-auto col-xl-4">
+            <div class="d-flex">
+                <button class="btn btn-primary px-5 w-100 text-nowrap">@SharedLocalizer.GetString("Continue")</button>
+            </div>
+        </div>
+    </div>
+    <div class="row g-5">
+        <input type="hidden" asp-for="@Model.ProjectId" />
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input class="form-control Title-input" asp-for="@Model.ConnectionString.DataSource" placeholder="" />
+                <label asp-for="@Model.ConnectionString.DataSource"></label>
+            </div>
+            <span asp-validation-for="@Model.ConnectionString.DataSource"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input class="form-control Title-input" asp-for="@Model.ConnectionString.DbName" placeholder="" />
+                <label asp-for="@Model.ConnectionString.DbName"></label>
+            </div>
+            <span asp-validation-for="@Model.ConnectionString.DbName"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input class="form-control Title-input" asp-for="@Model.ConnectionString.UserName" placeholder="" />
+                <label asp-for="@Model.ConnectionString.UserName"></label>
+            </div>
+            <span asp-validation-for="@Model.ConnectionString.UserName"></span>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-floating">
+                <input class="form-control Title-input" asp-for="@Model.ConnectionString.Password" placeholder="" />
+                <label asp-for="@Model.ConnectionString.Password"></label>
+            </div>
+            <span asp-validation-for="@Model.ConnectionString.Password"></span>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input Others-input" asp-for="@Model.ConnectionString.MultipleActiveResultsSet" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.ConnectionString.MultipleActiveResultsSet"></label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input Others-input" asp-for="@Model.ConnectionString.TrustServerCertificate" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.ConnectionString.TrustServerCertificate"></label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input Others-input" asp-for="@Model.AddDefaultValueLanguages" type="checkbox" />
+                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.AddDefaultValueLanguages"></label>
+            </div>
+        </div>
+        <div class="sub-form-container" data-name="@("DefaultAreasList")">
+            <h3>@SharedLocalizer.GetString("DefaultAreas")</h3>
+            @if (Model.DefaultAreasList is not null)
+            {
+                for (int defaultArea = 0; defaultArea < Model.DefaultAreasList.Count; defaultArea++)
+                {
+
+                    string defaultAreaDataName = "DefaultAreasList" + "[" + defaultArea + "]";
+
+                    <div class="single-sub-form row g-5" data-name="@("DefaultAreasList")">
+                        <input type="hidden" asp-for="@Model.DefaultAreasList[defaultArea].EntityId" class="sub-form-input"
+                               data-name="DefaultAreasList"
+                               data-prefix="DefaultAreasList"
+                               data-suffix="EntityId"
+                               data-value="1" />
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select"
+                                        data-name="DefaultAreasList"
+                                        data-prefix="DefaultAreasList"
+                                        data-suffix="ProjectAreaId"
+                                        asp-for="@Model.DefaultAreasList[defaultArea].ProjectAreaId" asp-items="projectAreas">
+                                </select>
+                                <label asp-for="@Model.DefaultAreasList[defaultArea].ProjectAreaId"></label>
+                            </div>
+                            <span asp-validation-for="@Model.DefaultAreasList[defaultArea].ProjectAreaId"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input data-name="DefaultAreasList"
+                                       data-prefix="DefaultAreasList"
+                                       data-suffix="HasIndex"
+                                       class="form-check-input sub-form-input Others-input" asp-for="@Model.DefaultAreasList[defaultArea].HasIndex" type="checkbox" />
+                                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.DefaultAreasList[defaultArea].HasIndex"></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input data-name="DefaultAreasList"
+                                       data-prefix="DefaultAreasList"
+                                       data-suffix="HasCreate"
+                                       class="form-check-input sub-form-input Others-input" asp-for="@Model.DefaultAreasList[defaultArea].HasCreate" type="checkbox" />
+                                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.DefaultAreasList[defaultArea].HasCreate"></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input data-name="DefaultAreasList"
+                                       data-prefix="DefaultAreasList"
+                                       data-suffix="HasUpdate"
+                                       class="form-check-input sub-form-input Others-input" asp-for="@Model.DefaultAreasList[defaultArea].HasUpdate" type="checkbox" />
+                                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.DefaultAreasList[defaultArea].HasUpdate"></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input data-name="DefaultAreasList"
+                                       data-prefix="DefaultAreasList"
+                                       data-suffix="HasDelete"
+                                       class="form-check-input sub-form-input Others-input" asp-for="@Model.DefaultAreasList[defaultArea].HasDelete" type="checkbox" />
+                                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.DefaultAreasList[defaultArea].HasDelete"></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input data-name="DefaultAreasList"
+                                       data-prefix="DefaultAreasList"
+                                       data-suffix="HasApi"
+                                       class="form-check-input sub-form-input Others-input" asp-for="@Model.DefaultAreasList[defaultArea].HasApi" type="checkbox" />
+                                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.DefaultAreasList[defaultArea].HasApi"></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <input data-name="DefaultAreasList"
+                                       data-prefix="DefaultAreasList"
+                                       data-suffix="HasWeb"
+                                       class="form-check-input sub-form-input Title-input" asp-for="@Model.DefaultAreasList[defaultArea].HasWeb" type="checkbox" />
+                                <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@Model.DefaultAreasList[defaultArea].HasWeb"></label>
+                            </div>
+                        </div>
+
+                        <div class="buttons-container" data-name="@defaultAreaDataName">
+
+                            <div class="d-flex justify-content-end mt-3">
+                                <p class="btn btn-danger next-btn mb-0 remove-sub-item-btn"
+                                   data-name="@("DefaultAreasList")"
+                                   onclick="RemoveSubItem(this)">@SharedLocalizer.GetString("Delete") @SharedEntitiesLocalizer.GetString("EntitySelectedProjectArea")</p>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            }
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+            <p class="btn btn-success next-btn mb-0 add-sub-item-btn"
+               onclick="AddSubItem('DefaultAreasList')"
+               data-name="DefaultAreasList">@SharedLocalizer.GetString("Add") @SharedEntitiesLocalizer.GetString("EntitySelectedProjectArea")</p>
+        </div>
+
+
+        <div class="sub-form-container" data-name="@("ExcludePropertiesNamesList")">
+            <h3>@SharedLocalizer.GetString("ExcludePropertiesNames")</h3>
+            @if (Model.ExcludePropertiesNamesList is not null)
+            {
+                for (int ExcludePropertiesName = 0; ExcludePropertiesName < Model.ExcludePropertiesNamesList.Count; ExcludePropertiesName++)
+                {
+
+                    string ExcludePropertiesNameDataName = "ExcludePropertiesNamesList" + "[" + ExcludePropertiesName + "]";
+
+                    <div class="single-sub-form row g-5" data-name="@("ExcludePropertiesNamesList")">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="form-floating">
+                                <input class="form-control Title-input sub-form-input" asp-for="@Model.ExcludePropertiesNamesList[ExcludePropertiesName]"
+                                       placeholder=""
+                                       data-name="ExcludePropertiesNamesList"
+                                       data-prefix="ExcludePropertiesNamesList"
+                                       data-suffix="" />
+                                <label asp-for="@Model.ExcludePropertiesNamesList[ExcludePropertiesName]">@SharedLocalizer.GetString("Name")</label>
+                            </div>
+                            <span asp-validation-for="@Model.ExcludePropertiesNamesList[ExcludePropertiesName]"></span>
+                        </div>
+
+                        <div class="buttons-container" data-name="@ExcludePropertiesNameDataName">
+
+                            <div class="d-flex justify-content-end mt-3">
+                                <p class="btn btn-danger next-btn mb-0 remove-sub-item-btn"
+                                   data-name="@("ExcludePropertiesNamesList")"
+                                   onclick="RemoveSubItem(this)">@SharedLocalizer.GetString("Delete") @SharedLocalizer.GetString("Name")</p>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            }
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+            <p class="btn btn-success next-btn mb-0 add-sub-item-btn"
+               onclick="AddSubItem('ExcludePropertiesNamesList')"
+               data-name="ExcludePropertiesNamesList">@SharedLocalizer.GetString("Add") @SharedLocalizer.GetString("Name")</p>
+        </div>
+
+        <div class="sub-form-template d-none add-default-sub-form"
+             data-name="DefaultAreasList"
+             data-form-name="DefaultAreasList"
+             data-title="@SharedEntitiesLocalizer.GetString("DefaultAreas")"
+             data-replace-from="createDefaultArea"
+             data-replace-to="DefaultAreasList[0]">
+            <input type="hidden" asp-for="@createDefaultArea.EntityId" class="sub-form-input"
+                   data-name="DefaultAreasList"
+                   data-prefix="DefaultAreasList"
+                   data-suffix="EntityId"
+                   value="0" />
+            <div class="col-sm-12 col-md-6">
+                <div class="form-floating">
+                    <select class="form-select"
+                            data-name="DefaultAreasList"
+                            data-prefix="DefaultAreasList"
+                            data-suffix="ProjectAreaId"
+                            asp-for="@createDefaultArea.ProjectAreaId" asp-items="projectAreas">
+                    </select>
+                    <label asp-for="@createDefaultArea.ProjectAreaId"></label>
+                </div>
+                <span asp-validation-for="@createDefaultArea.ProjectAreaId"></span>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-check">
+                    <input data-name="DefaultAreasList"
+                           data-prefix="DefaultAreasList"
+                           data-suffix="HasIndex"
+                           class="form-check-input sub-form-input Others-input" asp-for="@createDefaultArea.HasIndex" type="checkbox" />
+                    <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@createDefaultArea.HasIndex"></label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-check">
+                    <input data-name="DefaultAreasList"
+                           data-prefix="DefaultAreasList"
+                           data-suffix="HasCreate"
+                           class="form-check-input sub-form-input Others-input" asp-for="@createDefaultArea.HasCreate" type="checkbox" />
+                    <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@createDefaultArea.HasCreate"></label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-check">
+                    <input data-name="DefaultAreasList"
+                           data-prefix="DefaultAreasList"
+                           data-suffix="HasUpdate"
+                           class="form-check-input sub-form-input Others-input" asp-for="@createDefaultArea.HasUpdate" type="checkbox" />
+                    <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@createDefaultArea.HasUpdate"></label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-check">
+                    <input data-name="DefaultAreasList"
+                           data-prefix="DefaultAreasList"
+                           data-suffix="HasDelete"
+                           class="form-check-input sub-form-input Others-input" asp-for="@createDefaultArea.HasDelete" type="checkbox" />
+                    <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@createDefaultArea.HasDelete"></label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-check">
+                    <input data-name="DefaultAreasList"
+                           data-prefix="DefaultAreasList"
+                           data-suffix="HasApi"
+                           class="form-check-input sub-form-input Others-input" asp-for="@createDefaultArea.HasApi" type="checkbox" />
+                    <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@createDefaultArea.HasApi"></label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-check">
+                    <input data-name="DefaultAreasList"
+                           data-prefix="DefaultAreasList"
+                           data-suffix="HasWeb"
+                           class="form-check-input sub-form-input Title-input" asp-for="@createDefaultArea.HasWeb" type="checkbox" />
+                    <label class="form-check-label fw-bold fs-8 mb-5" asp-for="@createDefaultArea.HasWeb"></label>
+                </div>
+            </div>
+            <div class="buttons-container is-template" data-name="DefaultAreasList[0]">
+
+                <div class="d-flex justify-content-end mt-3">
+                    <p class="btn btn-danger next-btn mb-0 remove-sub-item-btn"
+                       data-name="DefaultAreasList"
+                       onclick="RemoveSubItem(this)">@SharedLocalizer.GetString("Delete") @SharedLocalizer.GetString("DefaultArea")</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="sub-form-template d-none add-default-sub-form"
+             data-name="ExcludePropertiesNamesList"
+             data-form-name="ExcludePropertiesNamesList"
+             data-title="@SharedEntitiesLocalizer.GetString("ExcludePropertiesNames")"
+             data-replace-from="createExcludePropertiesName"
+             data-replace-to="ExcludePropertiesNamesList[0]">
+            <div class="col-sm-12 col-md-6">
+                <div class="form-floating">
+                    <input class="form-control Title-input sub-form-input"
+                           asp-for="@createExcludePropertiesName"
+                           placeholder=""
+                           data-name="ExcludePropertiesNamesList"
+                           data-prefix="ExcludePropertiesNamesList"
+                           data-suffix="" />
+                    <label asp-for="@createExcludePropertiesName">@SharedLocalizer.GetString("Name")</label>
+                </div>
+                <span asp-validation-for="@createExcludePropertiesName"></span>
+            </div>
+            <div class="buttons-container is-template" data-name="ExcludePropertiesNamesList[0]">
+
+                <div class="d-flex justify-content-end mt-3">
+                    <p class="btn btn-danger next-btn mb-0 remove-sub-item-btn"
+                       data-name="ExcludePropertiesNamesList"
+                       onclick="RemoveSubItem(this)">@SharedLocalizer.GetString("Delete") @SharedLocalizer.GetString("Name")</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts
+{
+    <script src="/Shared/JqueryValidation.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+            $('.ImportEntitiesFromDb').addClass('active');
+            $('.ImportEntitiesFromDb').addClass('show');
+        });
+    </script>
+}

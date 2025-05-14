@@ -236,7 +236,33 @@
     <value>ادامه</value>
 </data>      <data name="Save" xml:space="preserve">
     <value>ذخیره</value>
-</data>    <data name="Modify And Review Enums" xml:space="preserve">
+</data>
+    <data name="Failed To Connect To The DataBase!" xml:space="preserve">
+    <value>خطا در اتصال به بانک اطلاعاتی</value>
+</data>
+    <data name="Modify And Review Enums" xml:space="preserve">
     <value>ویرایش و مرور Enum ها</value>
 </data>
+    <data name="Import Entities From Db" xml:space="preserve">
+    <value>وارد کردن Entity ها از بانک اطلاعاتی</value>
+</data>
+    <data name="Modify And Review Entities" xml:space="preserve">
+    <value>ویرایش و مرور Entities</value>
+</data>
+    <data name="DefaultAreas" xml:space="preserve">
+    <value>Area های پیش فرض</value>
+</data>
+    <data name="DefaultArea" xml:space="preserve">
+    <value>Area پیش فرض</value>
+</data>
+    <data name="ExcludePropertiesNames" xml:space="preserve">
+    <value>Property های مورد نظر برای حذف</value>
+</data>
+    <data name="Name" xml:space="preserve">
+    <value>نام</value>
+</data>
+    <data name="SelectProject" xml:space="preserve">
+    <value>انتخاب پروژه</value>
+</data>
+
 </root>

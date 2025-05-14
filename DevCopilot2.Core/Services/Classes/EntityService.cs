@@ -19,6 +19,10 @@ using DevCopilot2.Domain.DTOs.Entities;
 using DevCopilot2.Domain.Entities.Projects;
 using DevCopilot2.Domain.Entities.Users;
 using DevCopilot2.Domain.Enums.Projects;
+using DevCopilot2.Domain.DTOs.Imports;
+using DevCopilot2.Domain.Enums.DataTypes;
+using Microsoft.Data.SqlClient;
+using DevCopilot2.Core.Extensions.AdvanceExtensions.Data;
 
 namespace DevCopilot2.Core.Services.Classes
 {
@@ -1590,6 +1594,23 @@ EF.Functions.Like(q.PluralTitle, $"%{filter.Search}%")
 
             return BaseChangeEntityResult.Success;
         }
+
+
+        async Task<List<BaseChangeEntityResult>> AddPropertyRelationsByName(List<CreateEntityRelationDto> createRelations, long projectId)
+        {
+            List<BaseChangeEntityResult> results = new List<BaseChangeEntityResult>();
+            foreach (var create in createRelations)
+            {
+                create.SecondaryEntityId = await _entityRepository
+                    .GetQueryable()
+                    .Where(a => a.ProjectId == projectId && (a.SingularName == create.SecondaryEntityName || a.PluralName == create.SecondaryEntityName))
+                    .Select(a => a.Id)
+                    .FirstOrDefaultAsync();
+                if (create.SecondaryEntityId is not > 0) continue;
+                results.Add(await CreateEntityRelation(create));
+            }
+            return results;
+        }
         public async Task<UpdateEntityRelationDto?> GetEntityRelationInformation(int entityRelationId)
                 => await _entityRelationRepository
                     .GetQueryable()
@@ -1861,6 +1882,139 @@ EF.Functions.Like(q.ServiceName, $"%{filter.Search}%")
                     .Where(a => a.Id == entityId)
                     .ToUpdateDto()
                     .FirstOrDefaultAsync();
+
+        public List<CreateEntityDto>? GetCreateEntitiesFromDb(ImportEntitiesFromDbDto import)
+        {
+            string connectionString = import.ConnectionString.GetConnectionString();
+            var fastCreateEntities = new List<CreateEntityDto>();
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+                // Query to retrieve table and column information
+                string tableQuery = @"
+        SELECT TABLE_NAME
+        FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_TYPE = 'BASE TABLE'";
+
+                string columnQuery = @"
+        SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, IS_NULLABLE
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE DATA_TYPE != 'uniqueidentifier'";
+                string relationshipQuery = @"
+        SELECT
+            FK.TABLE_NAME AS ReferencingTable,
+            FK.COLUMN_NAME AS ReferencingColumn,
+            PK.TABLE_NAME AS ReferencedTable
+        FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS RC
+        JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE FK
+            ON RC.CONSTRAINT_NAME = FK.CONSTRAINT_NAME
+        JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE PK
+            ON RC.UNIQUE_CONSTRAINT_NAME = PK.CONSTRAINT_NAME";
+
+                // Load tables
+                var tables = new List<string>();
+                using (var command = new SqlCommand(tableQuery, connection))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        tables.Add(reader["TABLE_NAME"].ToString());
+                    }
+                }
+
+                // Load relationships
+                var relationships = new Dictionary<string, string>(); // Key: ReferencingColumn, Value: ReferencedTable
+                using (var command = new SqlCommand(relationshipQuery, connection))
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var referencingColumn = reader["ReferencingColumn"].ToString();
+                        var referencedTable = reader["ReferencedTable"].ToString();
+                        relationships[referencingColumn] = referencedTable;
+                    }
+                }
+
+                // Load columns and create entities
+                foreach (var table in tables)
+                {
+                    var fastCreateEntity = new CreateEntityDto
+                    {
+                        PluralName = table,
+                        SingularName = table.MakeSingular(),
+                        ServiceName = $"{table.MakeSingular()}Service",
+                        FolderName = table,
+                        AddToMenu = true,
+                        ProjectId = import.ProjectId,
+                        PropertiesList = new List<CreatePropertyDto>(),
+                        EntitySelectedProjectAreasList = import.DefaultAreasList
+                    };
+
+                    using (var command = new SqlCommand(columnQuery, connection))
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader["TABLE_NAME"].ToString() == table)
+                            {
+                                var columnName = reader["COLUMN_NAME"].ToString();
+                                if (import.ExcludePropertiesNamesList.Any(a => a == columnName)) continue;
+                                fastCreateEntity.PropertiesList.Add(new CreatePropertyDto
+                                {
+                                    Name = columnName,
+                                    DataType = reader["DATA_TYPE"].ToString().GetDataType(),
+                                    IsRequired = reader["IS_NULLABLE"].ToString() == "NO",
+                                    MaxLength = reader["CHARACTER_MAXIMUM_LENGTH"] as int? > 0 ? reader["CHARACTER_MAXIMUM_LENGTH"] as int? : 0,
+                                    ShowInList = true,
+                                    IsUpdatable = true,
+                                    IsFilterContain = reader["DATA_TYPE"].ToString().GetDataType() == DataTypeEnum.String,
+                                    EntityRelationsList = relationships.ContainsKey(columnName)
+                                        ? new List<CreateEntityRelationDto>() {
+                                            new CreateEntityRelationDto()
+                                            {
+                                                SecondaryEntityName = relationships[columnName],
+                                                SecondaryEntityId = 1
+                                            }
+                                        }
+                                        : new List<CreateEntityRelationDto>()
+                                });
+                            }
+                        }
+                    }
+
+                    fastCreateEntities.Add(fastCreateEntity);
+                }
+            }
+
+            return fastCreateEntities;
+        }
+
+        public async Task<List<ChangeEntityResult>> CreateEntities(List<CreateEntityDto> create)
+        {
+            List<ChangeEntityResult> results = new List<ChangeEntityResult>();
+            if (!create.Any()) return results;
+            foreach (var singleCreate in create)
+            {
+                results.Add(await CreateEntity(singleCreate));
+            }
+            List<CreateEntityRelationDto> createEntityRelations = create
+                .SelectMany(a => a.PropertiesList
+                .Where(a => a.EntityRelationsList.FirstOrDefault() != null &&
+                            !string.IsNullOrEmpty(a.EntityRelationsList.FirstOrDefault()!.SecondaryEntityName))
+                .Select(a => a.EntityRelationsList.FirstOrDefault()!))
+                .ToList();
+            await AddPropertyRelationsByName(createEntityRelations, create.First().ProjectId);
+            return results;
+        }
+
         public async Task<ChangeEntityResult> UpdateEntity(UpdateEntityDto update)
         {
             Entity? entity = await _entityRepository

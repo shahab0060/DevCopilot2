@@ -110,7 +110,7 @@ $(document).on("click", ".sub-form-container h3:first-child", function () {
 
 $(document).on("click", ".collapsible-container", function () {
     $(this).toggleClass("collapsed"); // Rotates the icon
-    $(this).siblings(".single-sub-form").first().slideToggle(); // Toggles the nearest single-sub-form
+    $(this).next(".single-sub-form").slideToggle(); // Toggles only the nearest single-sub-form
 });
 $(document).on("change", ".Image-input, .image-input", function () {
 
@@ -243,15 +243,31 @@ function RemoveSubItem(element) {
     var parentDataName = $(element).parent().parent().attr('data-name');
     var name = $(element).data('name');
     $(`input[name*='${parentDataName}.']`).remove();
-    $(element).closest(`.single-sub-form`).remove();
+    $(element).closest(".single-sub-form").each(function () {
+        $(this).prev(".collapsible-container").remove(); // Removes the collapsible container if it's directly next to it
+        $(this).remove(); // Removes the single-sub-form
+    });
     SetSubFormInputsValueAttrs();
+    $('input[name="__RequestVerificationToken"]').nextAll('input[type="hidden"]').remove();
     var replaceFrom = name;
+    var replaceIdFrom = name.replaceAll('[', '_').replaceAll(']', '_');
     $(`.single-sub-form[data-name="${name}"]`).each(function (index, newElement) {
         var replaceTo = `${name}[${index}]`;
+        var replaceIdTo = `${name}_${index}_`;
         var html = $(this).html();
         var newHtml = ReplaceAllWithBracketsInText(html, replaceFrom, replaceTo);
+        newHtml = ReplaceIdAndFor(newHtml, replaceIdFrom, replaceIdTo);
         $(this).html(newHtml);
     });
+    $('input[name="__RequestVerificationToken"]').after(
+        $('input[type="checkbox"]').map(function () {
+            return $('<input>', {
+                type: 'hidden',
+                name: this.name,
+                value: 'false' 
+            });
+        })
+    );
 }
 
 function SetSubFormInputsValueAttrs() {
@@ -329,6 +345,27 @@ function ReplaceAllWithBracketsInText(text, replaceFrom, replaceTo) {
     return text.replace(regex, replaceTo);
 }
 
+function ReplaceAllWithoutBracketsInText(text, replaceFrom, replaceTo) {
+    // Escape special characters
+    var escapedReplaceFrom = replaceFrom.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+    // Match the pattern that does NOT have brackets
+    var regex = new RegExp(escapedReplaceFrom + '(?!\\[\\d+\\])', 'g');
+
+    return text.replace(regex, replaceTo);
+}
+
+function ReplaceIdAndFor(text, replaceFrom, replaceTo) {
+    // Escape special characters in replaceFrom
+    // Escape special characters in replaceFrom
+    var escapedReplaceFrom = replaceFrom.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+    // Match 'id="..."' or 'for="..."' containing replaceFrom_anythingHere_
+    var regex = new RegExp('(id|for)="([^"]*?)' + escapedReplaceFrom + '_\\d+_' + '([^"]*?)"', 'g');
+
+    // Replace only inside the attribute values
+    return text.replace(regex, (match, attr, before, after) => `${attr}="${before}${replaceTo}${after}"`);
+}
 
 function ReplaceAll(text, from, to) {
     return text.replace(new RegExp(from, "g"), to);

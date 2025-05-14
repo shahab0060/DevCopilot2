@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DevCopilot2.Domain.Resources.DTOs.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace DevCopilot2.Domain.DTOs.Data
 {
@@ -10,25 +11,27 @@ namespace DevCopilot2.Domain.DTOs.Data
             this.TrustServerCertificate = true;
         }
 
-        [Display(Name = "Data Source")]
-        [Required(ErrorMessage = "{0} اجباری است")]
+        [Display(Name = "DataSource")]
+        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         public string DataSource { get; set; }
 
-        [Display(Name = "نام بانک")]
-        [Required(ErrorMessage = "{0} اجباری است")]
+        [Display(Name = "DbName")]
+        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         public string DbName { get; set; }
 
-        [Display(Name = "نام کاربری")]
-        //[Required(ErrorMessage = "{0} اجباری است")]
+        [Display(Name = "UserName")]
+        //[Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         public string? UserName { get; set; }
 
-        [Display(Name = "رمز عبور")]
-        //[Required(ErrorMessage = "{0} اجباری است")]
+        [Display(Name = "Password")]
+        //[Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]
         [DataType(DataType.Password)]
         public string? Password { get; set; }
 
+        [Display(Name = "MultipleActiveResultsSet")]
         public bool MultipleActiveResultsSet { get; set; }
 
+        [Display(Name = "TrustServerCertificate")]
         public bool TrustServerCertificate { get; set; }
     }
 }
