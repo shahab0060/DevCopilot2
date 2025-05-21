@@ -177,7 +177,7 @@ namespace DevCopilot2.Core.Services.Classes
 
             if (await _propertySelectedLanguageRepository
                 .GetQueryable()
-                .AnyAsync(a => a.Title == create.Title.ToTitle()!))
+                .AnyAsync(a => a.Title == create.Title.ToTitle()! && a.PropertyId == create.PropertyId))
                 return BaseChangeEntityResult.Exists;
 
             #endregion
@@ -221,7 +221,7 @@ namespace DevCopilot2.Core.Services.Classes
             if (await _propertySelectedLanguageRepository
                 .GetQueryable()
                 .AnyAsync(a => a.Title == update.Title.ToTitle()!
-                               && a.Id != update.Id))
+                               && a.Id != update.Id && a.PropertyId == update.PropertyId))
                 return BaseChangeEntityResult.Exists;
 
             #endregion
@@ -1679,7 +1679,8 @@ EF.Functions.Like(q.PluralTitle, $"%{filter.Search}%")
 
         IQueryable<Entity> GetEntitiesWithFilterAndSort(FilterEntitiesDto filter)
         {
-            IQueryable<Entity> query = _entityRepository.GetQueryable();
+            IQueryable<Entity> query = _entityRepository.GetQueryable()
+                .Where(a => !a.Project.IsDelete);
 
             #region filter
 
@@ -1765,10 +1766,9 @@ EF.Functions.Like(q.ServiceName, $"%{filter.Search}%")
                 await query.CountAsync(),
                 filter.TakeEntity,
                 filter.HowManyShowPageAfterAndBefore);
-
             filter.Entities = await query
                 .Paging(pager)
-                .ToDto()
+                .ToBaseDto()
                 .ToListAsync();
 
             return filter.SetPaging(pager);

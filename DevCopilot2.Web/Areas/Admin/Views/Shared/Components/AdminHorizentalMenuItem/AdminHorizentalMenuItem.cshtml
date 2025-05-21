@@ -1,6 +1,7 @@
 @using DevCopilot2.Web.Areas.Admin.Components;
 @using DevCopilot2.Domain.DTOs.Common;
 @inject IHtmlLocalizer<EntitiesSharedResources> SharedEntitiesLocalizer
+@inject IHtmlLocalizer<SharedResources> SharedLocalizer
 @model MenuItemDto
 @if (string.IsNullOrEmpty(Model.IconName))
     Model.IconName = "uil fs-8 me-2 uil-chart-pie";
@@ -8,7 +9,13 @@
     <a class="nav-link dropdown-toggle lh-1" href="#!"
        role="button" data-bs-toggle="dropdown"
        data-bs-auto-close="outside" aria-haspopup="true"
-       aria-expanded="false"><span class="@Model.IconName"></span>@SharedEntitiesLocalizer.GetString(Model.Title)</a>
+       aria-expanded="false">
+        <span class="@Model.IconName"></span>
+        @if (Model.UseSharedLocalizer)
+            @SharedLocalizer.GetString(Model.PluralTitle)
+        else
+            @SharedEntitiesLocalizer.GetString(Model.PluralTitle)
+    </a>
     <ul class="dropdown-menu navbar-dropdown-caret" id="@($"collapse-{Model.Index}")">
         @foreach (var item in Model.InnerItems!.Where(a => a.UserHasPermission || Model.UserHasPermission))
         {
@@ -20,7 +27,14 @@
                 <a class="dropdown-item @(!item.Enabled?"disabled":"") @($"{item.ControllerName}Management")"
                    asp-area="Admin" asp-controller="@item.ControllerName"
                    asp-action="@item.ActionName" asp-all-route-data="@item.RouteData">
-                    <div class="dropdown-item-wrapper"><span class="me-2 uil" data-feather="@item.VerticalIconName"></span>@SharedEntitiesLocalizer.GetString(item.PluralTitle)</div>
+                    <div class="dropdown-item-wrapper">
+                        <span class="me-2 uil" data-feather="@item.VerticalIconName"></span>
+                        @if (Model.UseSharedLocalizer)
+                            @SharedLocalizer.GetString(item.PluralTitle)
+                        else
+                            @SharedEntitiesLocalizer.GetString(item.PluralTitle)
+
+                    </div>
                 </a>
             </li>
         }

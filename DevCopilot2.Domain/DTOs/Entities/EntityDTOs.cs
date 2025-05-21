@@ -54,48 +54,53 @@ namespace DevCopilot2.Domain.DTOs.Entities
 		#endregion
     }
 
-    public class EntityListDto : BaseListDto<int>
+
+    public class BaseEntityListDto : BaseListDto<int>
     {
 
-        [Display(Name="SingularName")]
+        [Display(Name = "SingularName")]
         public string SingularName { get; set; } = null!;
 
-        [Display(Name="PluralName")]
+        [Display(Name = "PluralName")]
         public string PluralName { get; set; } = null!;
 
-        [Display(Name="FolderName")]
+        [Display(Name = "FolderName")]
         public string FolderName { get; set; } = null!;
 
-        [Display(Name="InheritedEntityId")]
+        [Display(Name = "InheritedEntityId")]
         public string InheritedEntityPluralName { get; set; } = null!;
 
-        [Display(Name="InheritedEntityId")]
-        public int? InheritedEntityId { get; set; } 
+        [Display(Name = "InheritedEntityId")]
+        public int? InheritedEntityId { get; set; }
 
-        [Display(Name="IdType")]
-        public IdTypeEnum IdType { get; set; } 
+        [Display(Name = "IdType")]
+        public IdTypeEnum IdType { get; set; }
 
-        [Display(Name="ServiceName")]
+        [Display(Name = "ServiceName")]
         public string ServiceName { get; set; } = null!;
 
-        [Display(Name="AuthorId")]
+        [Display(Name = "AuthorId")]
         public string AuthorPhoneNumber { get; set; } = null!;
 
-        [Display(Name="AuthorId")]
-        public long? AuthorId { get; set; } 
+        [Display(Name = "AuthorId")]
+        public long? AuthorId { get; set; }
 
-        [Display(Name="ProjectId")]
+        [Display(Name = "ProjectId")]
         public string ProjectTitle { get; set; } = null!;
 
-        [Display(Name="ProjectId")]
-        public int ProjectId { get; set; } 
+        [Display(Name = "ProjectId")]
+        public int ProjectId { get; set; }
 
-        [Display(Name="IsExcluded")]
-        public bool IsExcluded { get; set; } 
+        [Display(Name = "IsExcluded")]
+        public bool IsExcluded { get; set; }
 
-        [Display(Name="AddToMenu")]
-        public bool AddToMenu { get; set; } 
+        [Display(Name = "AddToMenu")]
+        public bool AddToMenu { get; set; }
 
+    }
+
+    public class EntityListDto : BaseEntityListDto
+    {
         [Display(Name="PropertiesList")]
         public List<PropertyListDto> PropertiesList { get; set; } = new List<PropertyListDto>();
 

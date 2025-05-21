@@ -4,11 +4,8 @@ using DevCopilot2.Core.Services.Interfaces;
 using DevCopilot2.Core.Services.Interfaces.Generators;
 using DevCopilot2.Domain.DTOs.GeneralSettings;
 using DevCopilot2.Domain.DTOs.Generators;
-using DevCopilot2.Domain.DTOs.Generators;
 using DevCopilot2.Domain.DTOs.Projects;
 using DevCopilot2.Domain.Enums.Common;
-using DocumentFormat.OpenXml.Spreadsheet;
-using iText.StyledXmlParser.Jsoup.Nodes;
 using System.IO.Compression;
 
 namespace DevCopilot2.Core.Services.Classes.Generators
@@ -175,8 +172,6 @@ namespace DevCopilot2.Core.Services.Classes.Generators
             if (generate.GenerateEntities)
             {
                 generateCleanArchitectureResult.EntityResult = _entityGeneratorService.Generate(generate, entityFullInformation);
-                generateCleanArchitectureResult.EnumsResult.Add(_changeEntityEnumGeneratorService.Generate(generate, entityFullInformation));
-                generateCleanArchitectureResult.EnumsResult.Add(_sortEntityEnumGeneratorService.Generate(generate, entityFullInformation));
             }
             if (generate.AddToDbContext)
                 _dbContextGeneratorService.AddEntityDbSet(entityFullInformation);
@@ -220,7 +215,11 @@ namespace DevCopilot2.Core.Services.Classes.Generators
             if (generate.GenerateViewResources)
                 generateCleanArchitectureResult.ViewResourcesResults = _viewResourceGeneratorService.Generate(generate, entityFullInformation);
             if (generate.GenerateEnums)
+            {
+                generateCleanArchitectureResult.EnumsResult.Add(_changeEntityEnumGeneratorService.Generate(generate, entityFullInformation));
+                generateCleanArchitectureResult.EnumsResult.Add(_sortEntityEnumGeneratorService.Generate(generate, entityFullInformation));
                 generateCleanArchitectureResult.EnumsResult.AddRange((await GenerateProjectEnums(entityFullInformation.Project.Id, generate.GenerateResources)));
+            }
             if (generate.GenerateWebViews)
                 generateCleanArchitectureResult.ViewsResults.AddRange(_viewGeneratorService.Generate(generate, entityFullInformation));
             return generateCleanArchitectureResult;

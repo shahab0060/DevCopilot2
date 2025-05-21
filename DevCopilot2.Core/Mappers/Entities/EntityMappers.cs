@@ -707,6 +707,29 @@ namespace DevCopilot2.Core.Mappers.Entities
 
         #region to dto
 
+        public static IQueryable<EntityListDto> ToBaseDto(this IQueryable<Entity> query)
+            => query.Select(entity => new EntityListDto()
+            {
+                Id = entity.Id,
+                LatestEditDate = entity.LatestEditDate,
+                CreateDate = entity.CreateDate,
+                EditCounts = entity.EditCounts,
+
+                SingularName = entity.SingularName,
+                PluralName = entity.PluralName,
+                FolderName = entity.FolderName,
+                InheritedEntityPluralName = entity.InheritedEntity == null ? "-" : entity.InheritedEntity!.PluralName,
+                InheritedEntityId = entity.InheritedEntityId,
+                IdType = entity.IdType,
+                ServiceName = entity.ServiceName,
+                AuthorPhoneNumber = entity.Author == null ? "-" : entity.Author!.PhoneNumber,
+                AuthorId = entity.AuthorId,
+                ProjectTitle = entity.Project.Title,
+                ProjectId = entity.ProjectId,
+                IsExcluded = entity.IsExcluded,
+                AddToMenu = entity.AddToMenu,
+            }).AsQueryable();
+
         public static IQueryable<EntityListDto> ToDto(this IQueryable<Entity> query)
                     => query.Select(entity => new EntityListDto()
                     {

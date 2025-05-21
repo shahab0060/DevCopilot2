@@ -179,15 +179,21 @@ namespace DevCopilot2.DataLayer.Context
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                if (!typeof(SoftDelete).IsAssignableFrom(entityType.ClrType) && !typeof(IRepository).IsAssignableFrom(entityType.ClrType))
+                var clrType = entityType.ClrType;
+
+                // Ensure the type inherits from EntityId<T>
+                if (!clrType.BaseType?.IsGenericType ?? true || clrType.BaseType.GetGenericTypeDefinition() != typeof(EntityId<>))
                 {
                     continue;
                 }
 
-                var param = Expression.Parameter(entityType.ClrType, "entity");
+                // Create expression: entity => !entity.IsDelete
+                var param = Expression.Parameter(clrType, "entity");
                 var prop = Expression.PropertyOrField(param, nameof(SoftDelete.IsDelete));
                 var entityNotDeleted = Expression.Lambda(Expression.Equal(prop, Expression.Constant(false)), param);
-                entityType.SetQueryFilter(entityNotDeleted);
+
+                // Apply query filter
+                modelBuilder.Entity(clrType).HasQueryFilter(entityNotDeleted);
             }
         }
 

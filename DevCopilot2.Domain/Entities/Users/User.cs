@@ -1,4 +1,5 @@
 using DevCopilot2.Domain.Entities.Common;
+using DevCopilot2.Domain.Entities.Entities;
 using DevCopilot2.Domain.Entities.Roles;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,7 +35,8 @@ namespace DevCopilot2.Domain.Entities.Users
 
         #region relations
 
-        public ICollection<UserSelectedRole> UserSelectedRoles { get; set; }
+        public ICollection<UserSelectedRole> UserSelectedRoles { get; set; } = new List<UserSelectedRole>();
+        public ICollection<Entity> CreatedEntities { get; set; } = new List<Entity>();
 
 
         #endregion
