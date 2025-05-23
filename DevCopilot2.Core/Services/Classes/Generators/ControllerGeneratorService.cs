@@ -24,7 +24,7 @@ namespace DevCopilot2.Core.Services.Classes.Generators
         public List<CreateFileResultDto> Generate(GenerateEntityDto generate, EntityFullInformationDto entity)
         {
             List<CreateFileResultDto> results = new List<CreateFileResultDto>();
-            foreach (var area in entity.Entity.EntitySelectedProjectAreasList)
+            foreach (var area in entity.Entity.EntitySelectedProjectAreasList.Where(a=>a.HasWeb))
             {
                 results.Add(Generate(generate, entity, area));
             }

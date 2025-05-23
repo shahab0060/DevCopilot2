@@ -2,7 +2,6 @@
 using DevCopilot2.Core.Extensions.BasicExtensions;
 using DevCopilot2.Core.Services.Interfaces.Generators;
 using DevCopilot2.Domain.DTOs.Generators;
-using DevCopilot2.Domain.DTOs.Generators;
 using DevCopilot2.Domain.DTOs.Properties;
 using System.Text;
 
