@@ -2,7 +2,6 @@
 using DevCopilot2.Core.Services.Interfaces.Generators;
 using DevCopilot2.Domain.DTOs.Entities;
 using DevCopilot2.Domain.DTOs.Generators;
-using DevCopilot2.Domain.DTOs.Generators;
 using DevCopilot2.Domain.DTOs.Projects;
 
 namespace DevCopilot2.Core.Services.Classes.Generators
@@ -33,7 +32,7 @@ namespace DevCopilot2.Core.Services.Classes.Generators
         List<GenerateFileDto> GetResources(GenerateEntityDto generate, EntityFullInformationDto entity)
         {
             List<GenerateFileDto> results = new List<GenerateFileDto>();
-            foreach (var area in entity.Entity.EntitySelectedProjectAreasList)
+            foreach (var area in entity.Entity.EntitySelectedProjectAreasList.Where(a=>a.HasWeb))
             {
                 results.AddRange(GetSingleAreaResources(generate, entity, area));
             }

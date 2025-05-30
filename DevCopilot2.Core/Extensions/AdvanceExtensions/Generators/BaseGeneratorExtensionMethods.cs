@@ -274,7 +274,7 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.Generators
             string displayName = string.IsNullOrEmpty(property.NameInDb) ? property.Name : property.NameInDb;
             return $@"        [Display(Name = ""{displayName}"")]
 {property.GetDataAnnotationsCode()}
-{property.DataAnnotationDataType.GetDataAnnotationTypeSpecificDataAttributes()}
+{property.DataAnnotationDataType.GetDataAnnotationTypeSpecificDataAttributes(property.ProjectId)}
         public {property.GetDataType()} {property.Name} {{ get; set; }} {property.InitializationCode}
 ";
         }
@@ -289,6 +289,9 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.Generators
 
         public static string GetDataAnnotationsCode(this PropertyListDto property)
         {
+            //this is backlink police project
+            if (property.ProjectId == 10007)
+                return property.GetDataAnnotationsCodeInEnglishWithoutResource();
             StringBuilder dataAnnotationsSb = new StringBuilder();
             if (property.IsRequired && property.DataType != DataTypeEnum.Bool)
                 dataAnnotationsSb.AppendLine($@"        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]");
@@ -307,9 +310,31 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.Generators
 
         }
 
-        public static string GetDataAnnotationTypeSpecificDataAttributes(this DataAnnotationsDataType type)
+        public static string GetDataAnnotationsCodeInEnglishWithoutResource(this PropertyListDto property)
+        {
+            StringBuilder dataAnnotationsSb = new StringBuilder();
+            if (property.IsRequired && property.DataType != DataTypeEnum.Bool)
+                dataAnnotationsSb.AppendLine($@"        [Required(ErrorMessage = ""{{0}} Is Required"")]");
+            if (property.IsRequired && property.DataAnnotationDataType is DataAnnotationsDataType.List or DataAnnotationsDataType.DtoList)
+                dataAnnotationsSb.AppendLine($@"        [NotEmptyList(ErrorMessage = ""{{0}} Is Required"")]");
+            if (property.MinLength > 0)
+                dataAnnotationsSb.AppendLine($@"        [MinLength({property.MinLength},ErrorMessage = "" {{0}} Must Have More Than {{1}} Characters"")]");
+            if (property.MaxLength > 0)
+                dataAnnotationsSb.AppendLine($@"        [MaxLength({property.MaxLength},ErrorMessage = "" {{0}} Must Have Less Than {{1}} Characters"")]");
+            if (property.RangeFrom is not null && property.RangeTo is not null)
+                dataAnnotationsSb.AppendLine($@"        [Range({property.RangeFrom}, {property.RangeTo}, ErrorMessage = ""{{0}} Must Be Between {{1}} And {{2}}"")]");
+            //if (property.RangeFrom is null && property.RangeTo is null && property.EntityRelation is not null &&
+            // property.EntityRelation.InputType == InputTypeEnum.Select && !property.IsRequired)
+            //dataAnnotationsSb.AppendLine($@"        [Range(1, {property.EntityRelation.PrimaryPropertyDataType.GetDataType()}.MaxValue, ErrorMessage = ""{{0}} Is Required"")]");
+            return dataAnnotationsSb.ToString();
+
+        }
+
+        public static string GetDataAnnotationTypeSpecificDataAttributes(this DataAnnotationsDataType type, int projectId)
         {
             string isNotValidErrorMessage = @"ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.IsNotValidErrorMessage)";
+            if (projectId == 10007)
+                isNotValidErrorMessage = $@"        [Required(ErrorMessage = ""{{0}} Is Not Valid"")]";
             return type switch
             {
                 DataAnnotationsDataType.Url => $@"        [Url({isNotValidErrorMessage})]",

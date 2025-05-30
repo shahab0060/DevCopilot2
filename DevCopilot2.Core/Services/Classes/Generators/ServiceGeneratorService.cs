@@ -286,16 +286,57 @@ namespace {GetNameSpace(firstEntity)}
                 listProperties
                 .ConvertAll(a => GetSingleAdvanceSortCode(a, entity)));
 
+            string dateFiltersCode = $@"            if (filter.FromDate!.ToMiladiDateTime() != null)
+                query = query.Where(q => q.CreateDate >= filter.FromDate!.ToMiladiDateTime());
+            if (filter.ToDate!.ToMiladiDateTime() != null)
+                query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());";
+            string sortCodes = $@"            query = filter.BaseSortEntityType switch
+            {{
+                BaseSortEntityType.Default => query,
+                BaseSortEntityType.Newest => query.OrderByDescending(q => q.CreateDate),
+                BaseSortEntityType.LatestUpdate => query.OrderByDescending(q => q.LatestEditDate),
+                _ => query
+            }};
+
+            query = filter.SortType switch
+            {{
+                SortType.Ascending => query.Reverse(),
+                SortType.Descending => query,
+                _ => query
+            }};";
+            //this is backlink police project
+            if (entity.Project.Id == 10007)
+            {
+                dateFiltersCode = $@"            if (filter.FromDate != null)
+                query = query.Where(q => q.CreateDate >= filter.FromDate);
+            if (filter.ToDate != null)
+                query = query.Where(q => q.CreateDate <= filter.ToDate);";
+                sortCodes = $@"            query = filter.BaseSortEntityType switch
+            {{
+                BaseSortEntityType.Default => query,
+                BaseSortEntityType.Newest => query.OrderByDescending(q => q.CreateDate),
+                BaseSortEntityType.LatestUpdate => query.OrderByDescending(q => q.ModifiedDate),
+                _ => query
+            }};
+
+            query = filter.SortType switch
+            {{
+                SortType.Ascending => query.Reverse(),
+                SortType.Descending => query,
+                _ => query
+            }};
+
+            query = query.ApplySorting(filter.Sort);
+";
+            }
+
             return $@"IQueryable<{entity.Entity.SingularName}> Get{entity.Entity.PluralName}WithFilterAndSort(Filter{entity.Entity.PluralName}Dto filter)
         {{
             IQueryable<{entity.Entity.SingularName}> query = _{entity.Entity.SingularName.ToFirstCharLower()}Repository.GetQueryable();
 
             #region filter
 
-            if (filter.FromDate!.ToMiladiDateTime() != null)
-                query = query.Where(q => q.CreateDate >= filter.FromDate!.ToMiladiDateTime());
-            if (filter.ToDate!.ToMiladiDateTime() != null)
-                query = query.Where(q => q.CreateDate <= filter.ToDate!.ToMiladiDateTime());
+{dateFiltersCode}
 
             {(textContainFilterProperties.Any() ? $@"if (!string.IsNullOrEmpty(filter.Search))
                 query = query.Where(q => {textContainFilterPropertiesCode});" : "")}
@@ -316,20 +357,7 @@ namespace {GetNameSpace(firstEntity)}
 
             #region base sort
 
-            query = filter.BaseSortEntityType switch
-            {{
-                BaseSortEntityType.Default => query,
-                BaseSortEntityType.Newest => query.OrderByDescending(q => q.CreateDate),
-                BaseSortEntityType.LatestUpdate => query.OrderByDescending(q => q.LatestEditDate),
-                _ => query
-            }};
-
-            query = filter.SortType switch
-            {{
-                SortType.Ascending => query.Reverse(),
-                SortType.Descending => query,
-                _ => query
-            }};
+            {sortCodes}
 
             #endregion
             
@@ -354,19 +382,30 @@ namespace {GetNameSpace(firstEntity)}
 
         private string GetFilterMethodCode(EntityFullInformationDto entity)
         {
-
+            string listPropertyName = entity.Entity.PluralName;
+            string pagerCode = $@"            var pager = Pager.Build(
+                filter.PageId, 
+                await query.CountAsync(),
+                filter.TakeEntity, 
+                filter.HowManyShowPageAfterAndBefore);";
+            //it's backlink police project
+            if (entity.Project.Id == 10007)
+            {
+                listPropertyName = "Items";
+                pagerCode = $@"            var pager = Pager.Build(
+                filter.Page, 
+                await query.CountAsync(),
+                filter.Size, 
+                filter.HowManyShowPageAfterAndBefore);";
+            }
             return @$"public async Task<Filter{entity.Entity.PluralName}Dto> Filter{entity.Entity.PluralName}(Filter{entity.Entity.PluralName}Dto filter)
         {{
             IQueryable<{entity.Entity.SingularName}> query = 
                 Get{entity.Entity.PluralName}WithFilterAndSort(filter);
 
-            var pager = Pager.Build(
-                filter.PageId, 
-                await query.CountAsync(),
-                filter.TakeEntity, 
-                filter.HowManyShowPageAfterAndBefore);
+{pagerCode}
 
-            filter.{entity.Entity.PluralName} = await query
+            filter.{listPropertyName} = await query
                 .Paging(pager)
                 .ToDto()
                 .ToListAsync();

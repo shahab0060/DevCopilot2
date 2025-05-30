@@ -420,6 +420,7 @@ namespace DevCopilot2.Core.Mappers.Entities
             ShowInList = r.ShowInList,
             RangeTo = r.RangeTo,
             RangeFrom = r.RangeFrom,
+            ProjectId = r.Entity.ProjectId,
             EntityRelationsList = r.EntityRelations
             .Select(d => new EntityRelationListDto()
             {

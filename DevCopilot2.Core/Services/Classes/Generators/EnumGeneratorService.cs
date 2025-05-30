@@ -71,7 +71,16 @@ namespace {GetNameSpace(project, projectEnum)}
         //    => $@"
         //[Display(Name = ""{property.Title}"")]
         //{property.Name} = {property.Order},";
-         => $@"        [Display(ResourceType = typeof({projectEnum.GetResourceName()}), Name = nameof({projectEnum.GetResourceName()}.{property.Name}))]
-        {property.Name} = {index},";
+        {
+            if (projectEnum.ProjectId == 10006) return GetSingleWihtoutResourceEnumPropertyCode(property, index);
+            return $@"        [Display(ResourceType = typeof({projectEnum.GetResourceName()}), Name = nameof({projectEnum.GetResourceName()}.{property.Name}))]
+            {property.Name} = {index},";
+        }
+
+        private string GetSingleWihtoutResourceEnumPropertyCode(ProjectEnumPropertyListDto property, int index)
+        {
+            return $@"        [Display(Name = ""{property.Name}"")]
+            {property.Name} = {index},";
+        }
     }
 }

@@ -81,6 +81,14 @@ namespace {GetNameSpace(entity)}
 
         string GetFilterDtoCode(EntityFullInformationDto entity)
         {
+            string listPropertyName = entity.Entity.PluralName;
+            string filterPagingMethodCodes = GetFilterPagingCode();
+            //it's backlink police project
+            if (entity.Project.Id == 10007)
+            {
+                listPropertyName = "Items";
+                filterPagingMethodCodes = GetFilterPagingCodeForBackLinkPoliceProject();
+            }
             string filterPropertiesCode = string.Join("\n",
                 entity.GetFilterProperties()
                 .ConvertAll(a => $@"        [Display(Name = ""{a.Name}"")]
@@ -90,7 +98,7 @@ namespace {GetNameSpace(entity)}
     {{
         #region properties
 
-		public List<{entity.Entity.SingularName}ListDto> {entity.Entity.PluralName} {{ get; set; }} = new List<{entity.Entity.SingularName}ListDto>();
+		public List<{entity.Entity.SingularName}ListDto> {listPropertyName} {{ get; set; }} = new List<{entity.Entity.SingularName}ListDto>();
 
         public {entity.GetSortEntityEnumName()}? SortProperty {{ get; set; }}
 
@@ -102,13 +110,21 @@ namespace {GetNameSpace(entity)}
 
         public Filter{entity.Entity.PluralName}Dto  Set{entity.Entity.PluralName}(List<{entity.Entity.SingularName}ListDto> {entity.Entity.PluralName.ToFirstCharLower()})
 		{{
-			this.{entity.Entity.PluralName} = {entity.Entity.PluralName.ToFirstCharLower()};
+			this.{listPropertyName} = {entity.Entity.PluralName.ToFirstCharLower()};
 			return this;
 		}}
 
 		public Filter{entity.Entity.PluralName}Dto  SetPaging(BasePaging paging)
 		{{
-			PageId = paging.PageId;
+{filterPagingMethodCodes}
+		}}
+
+		#endregion
+    }}";
+        }
+
+        string GetFilterPagingCode()
+            => $@"			PageId = paging.PageId;
 			AllEntitiesCount = paging.AllEntitiesCount;
 			StartPage = paging.StartPage;
 			EndPage = paging.EndPage;
@@ -116,12 +132,20 @@ namespace {GetNameSpace(entity)}
 			TakeEntity = paging.TakeEntity;
 			SkipEntity = paging.SkipEntity;
 			PageCount = paging.PageCount;
-			return this;
-		}}
+			return this;";
 
-		#endregion
-    }}";
-        }
+        string GetFilterPagingCodeForBackLinkPoliceProject()
+        => $@"            Page = paging.Page;
+            TotalCount = paging.TotalCount;
+            StartPage = paging.StartPage;
+            EndPage = paging.EndPage;
+            HowManyShowPageAfterAndBefore = paging.HowManyShowPageAfterAndBefore;
+            Size = paging.Size;
+            SkipEntity = paging.SkipEntity;
+            PageCount = paging.PageCount;
+            HasPreviousPage = paging.Page > 1;
+            HasNextPage = paging.Page < paging.PageCount;
+            return this;";
 
 
         #endregion

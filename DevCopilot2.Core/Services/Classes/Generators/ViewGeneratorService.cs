@@ -33,7 +33,7 @@ namespace DevCopilot2.Core.Services.Classes.Generators
         List<GenerateFileDto> GetAreaFiles(GenerateEntityDto generate, EntityFullInformationDto entity)
         {
             List<GenerateFileDto> files = new List<GenerateFileDto>();
-            foreach (var area in entity.Entity.EntitySelectedProjectAreasList)
+            foreach (var area in entity.Entity.EntitySelectedProjectAreasList.Where(a => a.HasWeb))
             {
                 files.AddRange(GetSingleAreaFiles(generate, entity, area));
             }

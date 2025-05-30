@@ -39,7 +39,7 @@ namespace DevCopilot2.Core.Services.Classes.Generators
         List<GenerateFileDto> GetResources(GenerateEntityDto generate, EntityFullInformationDto entity)
         {
             List<GenerateFileDto> results = new List<GenerateFileDto>();
-            foreach (var area in entity.Entity.EntitySelectedProjectAreasList)
+            foreach (var area in entity.Entity.EntitySelectedProjectAreasList.Where(a => a.HasWeb))
             {
                 foreach (var language in entity.Project.ProjectSelectedLanguagesList)
                 {
