@@ -1,4 +1,4 @@
-🧠 DevCopilot – AI-Powered Clean Architecture Solution Generator
+🧠 DevCopilot –  Clean Architecture Solution Generator
 DevCopilot is an open-source web-based tool that helps developers generate production-ready .NET Core solutions in seconds. With support for Clean Architecture, multilingual apps, and SQL Server integration, DevCopilot reads your database schema and generates complete backend + optional frontend layers—fully structured and ready to use.
 
 ⚡ Used in 100+ real-world projects over the past year!
