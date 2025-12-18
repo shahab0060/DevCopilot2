@@ -290,19 +290,24 @@ namespace DevCopilot2.Core.Extensions.AdvanceExtensions.Generators
         public static string GetDataAnnotationsCode(this PropertyListDto property)
         {
             //this is backlink police project
-            if (property.ProjectId == 10007)
+            if (property.ProjectId == 10007 || property.ProjectId==11025)
                 return property.GetDataAnnotationsCodeInEnglishWithoutResource();
             StringBuilder dataAnnotationsSb = new StringBuilder();
             if (property.IsRequired && property.DataType != DataTypeEnum.Bool)
-                dataAnnotationsSb.AppendLine($@"        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]");
+                dataAnnotationsSb.AppendLine($@"        [Required]");
+            //dataAnnotationsSb.AppendLine($@"        [Required(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]");
             if (property.IsRequired && property.DataAnnotationDataType is DataAnnotationsDataType.List or DataAnnotationsDataType.DtoList)
-                dataAnnotationsSb.AppendLine($@"        [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]");
+                dataAnnotationsSb.AppendLine($@"        [NotEmptyList]");
+            //dataAnnotationsSb.AppendLine($@"        [NotEmptyList(ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RequiredErrorMessage))]");
             if (property.MinLength > 0)
-                dataAnnotationsSb.AppendLine($@"        [MinLength({property.MinLength}, ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.MinLengthErrorMessage))]");
+                dataAnnotationsSb.AppendLine($@"        [MinLength({property.MinLength})]");
+            //dataAnnotationsSb.AppendLine($@"        [MinLength({property.MinLength}, ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.MinLengthErrorMessage))]");
             if (property.MaxLength > 0)
-                dataAnnotationsSb.AppendLine($@"        [MaxLength({property.MaxLength}, ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.MaxLengthErrorMessage))]");
+                dataAnnotationsSb.AppendLine($@"        [MaxLength({property.MaxLength})]");
+            // dataAnnotationsSb.AppendLine($@"        [MaxLength({property.MaxLength}, ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.MaxLengthErrorMessage))]");
             if (property.RangeFrom is not null && property.RangeTo is not null)
-                dataAnnotationsSb.AppendLine($@"        [Range({property.RangeFrom}, {property.RangeTo}, ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RangeErrorMessage))]");
+                dataAnnotationsSb.AppendLine($@"        [Range({property.RangeFrom},{property.RangeTo})]");
+            //  dataAnnotationsSb.AppendLine($@"        [Range({property.RangeFrom}, {property.RangeTo}, ErrorMessageResourceType = typeof(BaseListDtoResources), ErrorMessageResourceName = nameof(BaseListDtoResources.RangeErrorMessage))]");
             //if (property.RangeFrom is null && property.RangeTo is null && property.EntityRelation is not null &&
             // property.EntityRelation.InputType == InputTypeEnum.Select && !property.IsRequired)
             //dataAnnotationsSb.AppendLine($@"        [Range(1, {property.EntityRelation.PrimaryPropertyDataType.GetDataType()}.MaxValue, ErrorMessage = ""{{0}} Is Required"")]");

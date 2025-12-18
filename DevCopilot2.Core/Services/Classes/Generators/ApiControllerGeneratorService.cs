@@ -34,7 +34,7 @@ namespace DevCopilot2.Core.Services.Classes.Generators
 namespace {GetNameSpace(entity)}
 {{
 	{$@"//[PermissionChecker(""{entity.Entity.SingularName}Management"")]"}
-    public class {entity.Entity.SingularName}Controller : BaseApiController
+    public class {entity.Entity.PluralName}Controller : BaseApiController
     {{
         
 {GetConstructorCode(entity)}
@@ -83,7 +83,7 @@ namespace {GetNameSpace(entity)}
         {
             ConstructorListDto constructor = new ConstructorListDto()
             {
-                ClassName = $"{entity.Entity.SingularName}Controller",
+                ClassName = $"{entity.Entity.PluralName}Controller",
                 DependencyInjections = new List<DependencyInjectionListDto>()
                 {
                     new DependencyInjectionListDto()
@@ -136,7 +136,7 @@ namespace {GetNameSpace(entity)}
         {
             return $@"        #region index
 
-        [HttpGet(""list"")]
+        //[HttpGet(""list"")]
         public async Task<IActionResult> Index([FromQuery]Filter{entity.Entity.PluralName}Dto filter)
         {{
             return Ok(await _{entity.Entity.ServiceName!.ToFirstCharLower()}.Filter{entity.Entity.PluralName}(filter));
@@ -306,9 +306,10 @@ namespace {GetNameSpace(entity)}
             string instanceName = "update";
             return $@"        #region update
 
-		[HttpPut]
-		public async Task<IActionResult> Update(Update{entity.Entity.SingularName}Dto {instanceName})
+		[HttpPut(""{{id}}"")]
+		public async Task<IActionResult> Update({entity.Entity.GetDataType()} id,Update{entity.Entity.SingularName}Dto {instanceName})
 		{{
+            {instanceName}.Id = id;
 			{GetUpsertMethodPostCode(entity, instanceName, "Updated Successfully.", true)}
 		}}
 
@@ -325,7 +326,7 @@ namespace {GetNameSpace(entity)}
         {
             return $@"        #region delete
 
-		[HttpDelete]
+		[HttpDelete(""{{id}}"")]
 		public async Task<IActionResult> Delete({entity.Entity.GetDataType()} id)
 		{{
 			BaseChangeEntityResult result = await _{entity.Entity.ServiceName.ToFirstCharLower()}.Delete{entity.Entity.SingularName}(id);

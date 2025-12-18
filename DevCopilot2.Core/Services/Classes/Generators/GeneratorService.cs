@@ -171,6 +171,8 @@ namespace DevCopilot2.Core.Services.Classes.Generators
             GenerateCleanArchitectureResultDto generateCleanArchitectureResult = new GenerateCleanArchitectureResultDto();
             if (generate.GenerateEntities)
             {
+                generateCleanArchitectureResult.EnumsResult.Add(_changeEntityEnumGeneratorService.Generate(generate, entityFullInformation));
+                generateCleanArchitectureResult.EnumsResult.Add(_sortEntityEnumGeneratorService.Generate(generate, entityFullInformation));
                 generateCleanArchitectureResult.EntityResult = _entityGeneratorService.Generate(generate, entityFullInformation);
             }
             if (generate.AddToDbContext)
@@ -216,8 +218,6 @@ namespace DevCopilot2.Core.Services.Classes.Generators
                 generateCleanArchitectureResult.ViewResourcesResults = _viewResourceGeneratorService.Generate(generate, entityFullInformation);
             if (generate.GenerateEnums)
             {
-                generateCleanArchitectureResult.EnumsResult.Add(_changeEntityEnumGeneratorService.Generate(generate, entityFullInformation));
-                generateCleanArchitectureResult.EnumsResult.Add(_sortEntityEnumGeneratorService.Generate(generate, entityFullInformation));
                 generateCleanArchitectureResult.EnumsResult.AddRange((await GenerateProjectEnums(entityFullInformation.Project.Id, generate.GenerateResources)));
             }
             if (generate.GenerateWebViews)
